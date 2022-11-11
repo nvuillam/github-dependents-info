@@ -1,4 +1,3 @@
-# type: ignore[attr-defined]
 from typing import Optional
 
 from enum import Enum
