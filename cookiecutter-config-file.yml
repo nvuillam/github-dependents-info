@@ -1,0 +1,13 @@
+# This file contains values from Cookiecutter
+
+default_context:
+  project_name: "github-dependents-info"
+  project_description: "Collect information about dependencies between a github repo and other repositories. Results available in JSON, markdown and badges."
+  organization: "nvuillam"
+  license: "MIT"
+  minimal_python_version: 3.9
+  github_name: "nvuillam"
+  email: "nicolas.vuillamy@gmail.com"
+  version: "0.1.0"
+  line_length: "120"
+  create_example_template: "cli"
