@@ -55,6 +55,22 @@ coverage-badge = "^1.1.0"
 pytest-html = "^3.1.1"
 pytest-cov = "^3.0.0"
 
+[tool.poetry.group.dev.dependencies]
+bandit = "^1.7.4"
+darglint = "^1.8.1"
+isort = {extras = ["colors"], version = "^5.10.1"}
+mypy = "^0.990"
+pre-commit = "^2.20.0"
+pydocstyle = "^6.1.1"
+pylint = "^2.15.5"
+pytest = "^7.2.0"
+pyupgrade = "^3.2.2"
+safety = "^2.3.1"
+coverage = "^6.5.0"
+coverage-badge = "^1.1.0"
+pytest-html = "^3.2.0"
+pytest-cov = "^4.0.0"
+
 [tool.black]
 # https://github.com/psf/black
 target-version = ["py39"]
