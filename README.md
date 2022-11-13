@@ -18,7 +18,7 @@ Collect information about dependencies between a github repo and other repositor
 
 GitHub API does not allow to collect information about package usage (Used by insights section)
 
-This package uses GitHu:b HTML to collect information and output it as text or json, or generate a markdown file.
+This package uses GitHub HTML to collect information and output it as text or json, or generate a markdown file.
 
 JSON example
 
