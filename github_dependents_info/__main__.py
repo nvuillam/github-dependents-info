@@ -7,7 +7,6 @@ import typer
 from rich.console import Console
 
 from github_dependents_info import version
-from github_dependents_info.example import hello
 
 
 class Color(str, Enum):
@@ -58,7 +57,7 @@ def main(
     if color is None:
         color = choice(list(Color))
 
-    greeting: str = hello(name)
+    greeting: str = "wesh"
     console.print(f"[bold {color}]{greeting}[/]")
 
 
