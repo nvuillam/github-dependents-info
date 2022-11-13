@@ -22,7 +22,7 @@ def test_collect_stats_single_package():
 def test_collect_stats_multi_package():
     repo = "oxsecurity/megalinter"
     gh_deps_info = GithubDependentsInfo(repo, debug=True, sort_key="stars")
-    repo_stats = gh_deps_info.collect(debug=True)
+    repo_stats = gh_deps_info.collect()
     assert repo_stats["public_dependents_number"] > 0
     tmp_md_file = tempfile.gettempdir() + os.path.sep + str(uuid.uuid4()) + "-test-multiple.md"
     md = gh_deps_info.build_markdown(file=tmp_md_file)
