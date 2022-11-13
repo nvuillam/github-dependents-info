@@ -3,8 +3,7 @@ from bs4 import BeautifulSoup
 
 
 class GithubDependentsInfo:
-
-    def __init__(self, repo,**options) -> None:
+    def __init__(self, repo, **options) -> None:
         self.repo = repo
         self.url_init = "https://github.com/{}/network/dependents".format(self.repo)
         self.url_starts_with = "/{}/network/dependents".format(self.repo) + "?package_id="
@@ -14,7 +13,7 @@ class GithubDependentsInfo:
         self.total_private_sum = 0
         self.dependent_repos = []
 
-    def collect(self,**options):
+    def collect(self, **options):
         # List packages
         self.compute_packages()
 
@@ -27,11 +26,11 @@ class GithubDependentsInfo:
             if package["id"] is not None:
                 url = self.url_init + "?package_id=" + package["id"]
                 if self.debug is True:
-                    print("Package "+package["name"] + ": browsing " + url + " ...")
+                    print("Package " + package["name"] + ": browsing " + url + " ...")
             else:
                 url = self.url_init + ""
                 if self.debug is True:
-                    print("Package "+self.repo+": browsing" + url + " ...")
+                    print("Package " + self.repo + ": browsing" + url + " ...")
             page_number = 1
 
             # Get total number of dependents from UI
@@ -39,7 +38,7 @@ class GithubDependentsInfo:
             soup = BeautifulSoup(r.content, "html.parser")
             svg_item = soup.find("svg", {"class": "octicon-code-square"})
             a_around_svg = svg_item.parent
-            total_dependents = int(a_around_svg.text.replace("Repositories","").strip())
+            total_dependents = int(a_around_svg.text.replace("Repositories", "").strip())
 
             # Parse all dependent packages pages
             while nextExists:
@@ -60,8 +59,8 @@ class GithubDependentsInfo:
                             nextExists = True
                             url = u["href"]
                             page_number = page_number + 1
-                            if (self.debug is True):
-                                print("  - browsing page "+str(page_number))
+                            if self.debug is True:
+                                print("  - browsing page " + str(page_number))
 
             # Manage results for package
             result.sort()
@@ -78,12 +77,12 @@ class GithubDependentsInfo:
 
             # Build total stats
             self.total_sum += package["total_dependents_number"]
-            self.total_public_sum +=  package["public_dependents_number"]
-            self.total_private_sum +=  package["private_dependents_number"]
+            self.total_public_sum += package["public_dependents_number"]
+            self.total_private_sum += package["private_dependents_number"]
 
             # Output
             if self.debug is True:
-                print("Total for package: "+str(total_public_dependents))
+                print("Total for package: " + str(total_public_dependents))
                 print("")
 
         # Build final result
@@ -110,6 +109,6 @@ class GithubDependentsInfo:
         return {
             "public_dependents_repos": self.dependent_repos,
             "total_dependents_number": self.total_sum,
-            "public_dependents_number" : self.total_public_sum,
-            "private_dependents_number" :self. total_private_sum
-            }
+            "public_dependents_number": self.total_public_sum,
+            "private_dependents_number": self.total_private_sum,
+        }
