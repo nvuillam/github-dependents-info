@@ -37,8 +37,11 @@ class GithubDependentsInfo:
             r = requests.get(url)
             soup = BeautifulSoup(r.content, "html.parser")
             svg_item = soup.find("svg", {"class": "octicon-code-square"})
-            a_around_svg = svg_item.parent
-            total_dependents = int(a_around_svg.text.replace("Repositories", "").strip())
+            if svg_item is not None:
+                a_around_svg = svg_item.parent
+                total_dependents = int(a_around_svg.text.replace("Repositories", "").strip())
+            else:
+                total_dependents = 0
 
             # Parse all dependent packages pages
             while nextExists:
@@ -73,7 +76,7 @@ class GithubDependentsInfo:
             package["public_dependents"] = result
             package["public_dependents_number"] = total_public_dependents
             package["private_dependents_number"] = total_dependents - total_public_dependents
-            package["total_dependents_number"] = total_dependents
+            package["total_dependents_number"] = total_dependents if total_dependents > 0 else total_public_dependents
 
             # Build total stats
             self.total_sum += package["total_dependents_number"]
