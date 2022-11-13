@@ -125,7 +125,9 @@ class GithubDependentsInfo:
         md_lines = [f"# Dependents stats for {self.repo}", ""]
         md_lines += [
             "Total: " + str(self.total_sum),
+            "",
             "Public: " + str(self.total_public_sum),
+            "",
             "Private: " + str(self.total_private_sum),
             "",
         ]
