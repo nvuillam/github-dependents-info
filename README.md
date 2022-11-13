@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/github/license/nvuillam/github-dependents-info)](https://github.com/nvuillam/github-dependents-info/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-Collect information about dependencies between a github repo and other repositories. Results available in JSON, markdown and badges.
+Collect information about dependencies between a github repo and other repositories.
 
 </div>
 
