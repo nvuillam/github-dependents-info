@@ -617,3 +617,4 @@ MigrationBackup/
 # End of https://www.gitignore.io/api/osx,python,pycharm,windows,visualstudio,visualstudiocode
 
 megalinter-reports/
+github_conf/
