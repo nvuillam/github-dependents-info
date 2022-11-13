@@ -123,10 +123,13 @@ class GithubDependentsInfo:
 
     def build_markdown(self, **options) -> str:
         md_lines = [f"# Dependents stats for {self.repo}", ""]
+        badge_1 = self.build_badge("Dependents", self.total_sum)
+        badge_2 = self.build_badge("Public%20Dependents", self.total_public_sum)
+        badge_3 = self.build_badge("Private%20Dependents", self.total_private_sum)
         md_lines += [
-            self.build_badge("Dependents", self.total_sum),
-            +self.build_badge("Public%20Dependents", self.total_public_sum),
-            +self.build_badge("Private%20Dependents", self.total_private_sum),
+            badge_1,
+            badge_2,
+            badge_3,
             "",
         ]
 
@@ -135,10 +138,13 @@ class GithubDependentsInfo:
             if len(dep_repo["public_dependents"]) == 0:
                 md_lines += ["No dependent repositories"]
             else:
+                badge_1 = self.build_badge("Dependents", dep_repo["total_dependents_number"])
+                badge_2 = self.build_badge("Public%20Dependents", dep_repo["public_dependents_number"])
+                badge_3 = self.build_badge("Private%20Dependents", dep_repo["private_dependents_number"])
                 md_lines += [
-                    self.build_badge("Dependents", dep_repo["total_dependents_number"]),
-                    self.build_badge("Public%20Dependents", dep_repo["public_dependents_number"]),
-                    self.build_badge("Private%20Dependents", dep_repo["private_dependents_number"]),
+                    badge_1,
+                    badge_2,
+                    badge_3,
                     "",
                 ]
                 for repo1 in dep_repo["public_dependents"]:
