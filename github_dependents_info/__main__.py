@@ -25,7 +25,7 @@ def version_callback(print_version: bool) -> None:
 
 @app.command(name="")
 def main(
-    repo: str = typer.Option(..., help="Repository (ex: oxsecurity/megalinter)"),
+    repo: str = typer.Option(None, "-r", "--repo", help="Repository (ex: oxsecurity/megalinter)"),
     markdown_file: str = typer.Option(None, "-m", "--markdownfile", help="Output Markdown file path"),
     sort_key: str = typer.Option(None, "-s", "--sort", help="Sort of name(default) or stars"),
     json_output: bool = typer.Option(
@@ -49,7 +49,9 @@ def main(
         help="Prints the version of the github-dependents-info package.",
     ),
 ) -> None:
-    if repo is not None:
+    if repo is None:
+        raise ("--repo argument is mandatory")
+    else:
         if sort_key is None:
             sort_key = "name"
         gh_deps_info = GithubDependentsInfo(repo, debug=verbose, sort_key=sort_key)
