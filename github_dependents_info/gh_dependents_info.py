@@ -1,4 +1,7 @@
 import requests
+
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 from bs4 import BeautifulSoup
 
 
@@ -31,10 +34,11 @@ class GithubDependentsInfo:
                 url = self.url_init + ""
                 if self.debug is True:
                     print("Package " + self.repo + ": browsing" + url + " ...")
+            package["url"] = url
             page_number = 1
 
             # Get total number of dependents from UI
-            r = requests.get(url)
+            r = requests_retry_session().get(url)
             soup = BeautifulSoup(r.content, "html.parser")
             svg_item = soup.find("svg", {"class": "octicon-code-square"})
             if svg_item is not None:
@@ -45,7 +49,7 @@ class GithubDependentsInfo:
 
             # Parse all dependent packages pages
             while nextExists:
-                r = requests.get(url)
+                r = requests_retry_session().get(url)
                 soup = BeautifulSoup(r.content, "html.parser")
                 result = result + [
                     "{}/{}".format(
@@ -93,7 +97,7 @@ class GithubDependentsInfo:
 
     # Get first url to see if there are multiple packages
     def compute_packages(self):
-        r = requests.get(self.url_init)
+        r = requests_retry_session().get(self.url_init)
         soup = BeautifulSoup(r.content, "html.parser")
         for a in soup.find_all("a", href=True):
             if a["href"].startswith(self.url_starts_with):
@@ -138,9 +142,11 @@ class GithubDependentsInfo:
             if len(dep_repo["public_dependents"]) == 0:
                 md_lines += ["No dependent repositories"]
             else:
-                badge_1 = self.build_badge("Dependents", dep_repo["total_dependents_number"])
-                badge_2 = self.build_badge("Public%20Dependents", dep_repo["public_dependents_number"])
-                badge_3 = self.build_badge("Private%20Dependents", dep_repo["private_dependents_number"])
+                badge_1 = self.build_badge("Dependents", dep_repo["total_dependents_number"], dep_repo["url"])
+                badge_2 = self.build_badge("Public%20Dependents", dep_repo["public_dependents_number"], dep_repo["url"])
+                badge_3 = self.build_badge(
+                    "Private%20Dependents", dep_repo["private_dependents_number"], dep_repo["url"]
+                )
                 md_lines += [
                     badge_1,
                     badge_2,
@@ -161,5 +167,27 @@ class GithubDependentsInfo:
                     print("Wrote markdown file " + options["file"])
         return md_lines_str
 
-    def build_badge(self, type, nb):
-        return f"[![](https://img.shields.io/badge/{type}-{str(nb)}-lightgrey)](https://github.com/{self.repo}/network/dependents)"
+    def build_badge(self, type, nb, url=None):
+        if url is None:
+            url = f"https://github.com/{self.repo}/network/dependents"
+        return f"[![](https://img.shields.io/static/v1?label={type}&message={str(nb)}&color=informational&logo=slickpic]({url})"
+
+
+    def requests_retry_session(
+        retries=3,
+        backoff_factor=0.5,
+        status_forcelist=(500, 502, 504),
+        session=None,
+    ):
+        session = session or requests.Session()
+        retry = Retry(
+            total=retries,
+            read=retries,
+            connect=retries,
+            backoff_factor=backoff_factor,
+            status_forcelist=status_forcelist,
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount("http://", adapter)
+        session.mount("https://", adapter)
+        return session

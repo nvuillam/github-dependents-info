@@ -1,8 +1,8 @@
 # Dependents stats for oxsecurity/megalinter
 
-[![](https://img.shields.io/badge/Dependents-1674-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-1217-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-393-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=1676&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=1164&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=511&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents)
 
 ## Package github.com/megalinter/megalinter
 
@@ -10,9 +10,9 @@ No dependent repositories
 
 ## Package mega-linter-runner
 
-[![](https://img.shields.io/badge/Dependents-43-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-33-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-10-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=43&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0xNjQ2MDY2NDA2)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=33&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0xNjQ2MDY2NDA2)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=10&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0xNjQ2MDY2NDA2)
 
   - [DiSSCo/elvis-frontend](https://github.com/DiSSCo/elvis-frontend)
   - [MRDGH2821/Repository-Guidelines](https://github.com/MRDGH2821/Repository-Guidelines)
@@ -50,9 +50,9 @@ No dependent repositories
 
 ## Package megalinter/megalinter
 
-[![](https://img.shields.io/badge/Dependents-199-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-141-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-58-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=199&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQyNTYxNDY1)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=141&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQyNTYxNDY1)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=58&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQyNTYxNDY1)
 
   - [5ire-org/5ire-faucet](https://github.com/5ire-org/5ire-faucet)
   - [AErmie/DevSecOps](https://github.com/AErmie/DevSecOps)
@@ -198,25 +198,25 @@ No dependent repositories
 
 ## Package megalinter/megalinter/flavors/${{ inputs.flavor }}
 
-[![](https://img.shields.io/badge/Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-0-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTU2NTM0MTgw)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTU2NTM0MTgw)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=0&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTU2NTM0MTgw)
 
   - [lars-reimann/.github](https://github.com/lars-reimann/.github)
 
 ## Package megalinter/megalinter/flavors/all
 
-[![](https://img.shields.io/badge/Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-0-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTU4NjkyNTcy)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTU4NjkyNTcy)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=0&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTU4NjkyNTcy)
 
   - [lars-reimann/.github](https://github.com/lars-reimann/.github)
 
 ## Package megalinter/megalinter/flavors/ci_light
 
-[![](https://img.shields.io/badge/Dependents-11-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-6-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-5-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=11&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTY5NTQ2MTA3)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=6&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTY5NTQ2MTA3)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=5&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTY5NTQ2MTA3)
 
   - [Azure/ARO-RP](https://github.com/Azure/ARO-RP)
   - [epleypa/Home-AssistantConfig](https://github.com/epleypa/Home-AssistantConfig)
@@ -227,9 +227,9 @@ No dependent repositories
 
 ## Package megalinter/megalinter/flavors/documentation
 
-[![](https://img.shields.io/badge/Dependents-22-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-19-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-3-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=22&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQyNTYxMTM1)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=19&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQyNTYxMTM1)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=3&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQyNTYxMTM1)
 
   - [Amplitude-Developer-Docs/amplitude-dev-center](https://github.com/Amplitude-Developer-Docs/amplitude-dev-center)
   - [GrandMoff100/HomeAssistantAPI](https://github.com/GrandMoff100/HomeAssistantAPI)
@@ -253,9 +253,9 @@ No dependent repositories
 
 ## Package megalinter/megalinter/flavors/dotnet
 
-[![](https://img.shields.io/badge/Dependents-16-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-10-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-6-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=16&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTU2NTk4OTg5)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=10&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTU2NTk4OTg5)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=6&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTU2NTk4OTg5)
 
   - [BishopClassicMotors/.github](https://github.com/BishopClassicMotors/.github)
   - [BishopClassicMotors/bishopclassicmotors.github.io](https://github.com/BishopClassicMotors/bishopclassicmotors.github.io)
@@ -270,9 +270,9 @@ No dependent repositories
 
 ## Package megalinter/megalinter/flavors/go
 
-[![](https://img.shields.io/badge/Dependents-23-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-18-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-5-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=23&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTUyNzQ2NTU3)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=18&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTUyNzQ2NTU3)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=5&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTUyNzQ2NTU3)
 
   - [BlackDex/act](https://github.com/BlackDex/act)
   - [ChristopherHX/act](https://github.com/ChristopherHX/act)
@@ -295,9 +295,9 @@ No dependent repositories
 
 ## Package megalinter/megalinter/flavors/java
 
-[![](https://img.shields.io/badge/Dependents-46-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-42-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-4-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=46&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQ4OTgxNzc0)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=42&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQ4OTgxNzc0)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=4&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQ4OTgxNzc0)
 
   - [Aljendro/clojure-deps-edn](https://github.com/Aljendro/clojure-deps-edn)
   - [DIT113-V22/group-04](https://github.com/DIT113-V22/group-04)
@@ -344,9 +344,9 @@ No dependent repositories
 
 ## Package megalinter/megalinter/flavors/javascript
 
-[![](https://img.shields.io/badge/Dependents-458-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-339-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-119-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=458&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTUwMDIzMjc5)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=339&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTUwMDIzMjc5)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=119&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTUwMDIzMjc5)
 
   - [1do-github-admin/CIPP](https://github.com/1do-github-admin/CIPP)
   - [365darcy/CIPP](https://github.com/365darcy/CIPP)
@@ -690,9 +690,9 @@ No dependent repositories
 
 ## Package megalinter/megalinter/flavors/php
 
-[![](https://img.shields.io/badge/Dependents-11-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-9-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-2-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=11&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQyNTYzNzA1)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=9&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQyNTYzNzA1)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=2&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQyNTYzNzA1)
 
   - [ericp-mrel/docker-php-toolbox](https://github.com/ericp-mrel/docker-php-toolbox)
   - [llaville/.github](https://github.com/llaville/.github)
@@ -706,9 +706,9 @@ No dependent repositories
 
 ## Package megalinter/megalinter/flavors/python
 
-[![](https://img.shields.io/badge/Dependents-30-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-27-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-3-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=30&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQ0NTI5MDU1)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=27&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQ0NTI5MDU1)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=3&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQ0NTI5MDU1)
 
   - [Athe-kunal/Verge_Scraper](https://github.com/Athe-kunal/Verge_Scraper)
   - [InbarRose/megalinter](https://github.com/InbarRose/megalinter)
@@ -744,9 +744,9 @@ No dependent repositories
 
 ## Package megalinter/megalinter/flavors/rust
 
-[![](https://img.shields.io/badge/Dependents-5-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-4-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=5&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMDA1NDY2OTY1)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=4&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMDA1NDY2OTY1)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMDA1NDY2OTY1)
 
   - [davidB/axum-tracing-opentelemetry](https://github.com/davidB/axum-tracing-opentelemetry)
   - [davidB/sandbox_megalinter](https://github.com/davidB/sandbox_megalinter)
@@ -755,26 +755,26 @@ No dependent repositories
 
 ## Package megalinter/megalinter/flavors/security
 
-[![](https://img.shields.io/badge/Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-0-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMDA1NDg4NjE3)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMDA1NDg4NjE3)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=0&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMDA1NDg4NjE3)
 
   - [nvuillam/demo-megalinter-security-flavor](https://github.com/nvuillam/demo-megalinter-security-flavor)
 
 ## Package megalinter/megalinter/flavors/swift
 
-[![](https://img.shields.io/badge/Dependents-2-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-2-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-0-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=2&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQ5MDY5MDQ0)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=2&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQ5MDY5MDQ0)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=0&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0yOTQ5MDY5MDQ0)
 
   - [christianeiselt/Advent-Of-Code_Swift](https://github.com/christianeiselt/Advent-Of-Code_Swift)
   - [christianeiselt/AdventKit](https://github.com/christianeiselt/AdventKit)
 
 ## Package megalinter/megalinter/flavors/terraform
 
-[![](https://img.shields.io/badge/Dependents-124-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-65-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-59-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=124&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMDA1MDI0MDk4)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=65&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMDA1MDI0MDk4)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=59&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMDA1MDI0MDk4)
 
   - [0dragosh/homelab](https://github.com/0dragosh/homelab)
   - [DamianFlynn/acf-ref-tf-module-virtual-machine](https://github.com/DamianFlynn/acf-ref-tf-module-virtual-machine)
@@ -844,9 +844,9 @@ No dependent repositories
 
 ## Package nvuillam/mega-linter
 
-[![](https://img.shields.io/badge/Dependents-181-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-138-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-43-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=181&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjY4Nzk5Njg5)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=138&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjY4Nzk5Njg5)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=43&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjY4Nzk5Njg5)
 
   - [AB199/RepoB](https://github.com/AB199/RepoB)
   - [AB199/RepoC](https://github.com/AB199/RepoC)
@@ -989,18 +989,18 @@ No dependent repositories
 
 ## Package nvuillam/mega-linter/flavors/java
 
-[![](https://img.shields.io/badge/Dependents-3-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-2-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=3&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjY3MTM5NDc4)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=2&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjY3MTM5NDc4)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjY3MTM5NDc4)
 
   - [evg-tso/sample-donkey-api](https://github.com/evg-tso/sample-donkey-api)
   - [mariomurillo/ecommerce-exercise](https://github.com/mariomurillo/ecommerce-exercise)
 
 ## Package nvuillam/mega-linter/flavors/javascript
 
-[![](https://img.shields.io/badge/Dependents-29-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-26-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-3-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=29&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjc1NTkzNzA1)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=26&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjc1NTkzNzA1)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=3&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjc1NTkzNzA1)
 
   - [ChipWolf/mega-linter](https://github.com/ChipWolf/mega-linter)
   - [JimmyTournemaine/mega-linter](https://github.com/JimmyTournemaine/mega-linter)
@@ -1031,9 +1031,9 @@ No dependent repositories
 
 ## Package nvuillam/mega-linter/flavors/php
 
-[![](https://img.shields.io/badge/Dependents-20-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-19-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=20&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjYyOTg4MzA3)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=19&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjYyOTg4MzA3)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjYyOTg4MzA3)
 
   - [OCSInventory-NG/OCSInventory-ocsreports](https://github.com/OCSInventory-NG/OCSInventory-ocsreports)
   - [llaville/phpunit-LoggerTestListener](https://github.com/llaville/phpunit-LoggerTestListener)
@@ -1057,18 +1057,18 @@ No dependent repositories
 
 ## Package nvuillam/mega-linter/flavors/terraform
 
-[![](https://img.shields.io/badge/Dependents-13-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-2-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-11-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=13&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMzgwNDY4MzA5)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=2&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMzgwNDY4MzA5)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=11&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMzgwNDY4MzA5)
 
   - [Teasel-Ian/terraform](https://github.com/Teasel-Ian/terraform)
   - [cardosojc/apigee-sample](https://github.com/cardosojc/apigee-sample)
 
 ## Package oxsecurity/megalinter
 
-[![](https://img.shields.io/badge/Dependents-314-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-202-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-112-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=314&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjEzNzc5OTM4)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=202&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjEzNzc5OTM4)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=112&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjEzNzc5OTM4)
 
   - [0ghny/shellx](https://github.com/0ghny/shellx)
   - [2zH/home-ops](https://github.com/2zH/home-ops)
@@ -1275,9 +1275,9 @@ No dependent repositories
 
 ## Package oxsecurity/megalinter/flavors/ci_light
 
-[![](https://img.shields.io/badge/Dependents-3-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-3-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-0-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=3&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjYwMjUyMTc5)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=3&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjYwMjUyMTc5)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=0&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjYwMjUyMTc5)
 
   - [ly4e/github-actions-testing](https://github.com/ly4e/github-actions-testing)
   - [ly4e/kali-gui-container-image](https://github.com/ly4e/kali-gui-container-image)
@@ -1285,26 +1285,26 @@ No dependent repositories
 
 ## Package oxsecurity/megalinter/flavors/cupcake
 
-[![](https://img.shields.io/badge/Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-0-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zNDQyNzM2NjA4)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zNDQyNzM2NjA4)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=0&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zNDQyNzM2NjA4)
 
   - [nvuillam/node-java-caller](https://github.com/nvuillam/node-java-caller)
 
 ## Package oxsecurity/megalinter/flavors/dart
 
-[![](https://img.shields.io/badge/Dependents-2-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-2-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-0-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=2&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zNDA5MTQ0OTkz)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=2&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zNDA5MTQ0OTkz)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=0&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zNDA5MTQ0OTkz)
 
   - [ankita-nema/SampleWebhook](https://github.com/ankita-nema/SampleWebhook)
   - [ankita-nema/ValidationAndHook](https://github.com/ankita-nema/ValidationAndHook)
 
 ## Package oxsecurity/megalinter/flavors/documentation
 
-[![](https://img.shields.io/badge/Dependents-22-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-17-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-5-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=22&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjE0NjYwNzgy)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=17&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjE0NjYwNzgy)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=5&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjE0NjYwNzgy)
 
   - [Amplitude-Developer-Docs/amplitude-dev-center](https://github.com/Amplitude-Developer-Docs/amplitude-dev-center)
   - [IlanCosman/tide](https://github.com/IlanCosman/tide)
@@ -1326,50 +1326,29 @@ No dependent repositories
 
 ## Package oxsecurity/megalinter/flavors/dotnet
 
-[![](https://img.shields.io/badge/Dependents-21-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-22-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents--1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-
-  - [BishopClassicMotors/.github](https://github.com/BishopClassicMotors/.github)
-  - [BishopClassicMotors/bishopclassicmotors.github.io](https://github.com/BishopClassicMotors/bishopclassicmotors.github.io)
-  - [Programming-Simplified-Community/Social-Coder](https://github.com/Programming-Simplified-Community/Social-Coder)
-  - [brandonmcclure/Spooky-Screensaver](https://github.com/brandonmcclure/Spooky-Screensaver)
-  - [brandonmcclure/ansible-role-githubrunner](https://github.com/brandonmcclure/ansible-role-githubrunner)
-  - [brandonmcclure/elixir-devcontainer](https://github.com/brandonmcclure/elixir-devcontainer)
-  - [brandonmcclure/elixir_helloworld](https://github.com/brandonmcclure/elixir_helloworld)
-  - [brandonmcclure/friendly-chainsaw](https://github.com/brandonmcclure/friendly-chainsaw)
-  - [brandonmcclure/friendly-chainsaw-docker](https://github.com/brandonmcclure/friendly-chainsaw-docker)
-  - [brandonmcclure/unitybuild_test](https://github.com/brandonmcclure/unitybuild_test)
-  - [brandonmcclure/vsce](https://github.com/brandonmcclure/vsce)
-  - [brandonmcclure/vscode-pwsh](https://github.com/brandonmcclure/vscode-pwsh)
-  - [chgl/magniFHIR](https://github.com/chgl/magniFHIR)
-  - [dorssel/dotnet-aes-extra](https://github.com/dorssel/dotnet-aes-extra)
-  - [dorssel/dotnet-xmss](https://github.com/dorssel/dotnet-xmss)
-  - [dorssel/usbipd-win](https://github.com/dorssel/usbipd-win)
-  - [inmortalbobz/usbipd-win](https://github.com/inmortalbobz/usbipd-win)
-  - [jmuelbert/jmbde-QT](https://github.com/jmuelbert/jmbde-QT)
-  - [jmuelbert/qt_conan_boilerplate_template](https://github.com/jmuelbert/qt_conan_boilerplate_template)
-  - [sierrafoxtrot/srecord](https://github.com/sierrafoxtrot/srecord)
-  - [withinfocus/withinfocus](https://github.com/withinfocus/withinfocus)
-  - [withinfocus/withinfocus.github.io](https://github.com/withinfocus/withinfocus.github.io)
+No dependent repositories
 
 ## Package oxsecurity/megalinter/flavors/go
 
-[![](https://img.shields.io/badge/Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents-0-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjU1MDY0NjUy)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjU1MDY0NjUy)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=0&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjU1MDY0NjUy)
 
   - [Jasstkn/link-checker](https://github.com/Jasstkn/link-checker)
 
 ## Package oxsecurity/megalinter/flavors/java
 
-No dependent repositories
+[![](https://img.shields.io/static/v1?label=Dependents&message=3&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjQ1MjU2ODg2)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjQ1MjU2ODg2)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=2&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjQ1MjU2ODg2)
+
+  - [charkchalk/backend](https://github.com/charkchalk/backend)
 
 ## Package oxsecurity/megalinter/flavors/javascript
 
-[![](https://img.shields.io/badge/Dependents-55-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-55-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents--55-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
+[![](https://img.shields.io/static/v1?label=Dependents&message=66&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjEyMzEyMzA0)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=30&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjEyMzEyMzA0)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=36&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjEyMzEyMzA0)
 
   - [CaioAureliano/image-uploader](https://github.com/CaioAureliano/image-uploader)
   - [MRDGH2821/Discord-Ban-Utils-Bot](https://github.com/MRDGH2821/Discord-Ban-Utils-Bot)
@@ -1378,21 +1357,11 @@ No dependent repositories
   - [MRDGH2821/dpaste-ts](https://github.com/MRDGH2821/dpaste-ts)
   - [MRDGH2821/use-custom-env](https://github.com/MRDGH2821/use-custom-env)
   - [NOUIY/npm-groovy-lint](https://github.com/NOUIY/npm-groovy-lint)
-  - [Nautilus-Cyberneering/git-queue](https://github.com/Nautilus-Cyberneering/git-queue)
   - [Satsuger/NestAuth](https://github.com/Satsuger/NestAuth)
   - [ahmadnassri/action-commit-lint](https://github.com/ahmadnassri/action-commit-lint)
   - [ahmadnassri/action-semantic-release](https://github.com/ahmadnassri/action-semantic-release)
   - [ahmadnassri/action-template-repository-sync](https://github.com/ahmadnassri/action-template-repository-sync)
-  - [ahmadnassri/action-terraform-report](https://github.com/ahmadnassri/action-terraform-report)
-  - [ahmadnassri/node-ahmad](https://github.com/ahmadnassri/node-ahmad)
-  - [ahmadnassri/node-api-problem](https://github.com/ahmadnassri/node-api-problem)
-  - [ahmadnassri/node-autoenv](https://github.com/ahmadnassri/node-autoenv)
-  - [ahmadnassri/node-cloudevents-schemas](https://github.com/ahmadnassri/node-cloudevents-schemas)
-  - [ahmadnassri/node-error](https://github.com/ahmadnassri/node-error)
-  - [ahmadnassri/node-glob-promise](https://github.com/ahmadnassri/node-glob-promise)
-  - [ahmadnassri/node-nightwatch-accessibility](https://github.com/ahmadnassri/node-nightwatch-accessibility)
   - [ahmadnassri/node-oas-fastify](https://github.com/ahmadnassri/node-oas-fastify)
-  - [ahmadnassri/node-oas-request](https://github.com/ahmadnassri/node-oas-request)
   - [ahmadnassri/node-oas-request-readme](https://github.com/ahmadnassri/node-oas-request-readme)
   - [ahmadnassri/node-oas-schemas](https://github.com/ahmadnassri/node-oas-schemas)
   - [ahmadnassri/node-pretty-exceptions](https://github.com/ahmadnassri/node-pretty-exceptions)
@@ -1404,26 +1373,11 @@ No dependent repositories
   - [ahmadnassri/node-uncaught-extender](https://github.com/ahmadnassri/node-uncaught-extender)
   - [ahmadnassri/node-updated](https://github.com/ahmadnassri/node-updated)
   - [ahmadnassri/template-action-docker](https://github.com/ahmadnassri/template-action-docker)
-  - [ahmadnassri/template-action-node](https://github.com/ahmadnassri/template-action-node)
-  - [ahmadnassri/template-js-lib](https://github.com/ahmadnassri/template-js-lib)
-  - [ahmadnassri/template-node-lib](https://github.com/ahmadnassri/template-node-lib)
   - [arbitraryexecution/compound-monitoring](https://github.com/arbitraryexecution/compound-monitoring)
-  - [dgteixeira/pr-status-giphy-action](https://github.com/dgteixeira/pr-status-giphy-action)
-  - [hardisgroupcom/sfdx-hardis](https://github.com/hardisgroupcom/sfdx-hardis)
-  - [hardisgroupcom/vscode-sfdx-hardis](https://github.com/hardisgroupcom/vscode-sfdx-hardis)
-  - [jfandy1982/emby-data-check](https://github.com/jfandy1982/emby-data-check)
-  - [josecelano/mandelbrot-orbits-rust](https://github.com/josecelano/mandelbrot-orbits-rust)
   - [kutmanbek0258/login_auth_nest](https://github.com/kutmanbek0258/login_auth_nest)
   - [leosuncin/goal-app](https://github.com/leosuncin/goal-app)
-  - [leosuncin/nest-api-example](https://github.com/leosuncin/nest-api-example)
-  - [leosuncin/nest-auth-example](https://github.com/leosuncin/nest-auth-example)
-  - [leosuncin/nest-typeorm-custom-repository](https://github.com/leosuncin/nest-typeorm-custom-repository)
-  - [louffee/canada-design-system](https://github.com/louffee/canada-design-system)
-  - [nvuillam/markdown-table-formatter](https://github.com/nvuillam/markdown-table-formatter)
   - [nvuillam/node-sarif-builder](https://github.com/nvuillam/node-sarif-builder)
-  - [nvuillam/npm-groovy-lint](https://github.com/nvuillam/npm-groovy-lint)
   - [oasisprotocol/oasis-wallet-web](https://github.com/oasisprotocol/oasis-wallet-web)
-  - [oxsecurity/megalinter](https://github.com/oxsecurity/megalinter)
   - [react-universe/suplint](https://github.com/react-universe/suplint)
   - [tintincita/nest-test](https://github.com/tintincita/nest-test)
 
@@ -1433,33 +1387,26 @@ No dependent repositories
 
 ## Package oxsecurity/megalinter/flavors/python
 
-[![](https://img.shields.io/badge/Dependents-8-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-8-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents--8-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-
-  - [CITCOM-project/CausalTestingFramework](https://github.com/CITCOM-project/CausalTestingFramework)
-  - [adithyaamara/FlaskApp](https://github.com/adithyaamara/FlaskApp)
-  - [dochang/bumplus](https://github.com/dochang/bumplus)
-  - [ncsu-geoforall-lab/grass-gis-on-hpc-henry2](https://github.com/ncsu-geoforall-lab/grass-gis-on-hpc-henry2)
-  - [newrelic/newrelic-python-agent](https://github.com/newrelic/newrelic-python-agent)
-  - [oxsecurity/megalinter](https://github.com/oxsecurity/megalinter)
-  - [rasa/law-scraper](https://github.com/rasa/law-scraper)
-  - [spreequalle/ebuilds](https://github.com/spreequalle/ebuilds)
+No dependent repositories
 
 ## Package oxsecurity/megalinter/flavors/rust
 
-No dependent repositories
+[![](https://img.shields.io/static/v1?label=Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjM2MzA1NTAx)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjM2MzA1NTAx)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=-1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjM2MzA1NTAx)
+
+  - [josecelano/mandelbrot-orbits-rust](https://github.com/josecelano/mandelbrot-orbits-rust)
 
 ## Package oxsecurity/megalinter/flavors/salesforce
 
-No dependent repositories
+[![](https://img.shields.io/static/v1?label=Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjUxMTU1OTYw)
+[![](https://img.shields.io/static/v1?label=Public%20Dependents&message=1&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjUxMTU1OTYw)
+[![](https://img.shields.io/static/v1?label=Private%20Dependents&message=0&color=informational&logo=slickpic](https://github.com/oxsecurity/megalinter/network/dependents?package_id=UGFja2FnZS0zMjUxMTU1OTYw)
+
+  - [jleiby3/test-actions](https://github.com/jleiby3/test-actions)
 
 ## Package oxsecurity/megalinter/flavors/terraform
 
-[![](https://img.shields.io/badge/Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Public%20Dependents-1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-[![](https://img.shields.io/badge/Private%20Dependents--1-lightgrey)](https://github.com/oxsecurity/megalinter/network/dependents)
-
-  - [ahmadnassri/template-terraform](https://github.com/ahmadnassri/template-terraform)
+No dependent repositories
 
 _Generated by [github-dependents-info](https://github.com/nvuillam/github-dependents-info)_
