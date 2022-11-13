@@ -1,8 +1,7 @@
 import requests
-
+from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-from bs4 import BeautifulSoup
 
 
 class GithubDependentsInfo:
@@ -38,7 +37,7 @@ class GithubDependentsInfo:
             page_number = 1
 
             # Get total number of dependents from UI
-            r = requests_retry_session().get(url)
+            r = self.requests_retry_session().get(url)
             soup = BeautifulSoup(r.content, "html.parser")
             svg_item = soup.find("svg", {"class": "octicon-code-square"})
             if svg_item is not None:
@@ -49,7 +48,7 @@ class GithubDependentsInfo:
 
             # Parse all dependent packages pages
             while nextExists:
-                r = requests_retry_session().get(url)
+                r = self.requests_retry_session().get(url)
                 soup = BeautifulSoup(r.content, "html.parser")
                 result = result + [
                     "{}/{}".format(
@@ -97,7 +96,7 @@ class GithubDependentsInfo:
 
     # Get first url to see if there are multiple packages
     def compute_packages(self):
-        r = requests_retry_session().get(self.url_init)
+        r = self.requests_retry_session().get(self.url_init)
         soup = BeautifulSoup(r.content, "html.parser")
         for a in soup.find_all("a", href=True):
             if a["href"].startswith(self.url_starts_with):
@@ -127,9 +126,9 @@ class GithubDependentsInfo:
 
     def build_markdown(self, **options) -> str:
         md_lines = [f"# Dependents stats for {self.repo}", ""]
-        badge_1 = self.build_badge("Dependents", self.total_sum)
-        badge_2 = self.build_badge("Public%20Dependents", self.total_public_sum)
-        badge_3 = self.build_badge("Private%20Dependents", self.total_private_sum)
+        badge_1 = self.build_badge("Used%20by", self.total_sum)
+        badge_2 = self.build_badge("Used%20by%20(public)", self.total_public_sum)
+        badge_3 = self.build_badge("Used%20by%20(private)", self.total_private_sum)
         md_lines += [
             badge_1,
             badge_2,
@@ -142,10 +141,12 @@ class GithubDependentsInfo:
             if len(dep_repo["public_dependents"]) == 0:
                 md_lines += ["No dependent repositories"]
             else:
-                badge_1 = self.build_badge("Dependents", dep_repo["total_dependents_number"], dep_repo["url"])
-                badge_2 = self.build_badge("Public%20Dependents", dep_repo["public_dependents_number"], dep_repo["url"])
+                badge_1 = self.build_badge("Used%20by", dep_repo["total_dependents_number"], url=dep_repo["url"])
+                badge_2 = self.build_badge(
+                    "Used%20by%20(public)", dep_repo["public_dependents_number"], url=dep_repo["url"]
+                )
                 badge_3 = self.build_badge(
-                    "Private%20Dependents", dep_repo["private_dependents_number"], dep_repo["url"]
+                    "Used%20by%20(private)", dep_repo["private_dependents_number"], url=dep_repo["url"]
                 )
                 md_lines += [
                     badge_1,
@@ -167,13 +168,15 @@ class GithubDependentsInfo:
                     print("Wrote markdown file " + options["file"])
         return md_lines_str
 
-    def build_badge(self, type, nb, url=None):
-        if url is None:
+    def build_badge(self, label, nb, **options):
+        if "url" in options:
+            url = options["url"]
+        else:
             url = f"https://github.com/{self.repo}/network/dependents"
-        return f"[![](https://img.shields.io/static/v1?label={type}&message={str(nb)}&color=informational&logo=slickpic]({url})"
-
+        return f"[![](https://img.shields.io/static/v1?label={label}&message={str(nb)}&color=informational&logo=slickpic)]({url})"
 
     def requests_retry_session(
+        self,
         retries=3,
         backoff_factor=0.5,
         status_forcelist=(500, 502, 504),
