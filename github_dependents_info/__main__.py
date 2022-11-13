@@ -52,7 +52,6 @@ def main(
 ) -> None:
     if repo is not None:
         gh_deps_info = GithubDependentsInfo(repo, debug=verbose)
-        print(verbose)
         repo_stats = gh_deps_info.collect()
         if markdown_file is not None:
             gh_deps_info.build_markdown(file=markdown_file)
