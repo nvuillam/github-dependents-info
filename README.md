@@ -20,7 +20,14 @@ GitHub API does not allow to collect information about package usage (Used by in
 
 This package uses GitHub HTML to collect information and output it as text or json, or generate a markdown file.
 
-JSON example
+### Badges example
+
+[![](https://img.shields.io/static/v1?label=Used%20by&message=15&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)
+[![](https://img.shields.io/static/v1?label=Used%20by%20(public)&message=11&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)
+[![](https://img.shields.io/static/v1?label=Used%20by%20(private)&message=4&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)
+[![](https://img.shields.io/static/v1?label=Used%20by%20(stars)&message=56&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)
+
+### JSON example
 
 ```json
 {
@@ -100,7 +107,7 @@ JSON example
 }
 ```
 
-Markdown example
+### Markdown example
 
 ```markdown
 # Dependents stats for nvuillam/npm-groovy-lint
