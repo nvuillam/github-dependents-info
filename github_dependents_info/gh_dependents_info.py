@@ -9,13 +9,15 @@ class GithubDependentsInfo:
         self.repo = repo
         self.url_init = "https://github.com/{}/network/dependents".format(self.repo)
         self.url_starts_with = "/{}/network/dependents".format(self.repo) + "?package_id="
+        self.sort_key = "name" if "sort_key" not in options else options["sort_key"]
         self.debug = True if "debug" in options and options["debug"] is True else False
         self.total_sum = 0
         self.total_public_sum = 0
         self.total_private_sum = 0
+        self.total_stars_sum = 0
         self.dependent_repos = []
 
-    def collect(self, **options):
+    def collect(self):
         # List packages
         self.compute_packages()
 
@@ -34,6 +36,7 @@ class GithubDependentsInfo:
                 if self.debug is True:
                     print("Package " + self.repo + ": browsing" + url + " ...")
             package["url"] = url
+            package["public_dependent_stars"] = 0
             page_number = 1
 
             # Get total number of dependents from UI
@@ -50,13 +53,17 @@ class GithubDependentsInfo:
             while nextExists:
                 r = self.requests_retry_session().get(url)
                 soup = BeautifulSoup(r.content, "html.parser")
-                result = result + [
-                    "{}/{}".format(
-                        t.find("a", {"data-repository-hovercards-enabled": ""}).text,
-                        t.find("a", {"data-hovercard-type": "repository"}).text,
-                    )
-                    for t in soup.findAll("div", {"class": "Box-row"})
-                ]
+                total_public_stars = 0
+                for t in soup.findAll("div", {"class": "Box-row"}):
+                    result_item = {
+                        "name": "{}/{}".format(
+                            t.find("a", {"data-repository-hovercards-enabled": ""}).text,
+                            t.find("a", {"data-hovercard-type": "repository"}).text,
+                        ),
+                        "stars": int(t.find("svg", {"class": "octicon-star"}).parent.text.strip().replace(",", "")),
+                    }
+                    result += [result_item]
+                    total_public_stars += result_item["stars"]
                 nextExists = False
                 paginate_container = soup.find("div", {"class": "paginate-container"})
                 if paginate_container is not None:
@@ -69,7 +76,10 @@ class GithubDependentsInfo:
                                 print("  - browsing page " + str(page_number))
 
             # Manage results for package
-            result.sort()
+            if self.sort_key == "stars":
+                result = sorted(result, key=lambda d: d[self.sort_key], reverse=True)
+            else:
+                result = sorted(result, key=lambda d: d[self.sort_key])
             if self.debug is True:
                 for r in result:
                     print(r)
@@ -78,6 +88,7 @@ class GithubDependentsInfo:
             total_public_dependents = len(result)
             package["public_dependents"] = result
             package["public_dependents_number"] = total_public_dependents
+            package["public_dependent_stars"] = total_public_stars
             package["private_dependents_number"] = total_dependents - total_public_dependents
             package["total_dependents_number"] = total_dependents if total_dependents > 0 else total_public_dependents
 
@@ -85,12 +96,18 @@ class GithubDependentsInfo:
             self.total_sum += package["total_dependents_number"]
             self.total_public_sum += package["public_dependents_number"]
             self.total_private_sum += package["private_dependents_number"]
+            self.total_stars_sum += package["public_dependent_stars"]
 
             # Output
             if self.debug is True:
                 print("Total for package: " + str(total_public_dependents))
                 print("")
 
+        # sort
+        if self.sort_key == "stars":
+            self.dependent_repos = sorted(self.dependent_repos, key=lambda d: d["public_dependent_stars"], reverse=True)
+        else:
+            self.dependent_repos = sorted(self.dependent_repos, key=lambda d: d["name"])
         # Build final result
         return self.build_result()
 
@@ -102,6 +119,8 @@ class GithubDependentsInfo:
             if a["href"].startswith(self.url_starts_with):
                 package_id = a["href"].rsplit("=", 1)[1]
                 package_name = a.find("span").text.strip()
+                if "{{" in package_name:
+                    continue
                 if self.debug is True:
                     print(package_name)
                 self.dependent_repos += [{"id": package_id, "name": package_name}]
@@ -117,11 +136,12 @@ class GithubDependentsInfo:
             "total_dependents_number": self.total_sum,
             "public_dependents_number": self.total_public_sum,
             "private_dependents_number": self.total_private_sum,
+            "public_dependents_stars": self.total_stars_sum,
         }
 
     def print_result(self):
         print("Total: " + str(self.total_sum))
-        print("Public: " + str(self.total_public_sum))
+        print("Public: " + str(self.total_public_sum) + " (" + str(self.total_stars_sum) + " stars)")
         print("Private: " + str(self.total_private_sum))
 
     def build_markdown(self, **options) -> str:
@@ -129,12 +149,35 @@ class GithubDependentsInfo:
         badge_1 = self.build_badge("Used%20by", self.total_sum)
         badge_2 = self.build_badge("Used%20by%20(public)", self.total_public_sum)
         badge_3 = self.build_badge("Used%20by%20(private)", self.total_private_sum)
+        badge_4 = self.build_badge("Used%20by%20(stars)", self.total_stars_sum)
         md_lines += [
             badge_1,
             badge_2,
             badge_3,
+            badge_4,
             "",
         ]
+
+        # Summary table
+        if len(self.dependent_repos) > 1:
+            md_lines += [
+                "| Package    | Total  | Public | Private | Stars |",
+                "| :--------  | -----: | -----: | -----:  | ----: |",
+            ]
+            for dep_repo in self.dependent_repos:
+                name = "[" + dep_repo["name"] + "](#Package" + dep_repo["name"] + ")"
+                badge_1 = self.build_badge("Used%20by", dep_repo["total_dependents_number"], url=dep_repo["url"])
+                badge_2 = self.build_badge(
+                    "Used%20by%20(public)", dep_repo["public_dependents_number"], url=dep_repo["url"]
+                )
+                badge_3 = self.build_badge(
+                    "Used%20by%20(private)", dep_repo["private_dependents_number"], url=dep_repo["url"]
+                )
+                badge_4 = self.build_badge(
+                    "Used%20by%20(stars)", dep_repo["public_dependent_stars"], url=dep_repo["url"]
+                )
+                md_lines += [f"| {name}    | {badge_1}  | {badge_2} | {badge_3} | {badge_4} |"]
+            md_lines += [""]
 
         for dep_repo in self.dependent_repos:
             md_lines += ["## Package " + dep_repo["name"], ""]
@@ -148,14 +191,21 @@ class GithubDependentsInfo:
                 badge_3 = self.build_badge(
                     "Used%20by%20(private)", dep_repo["private_dependents_number"], url=dep_repo["url"]
                 )
+                badge_4 = self.build_badge(
+                    "Used%20by%20(stars)", dep_repo["public_dependent_stars"], url=dep_repo["url"]
+                )
                 md_lines += [
                     badge_1,
                     badge_2,
                     badge_3,
+                    badge_4,
                     "",
                 ]
+                md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
                 for repo1 in dep_repo["public_dependents"]:
-                    md_lines += [f"  - [{repo1}](https://github.com/{repo1})"]
+                    repo_label = repo1["name"]
+                    repo_stars = repo1["stars"]
+                    md_lines += [f"|[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
             md_lines += [""]
         md_lines += ["_Generated by [github-dependents-info](https://github.com/nvuillam/github-dependents-info)_"]
         md_lines_str = "\n".join(md_lines)
