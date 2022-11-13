@@ -1,6 +1,7 @@
 """Collect information about dependencies between a github repo and other repositories. Results available in JSON, markdown and badges."""
 
 import sys
+from .gh_dependents_info import GithubDependentsInfo
 
 if sys.version_info >= (3, 8):
     from importlib import metadata as importlib_metadata

@@ -14,7 +14,7 @@ repository = "https://github.com/nvuillam/github-dependents-info"
 homepage = "https://github.com/nvuillam/github-dependents-info"
 
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
-keywords = []  #! Update me
+keywords = ["github","dependent","used-by","repository","stats","dependencies","using"]  #! Update me
 
 # Pypi classifiers: https://pypi.org/classifiers/
 classifiers = [  #! Update me
