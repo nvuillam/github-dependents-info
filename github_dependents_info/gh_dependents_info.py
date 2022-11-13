@@ -16,6 +16,7 @@ class GithubDependentsInfo:
         self.total_private_sum = 0
         self.total_stars_sum = 0
         self.dependent_repos = []
+        self.badges = {}
 
     def collect(self):
         # List packages
@@ -92,6 +93,21 @@ class GithubDependentsInfo:
             package["private_dependents_number"] = total_dependents - total_public_dependents
             package["total_dependents_number"] = total_dependents if total_dependents > 0 else total_public_dependents
 
+            # Build package badges
+            package["badges"] = {}
+            package["badges"]["total"] = self.build_badge(
+                "Used%20by", package["total_dependents_number"], url=package["url"]
+            )
+            package["badges"]["public"] = self.build_badge(
+                "Used%20by%20(public)", package["public_dependents_number"], url=package["url"]
+            )
+            package["badges"]["private"] = self.build_badge(
+                "Used%20by%20(private)", package["private_dependents_number"], url=package["url"]
+            )
+            package["badges"]["stars"] = self.build_badge(
+                "Used%20by%20(stars)", package["public_dependent_stars"], url=package["url"]
+            )
+
             # Build total stats
             self.total_sum += package["total_dependents_number"]
             self.total_public_sum += package["public_dependents_number"]
@@ -108,6 +124,11 @@ class GithubDependentsInfo:
             self.dependent_repos = sorted(self.dependent_repos, key=lambda d: d["public_dependent_stars"], reverse=True)
         else:
             self.dependent_repos = sorted(self.dependent_repos, key=lambda d: d["name"])
+        # Build total badges
+        self.badges["total"] = self.build_badge("Used%20by", self.total_sum)
+        self.badges["public"] = self.build_badge("Used%20by%20(public)", self.total_public_sum)
+        self.badges["private"] = self.build_badge("Used%20by%20(private)", self.total_private_sum)
+        self.badges["stars"] = self.build_badge("Used%20by%20(stars)", self.total_stars_sum)
         # Build final result
         return self.build_result()
 
@@ -137,6 +158,7 @@ class GithubDependentsInfo:
             "public_dependents_number": self.total_public_sum,
             "private_dependents_number": self.total_private_sum,
             "public_dependents_stars": self.total_stars_sum,
+            "badges": self.badges,
         }
 
     def print_result(self):
@@ -146,15 +168,12 @@ class GithubDependentsInfo:
 
     def build_markdown(self, **options) -> str:
         md_lines = [f"# Dependents stats for {self.repo}", ""]
-        badge_1 = self.build_badge("Used%20by", self.total_sum)
-        badge_2 = self.build_badge("Used%20by%20(public)", self.total_public_sum)
-        badge_3 = self.build_badge("Used%20by%20(private)", self.total_private_sum)
-        badge_4 = self.build_badge("Used%20by%20(stars)", self.total_stars_sum)
+
         md_lines += [
-            badge_1,
-            badge_2,
-            badge_3,
-            badge_4,
+            self.badges["total"],
+            self.badges["public"],
+            self.badges["private"],
+            self.badges["stars"],
             "",
         ]
 
@@ -165,17 +184,11 @@ class GithubDependentsInfo:
                 "| :--------  | -----: | -----: | -----:  | ----: |",
             ]
             for dep_repo in self.dependent_repos:
-                name = "[" + dep_repo["name"] + "](#Package" + dep_repo["name"] + ")"
-                badge_1 = self.build_badge("Used%20by", dep_repo["total_dependents_number"], url=dep_repo["url"])
-                badge_2 = self.build_badge(
-                    "Used%20by%20(public)", dep_repo["public_dependents_number"], url=dep_repo["url"]
-                )
-                badge_3 = self.build_badge(
-                    "Used%20by%20(private)", dep_repo["private_dependents_number"], url=dep_repo["url"]
-                )
-                badge_4 = self.build_badge(
-                    "Used%20by%20(stars)", dep_repo["public_dependent_stars"], url=dep_repo["url"]
-                )
+                name = "[" + dep_repo["name"] + "](#package-" + dep_repo["name"].replace("/", "") + ")"
+                badge_1 = dep_repo["badges"]["total"]
+                badge_2 = dep_repo["badges"]["public"]
+                badge_3 = dep_repo["badges"]["private"]
+                badge_4 = dep_repo["badges"]["stars"]
                 md_lines += [f"| {name}    | {badge_1}  | {badge_2} | {badge_3} | {badge_4} |"]
             md_lines += [""]
 
@@ -184,21 +197,11 @@ class GithubDependentsInfo:
             if len(dep_repo["public_dependents"]) == 0:
                 md_lines += ["No dependent repositories"]
             else:
-                badge_1 = self.build_badge("Used%20by", dep_repo["total_dependents_number"], url=dep_repo["url"])
-                badge_2 = self.build_badge(
-                    "Used%20by%20(public)", dep_repo["public_dependents_number"], url=dep_repo["url"]
-                )
-                badge_3 = self.build_badge(
-                    "Used%20by%20(private)", dep_repo["private_dependents_number"], url=dep_repo["url"]
-                )
-                badge_4 = self.build_badge(
-                    "Used%20by%20(stars)", dep_repo["public_dependent_stars"], url=dep_repo["url"]
-                )
                 md_lines += [
-                    badge_1,
-                    badge_2,
-                    badge_3,
-                    badge_4,
+                    dep_repo["badges"]["total"],
+                    dep_repo["badges"]["public"],
+                    dep_repo["badges"]["private"],
+                    dep_repo["badges"]["stars"],
                     "",
                 ]
                 md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
