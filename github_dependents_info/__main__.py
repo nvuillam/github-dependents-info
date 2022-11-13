@@ -1,14 +1,12 @@
-from typing import Optional
-
 import json
 from enum import Enum
 from random import choice
+from typing import Optional
 
 import typer
-from rich.console import Console
-
 from github_dependents_info import version
 from github_dependents_info.gh_dependents_info import GithubDependentsInfo
+from rich.console import Console
 
 app = typer.Typer(
     name="github-dependents-info",
