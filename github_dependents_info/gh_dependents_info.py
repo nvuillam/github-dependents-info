@@ -12,6 +12,7 @@ class GithubDependentsInfo:
         self.total_public_sum = 0
         self.total_private_sum = 0
         self.dependent_repos = []
+        print(options)
 
     def collect(self, **options):
         # List packages
@@ -116,17 +117,25 @@ class GithubDependentsInfo:
             "private_dependents_number": self.total_private_sum,
         }
 
+    def print_result(self):
+        print("Total: " + str(self.total_sum))
+        print("Public: " + str(self.total_public_sum))
+        print("Private: " + str(self.total_private_sum))
+
     def build_markdown(self, **options) -> str:
         md_lines = [f"# Dependents stats for {self.repo}", ""]
         for dep_repo in self.dependent_repos:
             md_lines += ["## Package " + dep_repo["name"], ""]
-            for repo1 in dep_repo["public_dependents"]:
-                md_lines += ["  - " + repo1]
+            if len(dep_repo["public_dependents"]) == 0:
+                md_lines += ["No dependent repositories"]
+            else:
+                for repo1 in dep_repo["public_dependents"]:
+                    md_lines += ["  - " + repo1]
             md_lines += [""]
         md_lines_str = "\n".join(md_lines)
         if "file" in options:
             with open(options["file"], "w", encoding="utf-8") as f:
                 f.write(md_lines_str)
-                if self.debug:
+                if self.debug is True:
                     print("Wrote markdown file " + options["file"])
         return md_lines_str
