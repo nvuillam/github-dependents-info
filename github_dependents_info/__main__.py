@@ -1,4 +1,5 @@
 import json
+import logging
 from enum import Enum
 from random import choice
 from typing import Optional
@@ -27,7 +28,14 @@ def version_callback(print_version: bool) -> None:
 def main(
     repo: str = typer.Option(None, "-r", "--repo", help="Repository (ex: oxsecurity/megalinter)"),
     markdown_file: str = typer.Option(None, "-m", "--markdownfile", help="Output Markdown file path"),
+    badge_markdown_file: str = typer.Option(
+        None,
+        "-b",
+        "--badgemarkdownfile",
+        help="Path to markdown file to insert/update Used By badge between tags <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->",
+    ),
     sort_key: str = typer.Option(None, "-s", "--sort", help="Sort of name(default) or stars"),
+    min_stars: int = typer.Option(None, "-x", "--minstars", help="Filter dependents with less than X stars"),
     json_output: bool = typer.Option(
         False,
         "-j",
@@ -49,21 +57,39 @@ def main(
         help="Prints the version of the github-dependents-info package.",
     ),
 ) -> None:
-    if repo is None:
-        raise ("--repo argument is mandatory")
+    # Init logger
+    if verbose is True:
+        logging.basicConfig(level=logging.INFO)
     else:
+        logging.basicConfig(level=logging.WARNING)
+    # Check minimum arguments
+    if repo is None:
+        raise ValueError("--repo argument is mandatory")
+    else:
+        # Manage default values :)
         if sort_key is None:
             sort_key = "name"
-        gh_deps_info = GithubDependentsInfo(repo, debug=verbose, sort_key=sort_key)
-        repo_stats = gh_deps_info.collect()
+        if min_stars is None:
+            min_stars = 0
+        # Create GithubDependentsInfo instance
+        gh_deps_info = GithubDependentsInfo(
+            repo,
+            debug=verbose,
+            sort_key=sort_key,
+            min_stars=min_stars,
+            json_output=json_output,
+            badge_markdown_file=badge_markdown_file,
+        )
+        # Collect data
+        gh_deps_info.collect()
+        # Write output markdown
         if markdown_file is not None:
             gh_deps_info.build_markdown(file=markdown_file)
-            if json_output is False:
-                print("Wrote markdown file " + markdown_file)
-        if json_output is True:
-            print(json.dumps(repo_stats, indent=4))
-        else:
-            gh_deps_info.print_result()
+        # Update existing markdown to add badge
+        if badge_markdown_file is not None:
+            gh_deps_info.write_badge(badge_markdown_file)
+        # Print text or json result
+        gh_deps_info.print_result()
 
 
 if __name__ == "__main__":
