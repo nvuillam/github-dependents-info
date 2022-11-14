@@ -1,3 +1,6 @@
+import json
+import logging
+import re
 import requests
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
@@ -10,20 +13,24 @@ class GithubDependentsInfo:
         self.url_init = "https://github.com/{}/network/dependents".format(self.repo)
         self.url_starts_with = "/{}/network/dependents".format(self.repo) + "?package_id="
         self.sort_key = "name" if "sort_key" not in options else options["sort_key"]
+        self.min_stars = None if "min_stars" not in options else options["min_stars"]
+        self.json_output = True if "json_output" in options and options["json_output"] is True else False
         self.debug = True if "debug" in options and options["debug"] is True else False
         self.total_sum = 0
         self.total_public_sum = 0
         self.total_private_sum = 0
         self.total_stars_sum = 0
-        self.dependent_repos = []
+        self.packages = []
+        self.all_public_dependent_repos = []
         self.badges = {}
+        self.result = {}
 
     def collect(self):
         # List packages
         self.compute_packages()
 
         # for each package, get count by parsing GitHub HTML
-        for package in self.dependent_repos:
+        for package in self.packages:
             nextExists = True
             result = []
 
@@ -31,11 +38,11 @@ class GithubDependentsInfo:
             if package["id"] is not None:
                 url = self.url_init + "?package_id=" + package["id"]
                 if self.debug is True:
-                    print("Package " + package["name"] + ": browsing " + url + " ...")
+                    logging.debug("Package " + package["name"] + ": browsing " + url + " ...")
             else:
                 url = self.url_init + ""
                 if self.debug is True:
-                    print("Package " + self.repo + ": browsing" + url + " ...")
+                    logging.debug("Package " + self.repo + ": browsing" + url + " ...")
             package["url"] = url
             package["public_dependent_stars"] = 0
             page_number = 1
@@ -55,6 +62,8 @@ class GithubDependentsInfo:
                 r = self.requests_retry_session().get(url)
                 soup = BeautifulSoup(r.content, "html.parser")
                 total_public_stars = 0
+
+                # Browse page dependents
                 for t in soup.findAll("div", {"class": "Box-row"}):
                     result_item = {
                         "name": "{}/{}".format(
@@ -63,8 +72,13 @@ class GithubDependentsInfo:
                         ),
                         "stars": int(t.find("svg", {"class": "octicon-star"}).parent.text.strip().replace(",", "")),
                     }
+                    # Skip result if less than minimum stars
+                    if self.min_stars is not None and result_item["stars"] < self.min_stars:
+                        continue
                     result += [result_item]
                     total_public_stars += result_item["stars"]
+
+                # Check next page
                 nextExists = False
                 paginate_container = soup.find("div", {"class": "paginate-container"})
                 if paginate_container is not None:
@@ -74,7 +88,7 @@ class GithubDependentsInfo:
                             url = u["href"]
                             page_number = page_number + 1
                             if self.debug is True:
-                                print("  - browsing page " + str(page_number))
+                                logging.debug("  - browsing page " + str(page_number))
 
             # Manage results for package
             if self.sort_key == "stars":
@@ -83,7 +97,7 @@ class GithubDependentsInfo:
                 result = sorted(result, key=lambda d: d[self.sort_key])
             if self.debug is True:
                 for r in result:
-                    print(r)
+                    logging.debug(r)
 
             # Build package stats
             total_public_dependents = len(result)
@@ -109,6 +123,7 @@ class GithubDependentsInfo:
             )
 
             # Build total stats
+            self.all_public_dependent_repos += result
             self.total_sum += package["total_dependents_number"]
             self.total_public_sum += package["public_dependents_number"]
             self.total_private_sum += package["private_dependents_number"]
@@ -116,14 +131,19 @@ class GithubDependentsInfo:
 
             # Output
             if self.debug is True:
-                print("Total for package: " + str(total_public_dependents))
-                print("")
+                logging.debug("Total for package: " + str(total_public_dependents))
+                logging.debug("")
 
-        # sort
+        # Sort packages and dependent repos
         if self.sort_key == "stars":
-            self.dependent_repos = sorted(self.dependent_repos, key=lambda d: d["public_dependent_stars"], reverse=True)
+            self.packages = sorted(self.packages, key=lambda d: d["public_dependent_stars"], reverse=True)
+            self.all_public_dependent_repos = sorted(
+                self.all_public_dependent_repos, key=lambda d: d["stars"], reverse=True
+            )
         else:
-            self.dependent_repos = sorted(self.dependent_repos, key=lambda d: d["name"])
+            self.packages = sorted(self.packages, key=lambda d: d["name"])
+            self.all_public_dependent_repos = sorted(self.all_public_dependent_repos, key=lambda d: d["name"])
+
         # Build total badges
         self.badges["total"] = self.build_badge("Used%20by", self.total_sum)
         self.badges["public"] = self.build_badge("Used%20by%20(public)", self.total_public_sum)
@@ -143,69 +163,75 @@ class GithubDependentsInfo:
                 if "{{" in package_name:
                     continue
                 if self.debug is True:
-                    print(package_name)
-                self.dependent_repos += [{"id": package_id, "name": package_name}]
-        if len(self.dependent_repos) == 0:
-            self.dependent_repos = [{"id": None, "name": self.repo}]
+                    logging.debug(package_name)
+                self.packages += [{"id": package_id, "name": package_name}]
+        if len(self.packages) == 0:
+            self.packages = [{"id": None, "name": self.repo}]
 
-    # Build output results
+    # Build result
     def build_result(self):
-        if self.debug is True:
-            print("Total dependents: " + str(self.total_sum))
-        return {
-            "public_dependents_repos": self.dependent_repos,
+        self.result = {
+            "all_public_dependent_repos": self.all_public_dependent_repos,
+            "packages": self.packages,
             "total_dependents_number": self.total_sum,
             "public_dependents_number": self.total_public_sum,
             "private_dependents_number": self.total_private_sum,
             "public_dependents_stars": self.total_stars_sum,
             "badges": self.badges,
         }
+        return self.result
 
+    # Print output
     def print_result(self):
-        print("Total: " + str(self.total_sum))
-        print("Public: " + str(self.total_public_sum) + " (" + str(self.total_stars_sum) + " stars)")
-        print("Private: " + str(self.total_private_sum))
+        if self.json_output is True:
+            print(json.dumps(self.result, indent=4))
+        else:
+            print("Total: " + str(self.total_sum))
+            print("Public: " + str(self.total_public_sum) + " (" + str(self.total_stars_sum) + " stars)")
+            print("Private: " + str(self.total_private_sum))
 
     def build_markdown(self, **options) -> str:
         md_lines = [f"# Dependents stats for {self.repo}", ""]
 
-        md_lines += [
-            self.badges["total"],
-            self.badges["public"],
-            self.badges["private"],
-            self.badges["stars"],
-            "",
-        ]
-
         # Summary table
-        if len(self.dependent_repos) > 1:
+        if len(self.packages) > 1:
+
+            # Summary badges if there are multiple packages
+            md_lines += [
+                self.badges["total"],
+                self.badges["public"],
+                self.badges["private"],
+                self.badges["stars"],
+                "",
+            ]
+
             md_lines += [
                 "| Package    | Total  | Public | Private | Stars |",
                 "| :--------  | -----: | -----: | -----:  | ----: |",
             ]
-            for dep_repo in self.dependent_repos:
-                name = "[" + dep_repo["name"] + "](#package-" + dep_repo["name"].replace("/", "") + ")"
-                badge_1 = dep_repo["badges"]["total"]
-                badge_2 = dep_repo["badges"]["public"]
-                badge_3 = dep_repo["badges"]["private"]
-                badge_4 = dep_repo["badges"]["stars"]
+            for package in self.packages:
+                name = "[" + package["name"] + "](#package-" + package["name"].replace("/", "") + ")"
+                badge_1 = package["badges"]["total"]
+                badge_2 = package["badges"]["public"]
+                badge_3 = package["badges"]["private"]
+                badge_4 = package["badges"]["stars"]
                 md_lines += [f"| {name}    | {badge_1}  | {badge_2} | {badge_3} | {badge_4} |"]
             md_lines += [""]
 
-        for dep_repo in self.dependent_repos:
-            md_lines += ["## Package " + dep_repo["name"], ""]
-            if len(dep_repo["public_dependents"]) == 0:
+        for package in self.packages:
+            md_lines += ["## Package " + package["name"], ""]
+            if len(package["public_dependents"]) == 0:
                 md_lines += ["No dependent repositories"]
             else:
                 md_lines += [
-                    dep_repo["badges"]["total"],
-                    dep_repo["badges"]["public"],
-                    dep_repo["badges"]["private"],
-                    dep_repo["badges"]["stars"],
+                    package["badges"]["total"],
+                    package["badges"]["public"],
+                    package["badges"]["private"],
+                    package["badges"]["stars"],
                     "",
                 ]
                 md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
-                for repo1 in dep_repo["public_dependents"]:
+                for repo1 in package["public_dependents"]:
                     repo_label = repo1["name"]
                     repo_stars = repo1["stars"]
                     md_lines += [f"|[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
@@ -217,7 +243,7 @@ class GithubDependentsInfo:
         if "file" in options:
             with open(options["file"], "w", encoding="utf-8") as f:
                 f.write(md_lines_str)
-                if self.debug is True:
+                if self.json_output is False:
                     print("Wrote markdown file " + options["file"])
         return md_lines_str
 
@@ -247,3 +273,30 @@ class GithubDependentsInfo:
         session.mount("http://", adapter)
         session.mount("https://", adapter)
         return session
+
+    # Write badge in markdown file
+    def write_badge(self, file_path="README.md", badge_key="total"):
+        self.replace_in_file(
+            file_path,
+            "<!-- gh-dependents-info-used-by-start -->",
+            "<!-- gh-dependents-info-used-by-end -->",
+            self.badges[badge_key],
+        )
+
+    # Generic method to replace text between tags
+    def replace_in_file(self, file_path, start, end, content, add_new_line=False):
+        # Read in the file
+        with open(file_path, "r", encoding="utf-8") as file:
+            file_content = file.read()
+        # Replace the target string
+        if add_new_line is True:
+            replacement = f"{start}\n{content}\n{end}"
+        else:
+            replacement = f"{start}\n{content}{end}"
+        regex = rf"{start}([\s\S]*?){end}"
+        file_content = re.sub(regex, replacement, file_content, re.DOTALL)
+        # Write the file out again
+        with open(file_path, "w", encoding="utf-8") as file:
+            file.write(file_content)
+        if self.json_output is False:
+            print("Updated " + file.name + " between " + start + " and " + end)
