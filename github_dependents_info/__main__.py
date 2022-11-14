@@ -59,9 +59,9 @@ def main(
 ) -> None:
     # Init logger
     if verbose is True:
-        logging.basicConfig(level=logging.DEBUG)
-    else:
         logging.basicConfig(level=logging.INFO)
+    else:
+        logging.basicConfig(level=logging.WARNING)
     # Check minimum arguments
     if repo is None:
         raise ValueError("--repo argument is mandatory")

@@ -39,11 +39,11 @@ class GithubDependentsInfo:
             if package["id"] is not None:
                 url = self.url_init + "?package_id=" + package["id"]
                 if self.debug is True:
-                    logging.debug("Package " + package["name"] + ": browsing " + url + " ...")
+                    logging.info("Package " + package["name"] + ": browsing " + url + " ...")
             else:
                 url = self.url_init + ""
                 if self.debug is True:
-                    logging.debug("Package " + self.repo + ": browsing" + url + " ...")
+                    logging.info("Package " + self.repo + ": browsing" + url + " ...")
             package["url"] = url
             package["public_dependent_stars"] = 0
             page_number = 1
@@ -89,7 +89,7 @@ class GithubDependentsInfo:
                             url = u["href"]
                             page_number = page_number + 1
                             if self.debug is True:
-                                logging.debug("  - browsing page " + str(page_number))
+                                logging.info("  - browsing page " + str(page_number))
 
             # Manage results for package
             if self.sort_key == "stars":
@@ -98,7 +98,7 @@ class GithubDependentsInfo:
                 result = sorted(result, key=lambda d: d[self.sort_key])
             if self.debug is True:
                 for r in result:
-                    logging.debug(r)
+                    logging.info(r)
 
             # Build package stats
             total_public_dependents = len(result)
@@ -132,8 +132,8 @@ class GithubDependentsInfo:
 
             # Output
             if self.debug is True:
-                logging.debug("Total for package: " + str(total_public_dependents))
-                logging.debug("")
+                logging.info("Total for package: " + str(total_public_dependents))
+                logging.info("")
 
         # Sort packages and dependent repos
         if self.sort_key == "stars":
@@ -164,7 +164,7 @@ class GithubDependentsInfo:
                 if "{{" in package_name:
                     continue
                 if self.debug is True:
-                    logging.debug(package_name)
+                    logging.info(package_name)
                 self.packages += [{"id": package_id, "name": package_name}]
         if len(self.packages) == 0:
             self.packages = [{"id": None, "name": self.repo}]
