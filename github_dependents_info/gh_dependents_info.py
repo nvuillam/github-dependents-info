@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+
 import requests
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
