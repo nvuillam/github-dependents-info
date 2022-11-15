@@ -136,6 +136,9 @@ class GithubDependentsInfo:
                 logging.info("Total for package: " + str(total_public_dependents))
                 logging.info("")
 
+        # make all_dependent_repos unique
+        self.all_public_dependent_repos = list({v["name"]: v for v in self.all_public_dependent_repos}.values())
+
         # Sort packages and dependent repos
         if self.sort_key == "stars":
             self.packages = sorted(self.packages, key=lambda d: d["public_dependent_stars"], reverse=True)
