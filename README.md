@@ -218,16 +218,17 @@ _________________
     github-dependents-info [OPTIONS]
 ```
 
-| Parameter              | Type    | Description                                           |
-|------------------------|---------|-------------------------------------------------------|
-| --repo                 | String  | Repository. Example: `oxsecurity/megalinter`          |
-| -b<br/> --badgemarkdownfile         | String  | _(optional)_ Path to markdown file where to insert/update **Used by** badge <br/> (must contain tags `<!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->`)    |
-| -s<br/> --sort         | String  | _(optional)_ Sort order: name (default) or stars        |
-| -x<br/> --minstars         | String  | _(optional)_ If set, filters repositories to keep only those whith more than X stars        |
-| -m<br/> --markdownfile | String  | _(optional)_ Output markdown file file                  |
-| -j<br/> --json         | String  | _(optional)_ Output in json format                      |
-| -v<br/> --version      | Boolean | _(optional)_ Displays version of github-dependents-info |
-| --verbose              | Boolean | _(optional)_ Verbose output                             |
+| Parameter                   | Type    | Description                                                                                                                                                                              |
+|-----------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --repo                      | String  | Repository. Example: `oxsecurity/megalinter`                                                                                                                                             |
+| -b<br/> --badgemarkdownfile | String  | _(optional)_ Path to markdown file where to insert/update **Used by** badge <br/> (must contain tags `<!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->`) |
+| -s<br/> --sort              | String  | _(optional)_ Sort order: name (default) or stars                                                                                                                                         |
+| -x<br/> --minstars          | String  | _(optional)_ If set, filters repositories to keep only those with more than X stars                                                                                                      |
+| -m<br/> --markdownfile      | String  | _(optional)_ Output markdown file file                                                                                                                                                   |
+| -p<br/> --mergepackages     | String  | _(optional)_ In case of multiple packages, merge their stats in a single one in markdown and json output                                                                                 |
+| -j<br/> --json              | String  | _(optional)_ Output in json format                                                                                                                                                       |
+| -v<br/> --version           | Boolean | _(optional)_ Displays version of github-dependents-info                                                                                                                                  |
+| --verbose                   | Boolean | _(optional)_ Verbose output                                                                                                                                                              |
 
 _________________
 ## 🧪 Examples
@@ -255,6 +256,10 @@ _________________
 - Build markdown file with dependent repos (multiple package), sorted by stars
 
       github-dependents-info --repo oxsecurity/megalinter --markdownfile ./docs/package-usage.md --sort stars --verbose
+
+- Build markdown file with dependent repos (multiple package), with merged list of packages in output markdown
+
+      github-dependents-info --repo oxsecurity/megalinter --markdownfile ./docs/package-usage.md --sort stars --mergepackages --verbose
 
 _________________
 ## 🛡 License
