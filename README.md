@@ -43,92 +43,10 @@ Badges example
 
 ```json
 {
-    "public_dependents_repos": [
-        {
-            "id": null,
-            "name": "nvuillam/npm-groovy-lint",
-            "url": "https://github.com/nvuillam/npm-groovy-lint/network/dependents",
-            "public_dependent_stars": 56,
-            "public_dependents": [
-                {
-                    "name": "nvuillam/vscode-groovy-lint",
-                    "stars": 52
-                },
-                {
-                    "name": "run2cmd/dotfiles",
-                    "stars": 2
-                },
-                {
-                    "name": "aboe026/software-update-checker",
-                    "stars": 2
-                },
-                {
-                    "name": "Moaz-Adel/Jobsity-Challenge",
-                    "stars": 0
-                },
-                {
-                    "name": "Moaz-Adel/automation-exercise-cypress",
-                    "stars": 0
-                },
-                {
-                    "name": "mashafrancis/sa-jenkins",
-                    "stars": 0
-                },
-                {
-                    "name": "katalon-labs/katalon-recorder-extension",
-                    "stars": 0
-                },
-                {
-                    "name": "aboe026/data-structures",
-                    "stars": 0
-                },
-                {
-                    "name": "aboe026/shields.io-badge-results",
-                    "stars": 0
-                },
-                {
-                    "name": "CIT-SeniorDesign/CIT-SeniorDesign.github.io",
-                    "stars": 0
-                },
-                {
-                    "name": "RecuencoJones/vscode-groovy-lint-issue",
-                    "stars": 0
-                }
-            ],
-            "public_dependents_number": 11,
-            "private_dependents_number": 4,
-            "total_dependents_number": 15,
-            "badges": {
-                "total": "[![](https://img.shields.io/static/v1?label=Used%20by&message=15&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)",
-                "public": "[![](https://img.shields.io/static/v1?label=Used%20by%20(public)&message=11&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)",
-                "private": "[![](https://img.shields.io/static/v1?label=Used%20by%20(private)&message=4&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)",
-                "stars": "[![](https://img.shields.io/static/v1?label=Used%20by%20(stars)&message=56&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)"
-            }
-        }
-    ],
-    "total_dependents_number": 15,
-    "public_dependents_number": 11,
-    "private_dependents_number": 4,
-    "public_dependents_stars": 56,
-    "badges": {
-        "total": "[![](https://img.shields.io/static/v1?label=Used%20by&message=15&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)",
-        "public": "[![](https://img.shields.io/static/v1?label=Used%20by%20(public)&message=11&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)",
-        "private": "[![](https://img.shields.io/static/v1?label=Used%20by%20(private)&message=4&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)",
-        "stars": "[![](https://img.shields.io/static/v1?label=Used%20by%20(stars)&message=56&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)"
-    }
-}{
     "all_public_dependent_repos": [
         {
-            "name": "nvuillam/vscode-groovy-lint",
-            "stars": 52
-        },
-        {
-            "name": "run2cmd/dotfiles",
-            "stars": 2
-        },
-        {
-            "name": "aboe026/software-update-checker",
-            "stars": 2
+            "name": "CIT-SeniorDesign/CIT-SeniorDesign.github.io",
+            "stars": 0
         },
         {
             "name": "Moaz-Adel/Jobsity-Challenge",
@@ -139,11 +57,7 @@ Badges example
             "stars": 0
         },
         {
-            "name": "mashafrancis/sa-jenkins",
-            "stars": 0
-        },
-        {
-            "name": "katalon-labs/katalon-recorder-extension",
+            "name": "RecuencoJones/vscode-groovy-lint-issue",
             "stars": 0
         },
         {
@@ -155,12 +69,24 @@ Badges example
             "stars": 0
         },
         {
-            "name": "CIT-SeniorDesign/CIT-SeniorDesign.github.io",
+            "name": "aboe026/software-update-checker",
+            "stars": 2
+        },
+        {
+            "name": "katalon-labs/katalon-recorder-extension",
             "stars": 0
         },
         {
-            "name": "RecuencoJones/vscode-groovy-lint-issue",
+            "name": "mashafrancis/sa-jenkins",
             "stars": 0
+        },
+        {
+            "name": "nvuillam/vscode-groovy-lint",
+            "stars": 52
+        },
+        {
+            "name": "run2cmd/dotfiles",
+            "stars": 2
         }
     ],
     "packages": [
@@ -171,16 +97,8 @@ Badges example
             "public_dependent_stars": 56,
             "public_dependents": [
                 {
-                    "name": "nvuillam/vscode-groovy-lint",
-                    "stars": 52
-                },
-                {
-                    "name": "run2cmd/dotfiles",
-                    "stars": 2
-                },
-                {
-                    "name": "aboe026/software-update-checker",
-                    "stars": 2
+                    "name": "CIT-SeniorDesign/CIT-SeniorDesign.github.io",
+                    "stars": 0
                 },
                 {
                     "name": "Moaz-Adel/Jobsity-Challenge",
@@ -191,11 +109,7 @@ Badges example
                     "stars": 0
                 },
                 {
-                    "name": "mashafrancis/sa-jenkins",
-                    "stars": 0
-                },
-                {
-                    "name": "katalon-labs/katalon-recorder-extension",
+                    "name": "RecuencoJones/vscode-groovy-lint-issue",
                     "stars": 0
                 },
                 {
@@ -207,12 +121,24 @@ Badges example
                     "stars": 0
                 },
                 {
-                    "name": "CIT-SeniorDesign/CIT-SeniorDesign.github.io",
+                    "name": "aboe026/software-update-checker",
+                    "stars": 2
+                },
+                {
+                    "name": "katalon-labs/katalon-recorder-extension",
                     "stars": 0
                 },
                 {
-                    "name": "RecuencoJones/vscode-groovy-lint-issue",
+                    "name": "mashafrancis/sa-jenkins",
                     "stars": 0
+                },
+                {
+                    "name": "nvuillam/vscode-groovy-lint",
+                    "stars": 52
+                },
+                {
+                    "name": "run2cmd/dotfiles",
+                    "stars": 2
                 }
             ],
             "public_dependents_number": 11,
@@ -237,6 +163,7 @@ Badges example
         "stars": "[![](https://img.shields.io/static/v1?label=Used%20by%20(stars)&message=56&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)"
     }
 }
+
 ```
 </details>
 
@@ -294,11 +221,13 @@ _________________
 | Parameter              | Type    | Description                                           |
 |------------------------|---------|-------------------------------------------------------|
 | --repo                 | String  | Repository. Example: `oxsecurity/megalinter`          |
-| -s<br/> --sort         | String  | (optional) Sort order: name (default) or stars        |
-| -m<br/> --markdownfile | String  | (optional) Output markdown file file                  |
-| -j<br/> --json         | String  | (optional) Output in json format                      |
-| -v<br/> --version      | Boolean | (optional) Displays version of github-dependents-info |
-| --verbose              | Boolean | (optional) Verbose output                             |
+| -b<br/> --badgemarkdownfile         | String  | _(optional)_ Path to markdown file where to insert/update **Used by** badge <br/> (must contain tags `<!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->`)    |
+| -s<br/> --sort         | String  | _(optional)_ Sort order: name (default) or stars        |
+| -x<br/> --minstars         | String  | _(optional)_ If set, filters repositories to keep only those whith more than X stars        |
+| -m<br/> --markdownfile | String  | _(optional)_ Output markdown file file                  |
+| -j<br/> --json         | String  | _(optional)_ Output in json format                      |
+| -v<br/> --version      | Boolean | _(optional)_ Displays version of github-dependents-info |
+| --verbose              | Boolean | _(optional)_ Verbose output                             |
 
 _________________
 ## 🧪 Examples
