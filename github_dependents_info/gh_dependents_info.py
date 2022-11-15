@@ -224,10 +224,10 @@ class GithubDependentsInfo:
         # Single dependents list
         if self.merge_packages is True:
             md_lines += [
-                package["badges"]["total"],
-                package["badges"]["public"],
-                package["badges"]["private"],
-                package["badges"]["stars"],
+                self.badges["total"],
+                self.badges["public"],
+                self.badges["private"],
+                self.badges["stars"],
                 "",
             ]
             md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
