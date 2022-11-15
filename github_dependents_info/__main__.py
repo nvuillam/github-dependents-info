@@ -42,6 +42,12 @@ def main(
         "--json",
         help="Output in JSON format",
     ),
+    merge_packages: bool = typer.Option(
+        False,
+        "-p",
+        "--mergepackages",
+        help="In case of multiple packages, merges results into a single list",
+    ),
     verbose: bool = typer.Option(
         False,
         "-d",
@@ -79,6 +85,7 @@ def main(
             min_stars=min_stars,
             json_output=json_output,
             badge_markdown_file=badge_markdown_file,
+            merge_packages=merge_packages,
         )
         # Collect data
         gh_deps_info.collect()
