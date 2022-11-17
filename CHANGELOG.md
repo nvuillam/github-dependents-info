@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [O.7.0] 2022-11-17
+
+- Fix cases when dependents count is superior to 1000 ([#27](https://github.com/nvuillam/github-dependents-info/issues/27))
+- Internal CI
+  - Fix release drafter
+  - Update stale config
+  - Remove useless greetings job
+
 ## [0.6.0] 2022-11-15
 
 - New option `--mergepackages` to have all dependent repos in a single table in output markdown file

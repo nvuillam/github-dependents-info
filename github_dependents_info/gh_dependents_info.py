@@ -11,8 +11,8 @@ from requests.packages.urllib3.util.retry import Retry
 class GithubDependentsInfo:
     def __init__(self, repo, **options) -> None:
         self.repo = repo
-        self.url_init = "https://github.com/{}/network/dependents".format(self.repo)
-        self.url_starts_with = "/{}/network/dependents".format(self.repo) + "?package_id="
+        self.url_init = f"https://github.com/{self.repo}/network/dependents"
+        self.url_starts_with = f"/{self.repo}/network/dependents" + "?package_id="
         self.sort_key = "name" if "sort_key" not in options else options["sort_key"]
         self.min_stars = None if "min_stars" not in options else options["min_stars"]
         self.json_output = True if "json_output" in options and options["json_output"] is True else False
@@ -55,7 +55,7 @@ class GithubDependentsInfo:
             svg_item = soup.find("svg", {"class": "octicon-code-square"})
             if svg_item is not None:
                 a_around_svg = svg_item.parent
-                total_dependents = int(a_around_svg.text.replace("Repositories", "").strip())
+                total_dependents = self.get_int(a_around_svg.text.replace("Repositories", "").strip())
             else:
                 total_dependents = 0
 
@@ -72,7 +72,9 @@ class GithubDependentsInfo:
                             t.find("a", {"data-repository-hovercards-enabled": ""}).text,
                             t.find("a", {"data-hovercard-type": "repository"}).text,
                         ),
-                        "stars": int(t.find("svg", {"class": "octicon-star"}).parent.text.strip().replace(",", "")),
+                        "stars": self.get_int(
+                            t.find("svg", {"class": "octicon-star"}).parent.text.strip().replace(",", "")
+                        ),
                     }
                     # Skip result if less than minimum stars
                     if self.min_stars is not None and result_item["stars"] < self.min_stars:
@@ -324,3 +326,8 @@ class GithubDependentsInfo:
             file.write(file_content)
         if self.json_output is False:
             print("Updated " + file.name + " between " + start + " and " + end)
+
+    # Get integer from string
+    def get_int(self, number_as_string: str):
+        number_as_string = number_as_string.replace(",", "").replace(" ", "")
+        return int(number_as_string)
