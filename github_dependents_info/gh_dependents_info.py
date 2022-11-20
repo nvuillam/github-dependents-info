@@ -312,7 +312,7 @@ class GithubDependentsInfo:
     # Generic method to replace text between tags
     def replace_in_file(self, file_path, start, end, content, add_new_line=False):
         # Read in the file
-        with open(file_path, "r", encoding="utf-8") as file:
+        with open(file_path, encoding="utf-8") as file:
             file_content = file.read()
         # Replace the target string
         if add_new_line is True:
