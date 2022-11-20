@@ -1,8 +1,4 @@
-import json
 import logging
-from enum import Enum
-from random import choice
-from typing import Optional
 
 import typer
 from github_dependents_info import version

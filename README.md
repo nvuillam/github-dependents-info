@@ -275,6 +275,6 @@ _________________
 This package has been inspired by stackexchange post [How to use GitHub API to get a repository's dependents information in GitHub?](https://stackoverflow.com/questions/58734176/how-to-use-github-api-to-get-a-repositorys-dependents-information-in-github)
 - [Bertrand Martel](https://github.com/bertrandmartel)
 - [muvaf](https://stackoverflow.com/users/5233252/muvaf)
-- [Mo Ganji](https://www.linkedin.com/in/mohganji/)
+- [Mo Ganji](https://www.linkedin.com/in/mohganji/) <!-- markdown-link-check-disable-line -->
 
 This project was generated with [`python-package-template`](https://github.com/TezRomacH/python-package-template)

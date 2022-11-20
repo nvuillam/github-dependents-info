@@ -218,7 +218,7 @@ class GithubDependentsInfo:
                 "| :--------  | -----: | -----: | -----:  | ----: |",
             ]
             for package in self.packages:
-                name = "[" + package["name"] + "](#package-" + package["name"].replace("/", "") + ")"
+                name = "[" + package["name"] + "](#package-" + package["name"].replace("/", "").replace("@", "") + ")"
                 badge_1 = package["badges"]["total"]
                 badge_2 = package["badges"]["public"]
                 badge_3 = package["badges"]["private"]
