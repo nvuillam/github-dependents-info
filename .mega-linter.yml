@@ -7,7 +7,7 @@ APPLY_FIXES: all # all, none, or list of linter keys
 DISABLE:
   - EDITORCONFIG
 DISABLE_ERRORS: true
-MARKDOWN_MARKDOWN_LINK_CHECK_FILTER_REGEX_EXCLUDE: (assets)
+FILTER_REGEX_EXCLUDE: (assets)
 SHOW_ELAPSED_TIME: true
 FILEIO_REPORTER: false
 # DISABLE_ERRORS: true # Uncomment if you want MegaLinter to detect errors but not block CI to pass
