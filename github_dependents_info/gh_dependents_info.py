@@ -17,7 +17,7 @@ class GithubDependentsInfo:
         self.min_stars = None if "min_stars" not in options else options["min_stars"]
         self.json_output = True if "json_output" in options and options["json_output"] is True else False
         self.merge_packages = True if "merge_packages" in options and options["merge_packages"] is True else False
-        self.badge_color =  options["badge_color"] if "badge_color" in options else "informational"
+        self.badge_color = options["badge_color"] if "badge_color" in options else "informational"
         self.debug = True if "debug" in options and options["debug"] is True else False
         self.total_sum = 0
         self.total_public_sum = 0
