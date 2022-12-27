@@ -30,6 +30,7 @@ def main(
         "--badgemarkdownfile",
         help="Path to markdown file to insert/update Used By badge between tags <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->",
     ),
+    badge_color: str = typer.Option("informational", "-c", "--markdownbadgecolor", help="Markdown badge color"),
     sort_key: str = typer.Option(None, "-s", "--sort", help="Sort of name(default) or stars"),
     min_stars: int = typer.Option(None, "-x", "--minstars", help="Filter dependents with less than X stars"),
     json_output: bool = typer.Option(
@@ -81,6 +82,7 @@ def main(
             min_stars=min_stars,
             json_output=json_output,
             badge_markdown_file=badge_markdown_file,
+            badge_color=badge_color,
             merge_packages=merge_packages,
         )
         # Collect data
