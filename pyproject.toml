@@ -39,7 +39,7 @@ rich = ">=12.6,<14.0"
 beautifulsoup4 = "4.11.2"
 
 [tool.poetry.dev-dependencies]
-bandit = "^1.7.1"
+bandit = "^1.7.5"
 black = {version = "^22.12.0", allow-prereleases = true}
 darglint = "^1.8.1"
 isort = {extras = ["colors"], version = "^5.12.0"}
