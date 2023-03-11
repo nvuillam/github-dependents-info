@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [O.9.0] 2022-05-02
 
-- Add requests to requirements.txt by @edenlightning in https://github.com/nvuillam/github-dependents-info/pull/127
+- Add requests to requirements.txt by @edenlightning in <https://github.com/nvuillam/github-dependents-info/pull/127>
 - Upgrade python dependencies
 
 ## [O.8.0] 2022-12-28

@@ -204,7 +204,6 @@ class GithubDependentsInfo:
 
         # Summary table
         if len(self.packages) > 1 and self.merge_packages is False:
-
             # Summary badges if there are multiple packages
             md_lines += [
                 self.badges["total"],
