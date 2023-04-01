@@ -2,7 +2,7 @@
 
 from importlib import metadata as importlib_metadata
 
-from .gh_dependents_info import GithubDependentsInfo
+from .gh_dependents_info import GithubDependentsInfo  # noqa
 
 
 def get_version() -> str:
