@@ -4,9 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [O.10.0] 2022-04-01
+
 - Upgrade dependencies
 
-## [O.9.0] 2022-05-02
+## [O.9.0] 2022-02-05
 
 - Add requests to requirements.txt by @edenlightning in <https://github.com/nvuillam/github-dependents-info/pull/127>
 - Upgrade python dependencies
