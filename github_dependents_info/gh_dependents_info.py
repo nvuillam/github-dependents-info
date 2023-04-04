@@ -1,7 +1,9 @@
 import json
 import logging
 import re
+from pathlib import Path
 
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
@@ -19,6 +21,7 @@ class GithubDependentsInfo:
         self.merge_packages = True if "merge_packages" in options and options["merge_packages"] is True else False
         self.badge_color = options["badge_color"] if "badge_color" in options else "informational"
         self.debug = True if "debug" in options and options["debug"] is True else False
+        self.progress_dir = Path(options["progress_dir"]) if "progress_dir" in options else Path("./output/")
         self.total_sum = 0
         self.total_public_sum = 0
         self.total_private_sum = 0
@@ -138,6 +141,8 @@ class GithubDependentsInfo:
             if self.debug is True:
                 logging.info("Total for package: " + str(total_public_dependents))
                 logging.info("")
+            # Save crawl progress
+            self.save_progress(package)
 
         # make all_dependent_repos unique
         self.all_public_dependent_repos = list({v["name"]: v for v in self.all_public_dependent_repos}.values())
@@ -175,6 +180,23 @@ class GithubDependentsInfo:
                 self.packages += [{"id": package_id, "name": package_name}]
         if len(self.packages) == 0:
             self.packages = [{"id": None, "name": self.repo}]
+
+    # Save progress during the crawl
+    def save_progress(self, package):
+        self.progress_dir.mkdir(parents=True, exist_ok=True)
+        file_path_sources = self.progress_dir / f"packages_{self.repo}.csv".replace("/", "-")
+        file_path_dependents = self.progress_dir / f"dependents_{package['name']}.csv".replace("/", "-")
+
+        keys_skip = ["public_dependents", "badges"]
+        source_info = {k: v for (k, v) in package.items() if k not in keys_skip}
+        dependents_info = package["public_dependents"]
+
+        if file_path_sources.exists():
+            pd.json_normalize(source_info).to_csv(file_path_sources, mode="a", header=False)
+        else:
+            pd.json_normalize(source_info).to_csv(file_path_sources, mode="w", header=True)
+
+        pd.DataFrame(dependents_info).to_csv(file_path_dependents, mode="w", header=True)
 
     # Build result
     def build_result(self):

@@ -618,3 +618,6 @@ MigrationBackup/
 
 megalinter-reports/
 github_conf/
+
+# do not commit output (/progress) files
+output/
