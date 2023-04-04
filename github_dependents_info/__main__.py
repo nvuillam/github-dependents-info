@@ -1,9 +1,10 @@
 import logging
 
 import typer
+from rich.console import Console
+
 from github_dependents_info import version
 from github_dependents_info.gh_dependents_info import GithubDependentsInfo
-from rich.console import Console
 
 app = typer.Typer(
     name="github-dependents-info",
@@ -51,6 +52,12 @@ def main(
         "--verbose",
         help="Prints the version of github-dependents-info package",
     ),
+    overwrite: bool = typer.Option(
+        False,
+        "-o",
+        "--overwrite",
+        help="Overwrite existing CSV progress files. Default is to resume from existing progress",
+    ),
     print_version: bool = typer.Option(
         None,
         "-v",
@@ -78,6 +85,7 @@ def main(
         gh_deps_info = GithubDependentsInfo(
             repo,
             debug=verbose,
+            overwrite_progress=overwrite,
             sort_key=sort_key,
             min_stars=min_stars,
             json_output=json_output,

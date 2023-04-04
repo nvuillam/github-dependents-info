@@ -3,6 +3,7 @@ import logging
 import re
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -21,6 +22,9 @@ class GithubDependentsInfo:
         self.merge_packages = True if "merge_packages" in options and options["merge_packages"] is True else False
         self.badge_color = options["badge_color"] if "badge_color" in options else "informational"
         self.debug = True if "debug" in options and options["debug"] is True else False
+        self.overwrite_progress = (
+            True if "overwrite_progress" in options and options["overwrite_progress"] is True else False
+        )
         self.progress_dir = Path(options["progress_dir"]) if "progress_dir" in options else Path("./output/")
         self.total_sum = 0
         self.total_public_sum = 0
@@ -32,11 +36,15 @@ class GithubDependentsInfo:
         self.result = {}
 
     def collect(self):
-        # List packages
-        self.compute_packages()
+        if self.overwrite_progress or not self.load_progress():
+            self.compute_packages()
 
         # for each package, get count by parsing GitHub HTML
         for package in self.packages:
+            # check if we have already computed this package on previous crawl
+            if "public_dependents" in package:
+                continue
+
             nextExists = True
             result = []
 
@@ -191,12 +199,33 @@ class GithubDependentsInfo:
         source_info = {k: v for (k, v) in package.items() if k not in keys_skip}
         dependents_info = package["public_dependents"]
 
-        if file_path_sources.exists():
-            pd.json_normalize(source_info).to_csv(file_path_sources, mode="a", header=False)
-        else:
+        if not file_path_sources.exists() or self.overwrite_progress:
             pd.json_normalize(source_info).to_csv(file_path_sources, mode="w", header=True)
+        else:
+            sources_infos = pd.read_csv(file_path_sources, index_col=0)
+            if package["name"] not in sources_infos["name"].values:
+                pd.json_normalize(source_info).to_csv(file_path_sources, mode="a", header=False)
 
-        pd.DataFrame(dependents_info).to_csv(file_path_dependents, mode="w", header=True)
+        if not file_path_dependents.exists() or self.overwrite_progress:
+            pd.DataFrame(dependents_info).to_csv(file_path_dependents, mode="w", header=True)
+
+    # Load progress from previous crawl with the same repo
+    def load_progress(self):
+        file_path_sources = self.progress_dir / f"packages_{self.repo}.csv".replace("/", "-")
+        if file_path_sources.exists():
+            self.packages = pd.read_csv(file_path_sources, index_col=0).replace({np.nan: None}).to_dict("records")
+            for i, package in enumerate(self.packages):
+                file_path_dependents = self.progress_dir / f"dependents_{package['name']}.csv".replace("/", "-")
+                if file_path_dependents.exists():
+                    self.packages[i]["public_dependents"] = (
+                        pd.read_csv(file_path_dependents, index_col=0).replace({np.nan: None}).to_dict("records")
+                    )
+                    self.all_public_dependent_repos += self.packages[i]["public_dependents"]
+                    self.total_sum += package["total_dependents_number"]
+                    self.total_public_sum += package["public_dependents_number"]
+                    self.total_private_sum += package["private_dependents_number"]
+                    self.total_stars_sum += package["public_dependent_stars"]
+        return len(self.packages) > 0
 
     # Build result
     def build_result(self):
