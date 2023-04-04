@@ -187,7 +187,7 @@ class GithubDependentsInfo:
         file_path_sources = self.progress_dir / f"packages_{self.repo}.csv".replace("/", "-")
         file_path_dependents = self.progress_dir / f"dependents_{package['name']}.csv".replace("/", "-")
 
-        keys_skip = ["public_dependents", "badges"]
+        keys_skip = ["public_dependents"]
         source_info = {k: v for (k, v) in package.items() if k not in keys_skip}
         dependents_info = package["public_dependents"]
 
