@@ -38,6 +38,7 @@ class GithubDependentsInfo:
     def collect(self):
         if self.overwrite_progress or not self.load_progress():
             self.compute_packages()
+            self.save_progress_packages_list()  # keep CSV file of all packages to crawl
 
         # for each package, get count by parsing GitHub HTML
         for package in self.packages:
@@ -199,15 +200,41 @@ class GithubDependentsInfo:
         source_info = {k: v for (k, v) in package.items() if k not in keys_skip}
         dependents_info = package["public_dependents"]
 
-        if not file_path_sources.exists() or self.overwrite_progress:
+        if not file_path_sources.exists():
             pd.json_normalize(source_info).to_csv(file_path_sources, mode="w", header=True)
         else:
-            sources_infos = pd.read_csv(file_path_sources, index_col=0)
-            if package["name"] not in sources_infos["name"].values:
+            sources_all_df = pd.read_csv(file_path_sources, index_col=0)
+            if package["name"] in sources_all_df["name"].values:
+                # update the row with the new information
+                sources_all_df.set_index("name", inplace=True)
+                source_df = pd.json_normalize(source_info).set_index("name", drop=True)
+                sources_all_df.update(source_df)
+                sources_all_df.reset_index(inplace=True, drop=False)
+                sources_all_df.to_csv(file_path_sources, mode="w", header=True)
+            else:
                 pd.json_normalize(source_info).to_csv(file_path_sources, mode="a", header=False)
 
-        if not file_path_dependents.exists() or self.overwrite_progress:
+        if (not file_path_dependents.exists() or self.overwrite_progress) and len(dependents_info) > 0:
             pd.DataFrame(dependents_info).to_csv(file_path_dependents, mode="w", header=True)
+
+    def save_progress_packages_list(self):
+        self.progress_dir.mkdir(parents=True, exist_ok=True)
+        columns = [
+            "id",
+            "name",
+            "url",
+            "total_dependents_number",
+            "public_dependents_number",
+            "private_dependents_number",
+            "public_dependent_stars",
+            "badges.total",
+            "badges.public",
+            "badges.private",
+            "badges.stars",
+        ]
+        file_path_sources = self.progress_dir / f"packages_{self.repo}.csv".replace("/", "-")
+        if not file_path_sources.exists() or self.overwrite_progress:
+            pd.DataFrame(self.packages, columns=columns).to_csv(file_path_sources, mode="w", header=True)
 
     # Load progress from previous crawl with the same repo
     def load_progress(self):
@@ -221,10 +248,16 @@ class GithubDependentsInfo:
                         pd.read_csv(file_path_dependents, index_col=0).replace({np.nan: None}).to_dict("records")
                     )
                     self.all_public_dependent_repos += self.packages[i]["public_dependents"]
-                    self.total_sum += package["total_dependents_number"]
-                    self.total_public_sum += package["public_dependents_number"]
-                    self.total_private_sum += package["private_dependents_number"]
-                    self.total_stars_sum += package["public_dependent_stars"]
+                    self.total_sum += package["total_dependents_number"] if package["total_dependents_number"] else 0
+                    self.total_public_sum += (
+                        package["public_dependents_number"] if package["public_dependents_number"] else 0
+                    )
+                    self.total_private_sum += (
+                        package["private_dependents_number"] if package["private_dependents_number"] else 0
+                    )
+                    self.total_stars_sum += (
+                        package["public_dependent_stars"] if package["public_dependent_stars"] else 0
+                    )
         return len(self.packages) > 0
 
     # Build result
