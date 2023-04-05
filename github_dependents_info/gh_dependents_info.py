@@ -25,7 +25,11 @@ class GithubDependentsInfo:
         self.overwrite_progress = (
             True if "overwrite_progress" in options and options["overwrite_progress"] is True else False
         )
-        self.progress_dir = Path(options["progress_dir"]) if "progress_dir" in options else Path("./output/")
+        self.csv_directory = (
+            Path(options["csv_directory"])
+            if ("csv_directory" in options and options["csv_directory"] is not None)
+            else None
+        )
         self.total_sum = 0
         self.total_public_sum = 0
         self.total_private_sum = 0
@@ -38,7 +42,7 @@ class GithubDependentsInfo:
     def collect(self):
         if self.overwrite_progress or not self.load_progress():
             self.compute_packages()
-            self.save_progress_packages_list()  # keep CSV file of all packages to crawl
+            self.save_progress_packages_list()  # only saves if csv_directory is provided
 
         # for each package, get count by parsing GitHub HTML
         for package in self.packages:
@@ -151,7 +155,7 @@ class GithubDependentsInfo:
                 logging.info("Total for package: " + str(total_public_dependents))
                 logging.info("")
             # Save crawl progress
-            self.save_progress(package)
+            self.save_progress(package)  # only saves if csv_directory is provided
 
         # make all_dependent_repos unique
         self.all_public_dependent_repos = list({v["name"]: v for v in self.all_public_dependent_repos}.values())
@@ -192,9 +196,11 @@ class GithubDependentsInfo:
 
     # Save progress during the crawl
     def save_progress(self, package):
-        self.progress_dir.mkdir(parents=True, exist_ok=True)
-        file_path_sources = self.progress_dir / f"packages_{self.repo}.csv".replace("/", "-")
-        file_path_dependents = self.progress_dir / f"dependents_{package['name']}.csv".replace("/", "-")
+        if self.csv_directory is None:
+            return
+        self.csv_directory.mkdir(parents=False, exist_ok=True)
+        file_path_sources = self.csv_directory / f"packages_{self.repo}.csv".replace("/", "-")
+        file_path_dependents = self.csv_directory / f"dependents_{package['name']}.csv".replace("/", "-")
 
         keys_skip = ["public_dependents"]
         source_info = {k: v for (k, v) in package.items() if k not in keys_skip}
@@ -218,7 +224,9 @@ class GithubDependentsInfo:
             pd.DataFrame(dependents_info).to_csv(file_path_dependents, mode="w", header=True)
 
     def save_progress_packages_list(self):
-        self.progress_dir.mkdir(parents=True, exist_ok=True)
+        if self.csv_directory is None:
+            return
+        self.csv_directory.mkdir(parents=False, exist_ok=True)
         columns = [
             "id",
             "name",
@@ -232,17 +240,19 @@ class GithubDependentsInfo:
             "badges.private",
             "badges.stars",
         ]
-        file_path_sources = self.progress_dir / f"packages_{self.repo}.csv".replace("/", "-")
+        file_path_sources = self.csv_directory / f"packages_{self.repo}.csv".replace("/", "-")
         if not file_path_sources.exists() or self.overwrite_progress:
             pd.DataFrame(self.packages, columns=columns).to_csv(file_path_sources, mode="w", header=True)
 
     # Load progress from previous crawl with the same repo
     def load_progress(self):
-        file_path_sources = self.progress_dir / f"packages_{self.repo}.csv".replace("/", "-")
+        if self.csv_directory is None:
+            return False
+        file_path_sources = self.csv_directory / f"packages_{self.repo}.csv".replace("/", "-")
         if file_path_sources.exists():
             self.packages = pd.read_csv(file_path_sources, index_col=0).replace({np.nan: None}).to_dict("records")
             for i, package in enumerate(self.packages):
-                file_path_dependents = self.progress_dir / f"dependents_{package['name']}.csv".replace("/", "-")
+                file_path_dependents = self.csv_directory / f"dependents_{package['name']}.csv".replace("/", "-")
                 if file_path_dependents.exists():
                     self.packages[i]["public_dependents"] = (
                         pd.read_csv(file_path_dependents, index_col=0).replace({np.nan: None}).to_dict("records")
