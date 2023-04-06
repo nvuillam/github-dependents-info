@@ -39,6 +39,12 @@ def main(
         "--json",
         help="Output in JSON format",
     ),
+    csv_directory: str = typer.Option(
+        None,
+        "-c",
+        "--csvdirectory",
+        help="Path to directory for CSV files",
+    ),
     merge_packages: bool = typer.Option(
         False,
         "-p",
@@ -50,6 +56,12 @@ def main(
         "-d",
         "--verbose",
         help="Prints the version of github-dependents-info package",
+    ),
+    overwrite: bool = typer.Option(
+        False,
+        "-o",
+        "--overwrite",
+        help="Overwrite existing CSV files in provided csv_directory. Default is to resume from existing progress.",
     ),
     print_version: bool = typer.Option(
         None,
@@ -78,9 +90,11 @@ def main(
         gh_deps_info = GithubDependentsInfo(
             repo,
             debug=verbose,
+            overwrite_progress=overwrite,
             sort_key=sort_key,
             min_stars=min_stars,
             json_output=json_output,
+            csv_directory=csv_directory,
             badge_markdown_file=badge_markdown_file,
             badge_color=badge_color,
             merge_packages=merge_packages,
