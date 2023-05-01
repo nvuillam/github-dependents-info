@@ -11,6 +11,7 @@
     "**/.idea/**",
     "**/report/**",
     "**/*.svg",
-    "**/test_gh_dependents_info/**"
+    "**/test_gh_dependents_info/**",
+    "**/.bandit.yml"
   ]
 }
