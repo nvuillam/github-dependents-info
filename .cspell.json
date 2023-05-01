@@ -207,6 +207,7 @@
     "timemachine",
     "tqdm",
     "traceback",
+    "trivyignore",
     "typer",
     "ublish",
     "uild",

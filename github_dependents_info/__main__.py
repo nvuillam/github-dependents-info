@@ -7,7 +7,8 @@ from rich.console import Console
 
 app = typer.Typer(
     name="github-dependents-info",
-    help="Collect information about dependencies between a github repo and other repositories. Results available in JSON, markdown and badges.",
+    help="""Collect information about dependencies between a github repo and other repositories.
+         Results available in JSON, markdown and badges.""",
     add_completion=False,
 )
 console = Console()
@@ -29,7 +30,7 @@ def main(
         "-b",
         "--badgemarkdownfile",
         help="""Path to markdown file to insert/update Used By badge between tags
-          <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->""",
+             <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->""",
     ),
     badge_color: str = typer.Option("informational", "-c", "--markdownbadgecolor", help="Markdown badge color"),
     sort_key: str = typer.Option(None, "-s", "--sort", help="Sort of name(default) or stars"),
