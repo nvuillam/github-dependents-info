@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Fix crash _ValueError: invalid literal for int() with base 10: '1\nRepository'_
 - Upgrade dependencies
+- Enable more linters in MegaLinter
 
 ## [1.0.0] 2023-06-04
 

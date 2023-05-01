@@ -374,7 +374,10 @@ class GithubDependentsInfo:
             url = options["url"]
         else:
             url = f"https://github.com/{self.repo}/network/dependents"
-        return f"[![](https://img.shields.io/static/v1?label={label}&message={str(nb)}&color={self.badge_color}&logo=slickpic)]({url})"
+        return (
+            f"[![](https://img.shields.io/static/v1?label={label}&message={str(nb)}"
+            + f"&color={self.badge_color}&logo=slickpic)]({url})"
+        )
 
     def requests_retry_session(
         self,
