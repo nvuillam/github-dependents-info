@@ -28,7 +28,8 @@ def main(
         None,
         "-b",
         "--badgemarkdownfile",
-        help="Path to markdown file to insert/update Used By badge between tags <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->",
+        help="""Path to markdown file to insert/update Used By badge between tags
+          <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->""",
     ),
     badge_color: str = typer.Option("informational", "-c", "--markdownbadgecolor", help="Markdown badge color"),
     sort_key: str = typer.Option(None, "-s", "--sort", help="Sort of name(default) or stars"),
