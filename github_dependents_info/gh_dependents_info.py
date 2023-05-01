@@ -73,10 +73,8 @@ class GithubDependentsInfo:
             if svg_item is not None:
                 a_around_svg = svg_item.parent
                 total_dependents = self.get_int(
-                    a_around_svg.text.replace("Repositories", "")
-                                     .replace("Repository", "")
-                                     .strip()
-                    )
+                    a_around_svg.text.replace("Repositories", "").replace("Repository", "").strip()
+                )
             else:
                 total_dependents = 0
 
@@ -430,6 +428,6 @@ class GithubDependentsInfo:
         number_as_string = number_as_string.replace(",", "").replace(" ", "")
         try:
             return int(number_as_string)
-        except Exception as e:
-            logging.warning(f"WARNING: Unable to get integer from \"{number_as_string}\"")
+        except Exception:
+            logging.warning(f'WARNING: Unable to get integer from "{number_as_string}"')
             return 0
