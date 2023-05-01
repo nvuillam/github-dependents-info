@@ -72,7 +72,9 @@ class GithubDependentsInfo:
             svg_item = soup.find("svg", {"class": "octicon-code-square"})
             if svg_item is not None:
                 a_around_svg = svg_item.parent
-                total_dependents = self.get_int(a_around_svg.text.replace("Repositories", "").strip())
+                total_dependents = self.get_int(
+                    a_around_svg.text.replace("Repositories", "").replace("Repository", "").strip()
+                )
             else:
                 total_dependents = 0
 
@@ -372,7 +374,10 @@ class GithubDependentsInfo:
             url = options["url"]
         else:
             url = f"https://github.com/{self.repo}/network/dependents"
-        return f"[![](https://img.shields.io/static/v1?label={label}&message={str(nb)}&color={self.badge_color}&logo=slickpic)]({url})"
+        return (
+            f"[![](https://img.shields.io/static/v1?label={label}&message={str(nb)}"
+            + f"&color={self.badge_color}&logo=slickpic)]({url})"
+        )
 
     def requests_retry_session(
         self,
@@ -424,4 +429,8 @@ class GithubDependentsInfo:
     # Get integer from string
     def get_int(self, number_as_string: str):
         number_as_string = number_as_string.replace(",", "").replace(" ", "")
-        return int(number_as_string)
+        try:
+            return int(number_as_string)
+        except Exception:
+            logging.warning(f'WARNING: Unable to get integer from "{number_as_string}"')
+            return 0

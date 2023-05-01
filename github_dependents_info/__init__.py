@@ -1,4 +1,7 @@
-"""Collect information about dependencies between a github repo and other repositories. Results available in JSON, markdown and badges."""
+"""
+Collect information about dependencies between a github repo and other repositories.
+Results available in JSON, markdown and badges.
+"""
 
 from importlib import metadata as importlib_metadata
 
