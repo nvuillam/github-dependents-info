@@ -381,9 +381,9 @@ class GithubDependentsInfo:
 
     def requests_retry_session(
         self,
-        retries=3,
-        backoff_factor=0.5,
-        status_forcelist=(500, 502, 504),
+        retries=10,
+        backoff_factor=2,
+        status_forcelist=(429, 500, 502, 503, 504),
         session=None,
     ):
         session = session or requests.Session()
