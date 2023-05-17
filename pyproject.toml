@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "github-dependents-info"
-version = "1.0.1"
+version = "1.1.0"
 description = "Collect information about dependencies between a github repo and other repositories. Results available in JSON, markdown and badges."
 readme = "README.md"
 authors = ["nvuillam <nicolas.vuillamy@gmail.com>"]
