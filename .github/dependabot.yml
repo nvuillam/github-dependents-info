@@ -1,4 +1,4 @@
-# Configuration: https://dependabot.com/docs/config-file/
+# Configuration: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 # Docs: https://docs.github.com/en/github/administering-a-repository/keeping-your-dependencies-updated-automatically
 
 version: 2
