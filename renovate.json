@@ -5,7 +5,9 @@
   ],
   "packageRules": [
     {
-      "matchPackagePatterns": "*",
+      "matchPackagePatterns": [
+        ".*"
+      ],
       "matchUpdateTypes": [
         "minor",
         "patch"
