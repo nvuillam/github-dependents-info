@@ -20,7 +20,7 @@ jobs:
         run: make poetry-download
 
       - name: Set up cache
-        uses: actions/cache@v3.3.1
+        uses: actions/cache@v3.3.2
         with:
           path: .venv
           key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
