@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@61a6322f88396a6271a6ee3565807d608ecaddd1 # v4.7.0
+      - uses: actions/setup-python@b64ffcaf5b410884ad320a9cfac8866006a109aa # v4.8.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Run image
