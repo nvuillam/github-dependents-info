@@ -33,10 +33,14 @@ runs:
     - ${{ inputs.repo }}
     - --markdownfile
     - ${{ inputs.markdownfile }}
+    - --badgemarkdownfile
+    - ${{ inputs.badgemarkdownfile }}    
     - --sort
     - ${{ inputs.sort }}
     - --minstars
-    - ${{ inputs.minstars }}    
+    - ${{ inputs.minstars }}
+    - --mergepackages
+    - ${{ inputs.mergepackages }}    
     - --verbose
 
 branding:
