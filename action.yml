@@ -1,0 +1,15 @@
+name: "GitHub Dependents Info"
+author: "Nicolas Vuillamy"
+description: "Generates a markdown file with all repositories that have dependencies with the current GitHub repository package (s)"
+outputs:
+  has_updated_sources:
+    description: "0 if no source file has been updated, 1 if source files has been updated"
+runs:
+  using: "docker"
+  image: "docker://nvuillam/github-dependents-info:latest"
+  args:
+    - "-v"
+    - "/var/run/docker.sock:/var/run/docker.sock:rw"
+branding:
+  icon: "users"
+  color: "green"
