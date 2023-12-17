@@ -12,6 +12,7 @@ inputs:
   badgemarkdownfile:
     description: 'Path and name of the file where to replace badges (example: README.md). Must contain tags <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->'
     required: false
+    default: README.md
   sort:
     description: 'Sort criteria: stars (default) or name'
     required: false
