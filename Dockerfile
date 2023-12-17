@@ -3,8 +3,7 @@ WORKDIR /
 ARG GITHUB_DEPENDENTS_INFO_VERSION=latest
 ARG GITHUB_TOKEN
 
-RUN pip install --no-cache-dir poetry && \
-    poetry add github-dependents-info
+RUN pip install --no-cache-dir github-dependents-info
 
 LABEL maintainer="Nicolas Vuillamy <nicolas.vuillamy@gmail.com>" \
       org.opencontainers.image.created=$BUILD_DATE \
