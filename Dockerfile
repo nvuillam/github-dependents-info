@@ -1,10 +1,9 @@
 FROM python:3.11.7-alpine3.18
 WORKDIR /
 ARG GITHUB_DEPENDENTS_INFO_VERSION=latest
-ARG POETRY_VERSION=latest
 ARG GITHUB_TOKEN
 
-RUN pip install --no-cache-dir poetry==${POETRY_VERSION} && \
+RUN pip install --no-cache-dir poetry && \
     poetry add github-dependents-info
 
 LABEL maintainer="Nicolas Vuillamy <nicolas.vuillamy@gmail.com>" \
