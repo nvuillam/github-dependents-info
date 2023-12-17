@@ -19,6 +19,7 @@ inputs:
   minstars:
     description: 'Minimum number of stars to appear in the results'
     required: false
+    default: "0"
   mergepackages:
     description: 'If multiple packages, merge in a single result. Default: true'
     required: false
@@ -27,6 +28,16 @@ inputs:
 runs:
   using: "docker"
   image: "docker://nvuillam/github-dependents-info:latest"
+  args:
+    - --repo
+    - ${{ inputs.repo }}
+    - --markdownfile
+    - ${{ inputs.markdownfile }}
+    - --sort
+    - ${{ inputs.sort }}
+    - --minstars
+    - ${{ inputs.minstars }}    
+    - --verbose
 
 branding:
   icon: "users"
