@@ -1,9 +1,29 @@
 name: "GitHub Dependents Info"
 author: "Nicolas Vuillamy"
 description: "Generates a markdown file with all repositories that have dependencies with the current GitHub repository package (s)"
-outputs:
-  has_updated_sources:
-    description: "0 if no source file has been updated, 1 if source files has been updated"
+inputs:
+  repo:
+    description: 'Owner and name of the repository (example: nvuillam/node-sarif-builder)'
+    required: true
+  markdownfile:
+    description: 'Path and name of the output markdown file'
+    required: false
+    default: 'docs/github-dependents-info.md'
+  badgemarkdownfile:
+    description: 'Path and name of the file where to replace badges (example: README.md). Must contain tags <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->'
+    required: false
+  sort:
+    description: 'Sort criteria: stars (default) or name'
+    required: false
+    default: stars    
+  minstars:
+    description: 'Minimum number of stars to appear in the results'
+    required: false
+  mergepackages:
+    description: 'If multiple packages, merge in a single result. Default: true'
+    required: false
+    default: "true"
+
 runs:
   using: "docker"
   image: "docker://nvuillam/github-dependents-info:latest"
