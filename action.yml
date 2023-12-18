@@ -40,8 +40,7 @@ runs:
     - ${{ inputs.sort }}
     - --minstars
     - ${{ inputs.minstars }}
-    - --mergepackages
-    - ${{ inputs.mergepackages }}    
+    - ${{ inputs.mergepackages == "true" ? "--inputs.mergepackages" }}    
     - --verbose
 
 branding:
