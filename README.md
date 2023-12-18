@@ -328,6 +328,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Workaround for git issues
+      - name: Prepare commit
+        run: sudo chown -R $USER:$USER .
+
       # Create pull request
       - name: Create Pull Request
         id: cpr
