@@ -3,26 +3,26 @@ author: "Nicolas Vuillamy"
 description: "Generates a markdown file with all repositories that have dependencies with the current GitHub repository package (s)"
 inputs:
   repo:
-    description: 'Owner and name of the repository (example: nvuillam/node-sarif-builder)'
+    description: "Owner and name of the repository (example: nvuillam/node-sarif-builder)"
     required: true
   markdownfile:
-    description: 'Path and name of the output markdown file'
+    description: "Path and name of the output markdown file"
     required: false
-    default: 'docs/github-dependents-info.md'
+    default: "docs/github-dependents-info.md"
   badgemarkdownfile:
-    description: 'Path and name of the file where to replace badges (example: README.md). Must contain tags <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->'
+    description: "Path and name of the file where to replace badges (example: README.md). Must contain tags <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->"
     required: false
     default: README.md
   sort:
-    description: 'Sort criteria: stars (default) or name'
+    description: "Sort criteria: stars (default) or name"
     required: false
-    default: stars    
+    default: stars
   minstars:
-    description: 'Minimum number of stars to appear in the results'
+    description: "Minimum number of stars to appear in the results"
     required: false
     default: "0"
   mergepackages:
-    description: 'If multiple packages, merge in a single result. Default: true'
+    description: "If multiple packages, merge in a single result. Default: true"
     required: false
     default: "true"
 
@@ -35,12 +35,12 @@ runs:
     - --markdownfile
     - ${{ inputs.markdownfile }}
     - --badgemarkdownfile
-    - ${{ inputs.badgemarkdownfile }}    
+    - ${{ inputs.badgemarkdownfile }}
     - --sort
     - ${{ inputs.sort }}
     - --minstars
     - ${{ inputs.minstars }}
-    - --mergepackages  
+    - --mergepackages
     - --verbose
 
 branding:

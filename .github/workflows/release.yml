@@ -31,9 +31,9 @@ jobs:
 
   # Build & push docker image
   build_push_docker:
-    name:  Build & Push docker image
+    name: Build & Push docker image
     runs-on: ubuntu-latest
-    permissions: 
+    permissions:
       packages: write
     steps:
       - name: Check out the repo
