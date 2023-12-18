@@ -364,7 +364,7 @@ class GithubDependentsInfo:
 
         # Write in file if requested
         if "file" in options:
-            os.makedirs(options["file"],exist_ok=True)
+            os.makedirs(os.path.dirname(options["file"]),exist_ok=True)
             with open(options["file"], "w", encoding="utf-8") as f:
                 f.write(md_lines_str)
                 if self.json_output is False:
@@ -412,9 +412,15 @@ class GithubDependentsInfo:
 
     # Generic method to replace text between tags
     def replace_in_file(self, file_path, start, end, content, add_new_line=False):
+        if not os.path.exists(file_path):
+            print(f"[Warning] Can not update badge in not existing file {file_path}")
+            return
         # Read in the file
         with open(file_path, encoding="utf-8") as file:
             file_content = file.read()
+        if (start not in file_content) or (end not in file_content):
+            print(f"[Warning] Can not update badge if it does not contain tags {start} and {end}")
+            return
         # Replace the target string
         if add_new_line is True:
             replacement = f"{start}\n{content}\n{end}"
