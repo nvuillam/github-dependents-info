@@ -359,14 +359,16 @@ class GithubDependentsInfo:
                 md_lines += [""]
 
         # footer
-        md_lines += ["_Generated using [github-dependents-info]"
-                     "(https://github.com/nvuillam/github-dependents-info), "
-                     "by [Nicolas Vuillamy](https://github.com/nvuillam)_"]
+        md_lines += [
+            "_Generated using [github-dependents-info]"
+            "(https://github.com/nvuillam/github-dependents-info), "
+            "by [Nicolas Vuillamy](https://github.com/nvuillam)_"
+        ]
         md_lines_str = "\n".join(md_lines)
 
         # Write in file if requested
         if "file" in options:
-            os.makedirs(os.path.dirname(options["file"]),exist_ok=True)
+            os.makedirs(os.path.dirname(options["file"]), exist_ok=True)
             with open(options["file"], "w", encoding="utf-8") as f:
                 f.write(md_lines_str)
                 if self.json_output is False:
