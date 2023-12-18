@@ -359,6 +359,7 @@ class GithubDependentsInfo:
                 md_lines += [""]
 
         # footer
+        md_lines += [""]
         md_lines += [
             "_Generated using [github-dependents-info]"
             "(https://github.com/nvuillam/github-dependents-info), "
