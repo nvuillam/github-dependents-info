@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add your updates here :)
 
+## [1.3.1] 2023-12-18
+
+- Fix GitHub Action
+
 ## [1.3.0] 2023-12-18
 
 - Build & upload Docker image nvuillam/github-dependents-info on docker hub & ghcr.io
