@@ -32,7 +32,9 @@ def main(
         help="""Path to markdown file to insert/update Used By badge between tags
              <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->""",
     ),
-    doc_url: str = typer.Option(None, "-d", "--docurl", help="Hyperlink to use when clicking on badge markdown file badge"),
+    doc_url: str = typer.Option(
+        None, "-d", "--docurl", help="Hyperlink to use when clicking on badge markdown file badge"
+    ),
     badge_color: str = typer.Option("informational", "-c", "--markdownbadgecolor", help="Markdown badge color"),
     sort_key: str = typer.Option(None, "-s", "--sort", help="Sort of name(default) or stars"),
     min_stars: int = typer.Option(None, "-x", "--minstars", help="Filter dependents with less than X stars"),
@@ -111,7 +113,7 @@ def main(
             gh_deps_info.build_markdown(file=markdown_file)
         # Update existing markdown to add badge
         if badge_markdown_file is not None:
-            gh_deps_info.write_badge(badge_markdown_file,"total_doc_url")
+            gh_deps_info.write_badge(badge_markdown_file, "total_doc_url")
         # Print text or json result
         gh_deps_info.print_result()
 

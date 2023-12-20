@@ -9,10 +9,9 @@ from github_dependents_info import GithubDependentsInfo
 def test_collect_stats_single_package():
     repo = "nvuillam/npm-groovy-lint"
     tmp_md_file = tempfile.gettempdir() + os.path.sep + str(uuid.uuid4()) + "-test-single.md"
-    gh_deps_info = GithubDependentsInfo(repo, debug=True,
-                                         sort_key="stars", 
-                                         badge_color="pink",
-                                         markdown_file=tmp_md_file)
+    gh_deps_info = GithubDependentsInfo(
+        repo, debug=True, sort_key="stars", badge_color="pink", markdown_file=tmp_md_file
+    )
     repo_stats = gh_deps_info.collect()
     assert repo_stats["public_dependents_number"] > 10
 
