@@ -99,6 +99,7 @@
     "docstates",
     "docstrings",
     "doctest",
+    "docurl",
     "donotpresent",
     "dont",
     "dotfiles",
