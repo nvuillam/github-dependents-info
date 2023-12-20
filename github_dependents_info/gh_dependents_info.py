@@ -351,8 +351,9 @@ class GithubDependentsInfo:
                 repo_stars = repo1["stars"]
                 image_md = ""
                 if "img" in repo1:
-                    image_md = f"![{repo_label}](" + repo1["img"] + ") "
-                md_lines += [f"|[{image_md}{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
+                    img = repo1["img"]
+                    image_md = f'<img class="avatar mr-2" src="{img}" width="20" height="20" alt=""> '
+                md_lines += [f"|{image_md}[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
         # Dependents by package
         else:
             for package in self.packages:
@@ -373,8 +374,9 @@ class GithubDependentsInfo:
                         repo_stars = repo1["stars"]
                         image_md = ""
                         if "img" in repo1:
-                            image_md = f"![{repo_label}](" + repo1["img"] + ") "
-                        md_lines += [f"|[{image_md}{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
+                            img = repo1["img"]
+                            image_md = f'<img class="avatar mr-2" src="{img}" width="20" height="20" alt=""> '
+                        md_lines += [f"|{image_md}[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
                 md_lines += [""]
 
         # footer
