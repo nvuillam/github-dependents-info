@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add your updates here :)
 
+## [1.4.0] 2023-12-20
+
+- Allow to override hyperlink on README badge using option **--docurl**
+- Also fetch GitHub repositories avatars, for a nicer result in markdown :)
+
 ## [1.3.2] 2023-12-18
 
 - Fix markdown table

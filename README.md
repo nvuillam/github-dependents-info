@@ -235,6 +235,7 @@ _________________
 | -s<br/> --sort              | String  | _(optional)_ Sort order: name (default) or stars                                                                                                                                         |
 | -x<br/> --minstars          | String  | _(optional)_ If set, filters repositories to keep only those with more than X stars                                                                                                      |
 | -m<br/> --markdownfile      | String  | _(optional)_ Output markdown file file                                                                                                                                                   |
+| -d<br/> --docurl            | String  | _(optional)_ Hyperlink to use when clicking on badge markdown file badge. (Default: link to markdown file)                                                                               |
 | -p<br/> --mergepackages     | String  | _(optional)_ In case of multiple packages, merge their stats in a single one in markdown and json output                                                                                 |
 | -j<br/> --json              | String  | _(optional)_ Output in json format                                                                                                                                                       |
 | -v<br/> --version           | Boolean | _(optional)_ Displays version of github-dependents-info                                                                                                                                  |
@@ -278,7 +279,6 @@ Create a file **.github/workflows/github-dependents-info.yml** in your repositor
 If will generate a new Pull Request (or replace the pending one) every time the usage stats will have changed :)
 
 ```yaml
----
 # GitHub Dependents Info workflow
 # More info at https://github.com/nvuillam/github-dependents-info/
 name: GitHub Dependents Info

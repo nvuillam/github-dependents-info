@@ -21,6 +21,8 @@ class GithubDependentsInfo:
         self.min_stars = None if "min_stars" not in options else options["min_stars"]
         self.json_output = True if "json_output" in options and options["json_output"] is True else False
         self.merge_packages = True if "merge_packages" in options and options["merge_packages"] is True else False
+        self.doc_url = options["doc_url"] if "doc_url" in options else None
+        self.markdown_file = options["markdown_file"] if "markdown_file" in options else None
         self.badge_color = options["badge_color"] if "badge_color" in options else "informational"
         self.debug = True if "debug" in options and options["debug"] is True else False
         self.overwrite_progress = (
@@ -96,6 +98,10 @@ class GithubDependentsInfo:
                             t.find("svg", {"class": "octicon-star"}).parent.text.strip().replace(",", "")
                         ),
                     }
+                    # Collect avatar image
+                    image = t.findAll("img", {"class": "avatar"})
+                    if len(image) > 0 and image[0].attrs and "src" in image[0].attrs:
+                        result_item["img"] = image[0].attrs["src"]
                     # Skip result if less than minimum stars
                     if self.min_stars is not None and result_item["stars"] < self.min_stars:
                         continue
@@ -174,6 +180,13 @@ class GithubDependentsInfo:
             self.all_public_dependent_repos = sorted(self.all_public_dependent_repos, key=lambda d: d["name"])
 
         # Build total badges
+        doc_url_to_use = "https://github.com/nvuillam/github-dependents-info"
+        if self.doc_url is not None:
+            doc_url_to_use = self.doc_url
+        elif self.markdown_file is not None:
+            doc_url_to_use = f"https://github.com/{self.repo}/blob/main/{self.markdown_file}"
+        self.badges["total_doc_url"] = self.build_badge("Used%20by", self.total_sum, url=doc_url_to_use)
+
         self.badges["total"] = self.build_badge("Used%20by", self.total_sum)
         self.badges["public"] = self.build_badge("Used%20by%20(public)", self.total_public_sum)
         self.badges["private"] = self.build_badge("Used%20by%20(private)", self.total_private_sum)
@@ -336,7 +349,10 @@ class GithubDependentsInfo:
             for repo1 in self.all_public_dependent_repos:
                 repo_label = repo1["name"]
                 repo_stars = repo1["stars"]
-                md_lines += [f"|[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
+                image_md = ""
+                if "img" in repo1:
+                    image_md = f"![{repo_label}](" + repo1["img"] + ") "
+                md_lines += [f"|[{image_md}{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
         # Dependents by package
         else:
             for package in self.packages:
@@ -355,7 +371,10 @@ class GithubDependentsInfo:
                     for repo1 in package["public_dependents"]:
                         repo_label = repo1["name"]
                         repo_stars = repo1["stars"]
-                        md_lines += [f"|[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
+                        image_md = ""
+                        if "img" in repo1:
+                            image_md = f"![{repo_label}](" + repo1["img"] + ") "
+                        md_lines += [f"|[{image_md}{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
                 md_lines += [""]
 
         # footer

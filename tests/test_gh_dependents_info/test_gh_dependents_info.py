@@ -8,10 +8,14 @@ from github_dependents_info import GithubDependentsInfo
 
 def test_collect_stats_single_package():
     repo = "nvuillam/npm-groovy-lint"
-    gh_deps_info = GithubDependentsInfo(repo, debug=True, sort_key="stars", badge_color="pink")
+    tmp_md_file = tempfile.gettempdir() + os.path.sep + str(uuid.uuid4()) + "-test-single.md"
+    gh_deps_info = GithubDependentsInfo(repo, debug=True,
+                                         sort_key="stars", 
+                                         badge_color="pink",
+                                         markdown_file=tmp_md_file)
     repo_stats = gh_deps_info.collect()
     assert repo_stats["public_dependents_number"] > 10
-    tmp_md_file = tempfile.gettempdir() + os.path.sep + str(uuid.uuid4()) + "-test-single.md"
+
     md = gh_deps_info.build_markdown(file=tmp_md_file)
     assert md.count("\n") > 10
     assert "pink" in md
