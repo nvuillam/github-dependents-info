@@ -33,6 +33,7 @@ This package uses GitHub HTML to collect dependents information and can:
   - `<!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->`
 - Handle multiple repositories packages
 - Filter results using minimum stars
+- Automate all that [**using a simple GitHub Action**](#use-as-github-action) !
 
 Badges example
 
@@ -274,9 +275,11 @@ _________________
 
 ## Use as GitHub Action
 
-Create a file **.github/workflows/github-dependents-info.yml** in your repository with the following content.
+Create a file **.github/workflows/github-dependents-info.yml** in your repository with the following YAML content.
 
 If will generate a new Pull Request (or replace the pending one) every time the usage stats will have changed :)
+
+Don't forget to add tags `<!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->` in your **README.md**, at the end of another badge line if you want github-dependents-info to replace its content automatically.
 
 ```yaml
 # GitHub Dependents Info workflow
