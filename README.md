@@ -26,6 +26,7 @@ GitHub API does not allow to collect information about package usage (**Used by*
 
 This package uses GitHub HTML to collect dependents information and can:
 
+- Automate all the actions below [**using a simple GitHub Action**](#use-as-github-action) !
 - Output as text
 - Output as json (including shields.io markdown badges)
 - Generate summary markdown file
@@ -33,7 +34,7 @@ This package uses GitHub HTML to collect dependents information and can:
   - `<!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->`
 - Handle multiple repositories packages
 - Filter results using minimum stars
-- Automate all that [**using a simple GitHub Action**](#use-as-github-action) !
+
 
 Badges example
 
