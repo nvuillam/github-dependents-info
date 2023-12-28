@@ -17,6 +17,8 @@
 
 Collect information about dependencies between a github repo and other repositories.
 
+[![See tutorial on youtube](assets/images/youtube-preview.png)](https://www.youtube.com/watch?v=katV9w0QhTQ)
+
 </div>
 
 _________________
