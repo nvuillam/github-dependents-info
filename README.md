@@ -293,7 +293,7 @@ on:
   workflow_dispatch:
   # On every push on selected branches (usually just main)
   push:
-    branches: [main, setup-gdi]
+    branches: [main,master,setup-gdi]
   # Scheduled interval: Use CRON format https://crontab.guru/
   schedule:
     - cron: "0 0 * * 0" # Every sunday at midnight
