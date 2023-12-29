@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add your updates here :)
 
+## [1.5.0] 2023-12-29
+
+- Enhance display of repositories in markdown
+
 ## [1.4.0] 2023-12-20
 
 - Allow to override hyperlink on README badge using option **--docurl**
