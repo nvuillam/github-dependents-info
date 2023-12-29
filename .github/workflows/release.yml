@@ -33,6 +33,7 @@ jobs:
   build_push_docker:
     name: Build & Push docker image
     runs-on: ubuntu-latest
+    needs: publish
     permissions:
       packages: write
     steps:
