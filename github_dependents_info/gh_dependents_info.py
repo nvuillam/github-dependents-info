@@ -400,9 +400,9 @@ class GithubDependentsInfo:
         if "owner" in repo1 and "repo_name" in repo1:
             owner_md = "[" + repo1["owner"] + "](https://github.com/" + repo1["owner"] + ")"
             repo_md = "[" + repo1["owner"] + "](https://github.com/" + repo1["owner"] + "/" + repo1["repo_name"] + ")"
-            md_lines += [f"|{image_md} {owner_md} / {repo_md} | {repo_stars} |"]
+            md_lines += [f"|{image_md} &nbsp; {owner_md} / {repo_md} | {repo_stars} |"]
         else:
-            md_lines += [f"|{image_md}[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
+            md_lines += [f"|{image_md} &nbsp; [{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
 
     def build_badge(self, label, nb, **options):
         if "url" in options:
