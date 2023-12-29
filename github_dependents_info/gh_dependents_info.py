@@ -102,6 +102,11 @@ class GithubDependentsInfo:
                     image = t.findAll("img", {"class": "avatar"})
                     if len(image) > 0 and image[0].attrs and "src" in image[0].attrs:
                         result_item["img"] = image[0].attrs["src"]
+                    # Split owner and name
+                    if "/" in result_item["name"]:
+                        splits = str(result_item["name"]).split("/")
+                        result_item["owner"] = splits[0]
+                        result_item["repo_name"] = splits[1]
                     # Skip result if less than minimum stars
                     if self.min_stars is not None and result_item["stars"] < self.min_stars:
                         continue
@@ -347,13 +352,7 @@ class GithubDependentsInfo:
             ]
             md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
             for repo1 in self.all_public_dependent_repos:
-                repo_label = repo1["name"]
-                repo_stars = repo1["stars"]
-                image_md = ""
-                if "img" in repo1:
-                    img = repo1["img"]
-                    image_md = f'<img class="avatar mr-2" src="{img}" width="20" height="20" alt=""> '
-                md_lines += [f"|{image_md}[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
+                self.build_repo_md_line(md_lines, repo1)
         # Dependents by package
         else:
             for package in self.packages:
@@ -370,13 +369,7 @@ class GithubDependentsInfo:
                     ]
                     md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
                     for repo1 in package["public_dependents"]:
-                        repo_label = repo1["name"]
-                        repo_stars = repo1["stars"]
-                        image_md = ""
-                        if "img" in repo1:
-                            img = repo1["img"]
-                            image_md = f'<img class="avatar mr-2" src="{img}" width="20" height="20" alt=""> '
-                        md_lines += [f"|{image_md}[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
+                        self.build_repo_md_line(md_lines, repo1)
                 md_lines += [""]
 
         # footer
@@ -396,6 +389,20 @@ class GithubDependentsInfo:
                 if self.json_output is False:
                     print("Wrote markdown file " + options["file"])
         return md_lines_str
+
+    def build_repo_md_line(self, md_lines, repo1):
+        repo_label = repo1["name"]
+        repo_stars = repo1["stars"]
+        image_md = ""
+        if "img" in repo1:
+            img = repo1["img"]
+            image_md = f'<img class="avatar mr-2" src="{img}" width="20" height="20" alt=""> '
+        if "owner" in repo1 and "repo_name" in repo1:
+            owner_md = "[" + repo1["owner"] + "](https://github.com/" + repo1["owner"] + ")"
+            repo_md = "[" + repo1["owner"] + "](https://github.com/" + repo1["owner"] + "/" + repo1["repo_name"] + ")"
+            md_lines += [f"|{image_md} &nbsp; {owner_md} / {repo_md} | {repo_stars} |"]
+        else:
+            md_lines += [f"|{image_md} &nbsp; [{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
 
     def build_badge(self, label, nb, **options):
         if "url" in options:

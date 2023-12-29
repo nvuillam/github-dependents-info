@@ -50,9 +50,9 @@ def test_collect_csv():
             repo, debug=True, sort_key="stars", min_stars=10, csv_directory=csv_directory
         )
         gh_deps_info.collect()
-        assert os.path.isfile(csv_directory + os.path.sep + f"packages_{repo.replace('/','-')}.csv")
+        assert os.path.isfile(csv_directory + os.path.sep + f"packages_{repo.replace('/', '-')}.csv")
         assert os.path.isfile(
-            csv_directory + os.path.sep + f"dependents_{gh_deps_info.packages[0]['name'].replace('/','-')}.csv"
+            csv_directory + os.path.sep + f"dependents_{gh_deps_info.packages[0]['name'].replace('/', '-')}.csv"
         )
 
 
@@ -63,8 +63,8 @@ def test_collect_csv_multi_package():
             repo, debug=True, sort_key="stars", min_stars=10, csv_directory=csv_directory
         )
         gh_deps_info.collect()
-        assert os.path.isfile(csv_directory + os.path.sep + f"packages_{repo.replace('/','-')}.csv")
+        assert os.path.isfile(csv_directory + os.path.sep + f"packages_{repo.replace('/', '-')}.csv")
         for package in gh_deps_info.packages:
             if package["public_dependents_number"] <= 0:
                 continue
-            assert os.path.isfile(csv_directory + os.path.sep + f"dependents_{package['name'].replace('/','-')}.csv")
+            assert os.path.isfile(csv_directory + os.path.sep + f"dependents_{package['name'].replace('/', '-')}.csv")
