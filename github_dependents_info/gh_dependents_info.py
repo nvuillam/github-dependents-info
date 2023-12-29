@@ -102,6 +102,11 @@ class GithubDependentsInfo:
                     image = t.findAll("img", {"class": "avatar"})
                     if len(image) > 0 and image[0].attrs and "src" in image[0].attrs:
                         result_item["img"] = image[0].attrs["src"]
+                    # Split owner and name
+                    if "/" in result_item["name"]:
+                        splits = str(result_item["name"]).split("/")
+                        result_item["owner"] = splits[0]
+                        result_item["repo_name"] = splits[1]
                     # Skip result if less than minimum stars
                     if self.min_stars is not None and result_item["stars"] < self.min_stars:
                         continue
@@ -353,7 +358,12 @@ class GithubDependentsInfo:
                 if "img" in repo1:
                     img = repo1["img"]
                     image_md = f'<img class="avatar mr-2" src="{img}" width="20" height="20" alt=""> '
-                md_lines += [f"|{image_md}[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
+                if "owner" in repo1 and "repo_name" in repo1:
+                    owner_md = "["+repo1["owner"]+"](https://github.com/"+repo1["owner"]+")"
+                    repo_md = "["+repo1["owner"]+"](https://github.com/"+repo1["owner"]+"/"+repo1["repo_name"]+")"
+                    md_lines += [f"|{image_md} {owner_md} / {repo_md} | {repo_stars} |"]
+                else:
+                    md_lines += [f"|{image_md}[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
         # Dependents by package
         else:
             for package in self.packages:
@@ -376,7 +386,12 @@ class GithubDependentsInfo:
                         if "img" in repo1:
                             img = repo1["img"]
                             image_md = f'<img class="avatar mr-2" src="{img}" width="20" height="20" alt=""> '
-                        md_lines += [f"|{image_md}[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
+                        if "owner" in repo1 and "repo_name" in repo1:
+                            owner_md = "["+repo1["owner"]+"](https://github.com/"+repo1["owner"]+")"
+                            repo_md = "["+repo1["owner"]+"](https://github.com/"+repo1["owner"]+"/"+repo1["repo_name"]+")"
+                            md_lines += [f"|{image_md} {owner_md} / {repo_md} | {repo_stars} |"]
+                        else:
+                            md_lines += [f"|{image_md}[{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
                 md_lines += [""]
 
         # footer
