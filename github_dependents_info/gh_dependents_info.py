@@ -399,7 +399,7 @@ class GithubDependentsInfo:
             image_md = f'<img class="avatar mr-2" src="{img}" width="20" height="20" alt=""> '
         if "owner" in repo1 and "repo_name" in repo1:
             owner_md = "[" + repo1["owner"] + "](https://github.com/" + repo1["owner"] + ")"
-            repo_md = "[" + repo1["owner"] + "](https://github.com/" + repo1["owner"] + "/" + repo1["repo_name"] + ")"
+            repo_md = "[" + repo1["repo_name"] + "](https://github.com/" + repo1["owner"] + "/" + repo1["repo_name"] + ")"
             md_lines += [f"|{image_md} &nbsp; {owner_md} / {repo_md} | {repo_stars} |"]
         else:
             md_lines += [f"|{image_md} &nbsp; [{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
