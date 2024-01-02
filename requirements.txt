@@ -1,7 +1,7 @@
 beautifulsoup4==4.12.2 ; python_version >= "3.9" and python_version < "4.0"
 click==8.1.7 ; python_version >= "3.9" and python_version < "4.0"
 colorama==0.4.6 ; python_version >= "3.9" and python_version < "4.0"
-markdown-it-py==2.2.0 ; python_version >= "3.9" and python_version < "4.0"
+markdown-it-py==3.0.0 ; python_version >= "3.9" and python_version < "4.0"
 mdurl==0.1.2 ; python_version >= "3.9" and python_version < "4.0"
 pygments==2.17.2 ; python_version >= "3.9" and python_version < "4.0"
 rich==13.7.0 ; python_version >= "3.9" and python_version < "4.0"

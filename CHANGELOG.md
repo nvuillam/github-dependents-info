@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add your updates here :)
 
+## [1.5.1] 2023-12-31
+
+- Fix repository display & release job
+
 ## [1.5.0] 2023-12-29
 
 - Enhance display of repositories in markdown
