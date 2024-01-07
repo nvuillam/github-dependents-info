@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
+- Setup Github Dependents Info on own repo
 - Add your updates here :)
 
 ## [1.5.1] 2023-12-31

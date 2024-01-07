@@ -9,9 +9,9 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/github-dependents-info.svg)](https://pypi.org/project/github-dependents-info/)
 [![Dependencies Status](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)](https://github.com/nvuillam/github-dependents-info/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
 
-[![GitHub contributors](https://img.shields.io/github/contributors/nvuillam/github-dependents-info.svg)](https://github.com/nvuillam/github-dependents-info/graphs/contributors/)
+[![GitHub contributors](https://img.shields.io/github/contributors/nvuillam/github-dependents-info.svg)](https://github.com/nvuillam/github-dependents-info/graphs/contributors/)<!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/nvuillam)](https://github.com/sponsors/nvuillam)
-[![MegaLinter](https://github.com/nvuillam/github-dependents-info/workflows/MegaLinter/badge.svg?branch=main)](https://oxsecurity.github.io/megalinter)
+[![MegaLinter](https://github.com/nvuillam/github-dependents-info/actions/workflows/mega-linter.yml/badge.svg)](https://github.com/nvuillam/github-dependents-info/actions/workflows/mega-linter.yml)
 [![License](https://img.shields.io/github/license/nvuillam/github-dependents-info)](https://github.com/nvuillam/github-dependents-info/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
