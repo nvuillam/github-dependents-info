@@ -56,7 +56,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN  }}
+          token: ${{ secrets.GITHUB_TOKEN  }}
           branch: github-dependents-info-auto-update
           commit-message: "[GitHub Dependents Info] Updated markdown file(s)"
           delete-branch: true
