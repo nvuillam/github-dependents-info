@@ -42,7 +42,7 @@ requests = "^2.31.0"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.5"
-black = {version = "^23.0.0", allow-prereleases = true}
+black = {version = "^24.1.0", allow-prereleases = true}
 darglint = "^1.8.1"
 isort = {extras = ["colors"], version = "^5.13.2"}
 mypy = "^1.8"
