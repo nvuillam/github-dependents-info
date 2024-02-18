@@ -15,6 +15,7 @@ from requests.packages.urllib3.util.retry import Retry
 class GithubDependentsInfo:
     def __init__(self, repo, **options) -> None:
         self.repo = repo
+        self.outputrepo = self.repo if "outputrepo" not in options else options["outputrepo"]
         self.url_init = f"https://github.com/{self.repo}/network/dependents"
         self.url_starts_with = f"/{self.repo}/network/dependents" + "?package_id="
         self.sort_key = "name" if "sort_key" not in options else options["sort_key"]
@@ -189,7 +190,7 @@ class GithubDependentsInfo:
         if self.doc_url is not None:
             doc_url_to_use = self.doc_url
         elif self.markdown_file is not None:
-            doc_url_to_use = f"https://github.com/{self.repo}/blob/main/{self.markdown_file}"
+            doc_url_to_use = f"https://github.com/{self.outputrepo}/blob/main/{self.markdown_file}"
         self.badges["total_doc_url"] = self.build_badge("Used%20by", self.total_sum, url=doc_url_to_use)
 
         self.badges["total"] = self.build_badge("Used%20by", self.total_sum)

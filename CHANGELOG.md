@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
+- New config `outputrepo` allowing to run stats on another repository
 - Setup Github Dependents Info on own repo
 - Add your updates here :)
 
