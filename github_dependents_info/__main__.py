@@ -24,6 +24,7 @@ def version_callback(print_version: bool) -> None:
 @app.command(name="")
 def main(
     repo: str = typer.Option(None, "-r", "--repo", help="Repository (ex: oxsecurity/megalinter)"),
+    outputrepo: str = typer.Option(None, "-z", "--outputrepo", help="Output repository (ex: oxsecurity/megalinter)"),
     markdown_file: str = typer.Option(None, "-m", "--markdownfile", help="Output Markdown file path"),
     badge_markdown_file: str = typer.Option(
         None,
@@ -87,6 +88,8 @@ def main(
         raise ValueError("--repo argument is mandatory")
     else:
         # Manage default values :)
+        if outputrepo is None:
+            outputrepo = repo
         if sort_key is None:
             sort_key = "name"
         if min_stars is None:
@@ -94,6 +97,7 @@ def main(
         # Create GithubDependentsInfo instance
         gh_deps_info = GithubDependentsInfo(
             repo,
+            outputrepo=outputrepo,
             debug=verbose,
             overwrite_progress=overwrite,
             sort_key=sort_key,

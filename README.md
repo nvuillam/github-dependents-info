@@ -332,6 +332,7 @@ jobs:
         # See documentation for variables details: https://github.com/nvuillam/github-dependents-info?tab=readme-ov-file#%EF%B8%8F-usage
         with:
           repo: ${{ github.repository }}
+          outputrepo: ${{ github.repository }}
           # markdownfile: docs/github-dependents-info.md
           # badgemarkdownfile: README.md
           # sort: stars
@@ -346,7 +347,7 @@ jobs:
       # Create pull request
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN  }}
           branch: github-dependents-info-auto-update
