@@ -168,6 +168,7 @@
     "optionflags",
     "optparse",
     "orjson",
+    "outputrepo",
     "overgeneral",
     "oxsecurity",
     "paket",
