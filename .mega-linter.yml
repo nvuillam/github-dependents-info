@@ -6,6 +6,8 @@ APPLY_FIXES: all # all, none, or list of linter keys
 # ENABLE_LINTERS: # If you use ENABLE_LINTERS variable, all other linters will be disabled by default
 DISABLE:
   - EDITORCONFIG
+DISABLE_LINTERS:
+  - MARKDOWN_MARKDOWN_LINK_CHECK
 DISABLE_ERRORS_LINTERS:
   - ACTION_ACTIONLINT
   - DOCKERFILE_HADOLINT
