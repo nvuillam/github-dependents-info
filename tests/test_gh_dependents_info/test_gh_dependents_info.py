@@ -1,4 +1,5 @@
 """Tests for gh_dependents_info"""
+
 import os
 import tempfile
 import uuid
