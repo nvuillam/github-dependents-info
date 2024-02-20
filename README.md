@@ -282,6 +282,10 @@ _________________
 
 ## Use as GitHub Action
 
+Allow GitHub Actions to create Pull Requests in **Settings > Actions > General**
+
+![image](https://github.com/nvuillam/github-dependents-info/assets/17500430/19615cf1-001e-4479-8306-0cb30ad996f4)
+
 Create a file **.github/workflows/github-dependents-info.yml** in your repository with the following YAML content.
 
 If will generate a new Pull Request (or replace the pending one) every time the usage stats will have changed :)
