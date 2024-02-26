@@ -16,6 +16,8 @@ class GithubDependentsInfo:
     def __init__(self, repo, **options) -> None:
         self.repo = repo
         self.outputrepo = self.repo if "outputrepo" not in options else options["outputrepo"]
+        if self.outputrepo is None or self.outputrepo == "":
+            self.outputrepo = self.repo
         self.url_init = f"https://github.com/{self.repo}/network/dependents"
         self.url_starts_with = f"/{self.repo}/network/dependents" + "?package_id="
         self.sort_key = "name" if "sort_key" not in options else options["sort_key"]
