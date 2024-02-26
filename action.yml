@@ -31,7 +31,7 @@ inputs:
 
 runs:
   using: "docker"
-  image: "docker://nvuillam/github-dependents-info:v1.5.1"
+  image: "docker://nvuillam/github-dependents-info:v1.6.1"
   args:
     - --repo
     - ${{ inputs.repo }}
