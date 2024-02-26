@@ -6,9 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
+- Add your updates here :)
+
+## [1.6.0] 2023-02-20
+
 - New config `outputrepo` allowing to run stats on another repository
 - Setup Github Dependents Info on own repo
-- Add your updates here :)
+- Update doc to explain how to authorize GitHub Actions to create Pull Requests
 
 ## [1.5.1] 2023-12-31
 
