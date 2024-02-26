@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add your updates here :)
 
+## [1.6.1] 2023-02-26
+
+- Fix issue with hyperlink when outputrepo is not set
+
 ## [1.6.0] 2023-02-20
 
 - New config `outputrepo` allowing to run stats on another repository
