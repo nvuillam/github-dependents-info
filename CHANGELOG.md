@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add your updates here :)
 
+## [1.6.3] 2023-03-03
+
+- Set outputrepo as not required in the GitHub Action definition
+- Test case: check update of README file with _Used by_ badge
+
 ## [1.6.2] 2023-02-26
 
 - Fix issue with hyperlink when outputrepo is not set

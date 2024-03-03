@@ -7,7 +7,7 @@ inputs:
     required: true
   outputrepo:
     description: "Owner and name of the output repository, if different from repo (example: nvuillam/node-sarif-builder)"
-    required: true
+    required: false
   markdownfile:
     description: "Path and name of the output markdown file"
     required: false
@@ -31,7 +31,7 @@ inputs:
 
 runs:
   using: "docker"
-  image: "docker://nvuillam/github-dependents-info:v1.6.2"
+  image: "docker://nvuillam/github-dependents-info:v1.6.3"
   args:
     - --repo
     - ${{ inputs.repo }}
