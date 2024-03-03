@@ -26,8 +26,9 @@ def test_collect_stats_single_package():
     # Check Update README file
     tmp_readme_file = tempfile.gettempdir() + os.path.sep + str(uuid.uuid4()) + "-test-single-readme.md"
     with open(tmp_readme_file, "w", encoding="utf-8") as file:
-        file.write("<!-- gh-dependents-info-used-by-start -->" + "shouldBeReplaced" +
-            "<!-- gh-dependents-info-used-by-end -->")
+        file.write(
+            "<!-- gh-dependents-info-used-by-start -->" + "shouldBeReplaced" + "<!-- gh-dependents-info-used-by-end -->"
+        )
 
     gh_deps_info.badges["total_doc_url"] = "https://nvuillam/npm-groovy-lint"
     gh_deps_info.write_badge(tmp_readme_file, "total_doc_url")
@@ -35,6 +36,7 @@ def test_collect_stats_single_package():
         readme_content = file.read()
     assert "shouldBeReplaced" not in readme_content
     assert "nvuillam/npm-groovy-lint" in readme_content
+
 
 def test_collect_stats_multi_package():
     repo = "oxsecurity/megalinter"
