@@ -56,7 +56,7 @@ safety = "^3.0.1"
 coverage = "^7.3.4"
 coverage-badge = "^1.1.0"
 pytest-html = "^4.1.1"
-pytest-cov = "^4.0.0"
+pytest-cov = "^5.0.0"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"
@@ -72,7 +72,7 @@ safety = ">=2.3.5,<4.0.0"
 coverage = ">=6.5,<8.0"
 coverage-badge = "^1.1.0"
 pytest-html = ">=3.2,<5.0"
-pytest-cov = "^4.0.0"
+pytest-cov = "^5.0.0"
 
 [tool.black]
 # https://github.com/psf/black
