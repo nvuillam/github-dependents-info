@@ -75,9 +75,9 @@ class GithubDependentsInfo:
             # Get total number of dependents from UI
             r = self.requests_retry_session().get(url)
             soup = BeautifulSoup(r.content, "html.parser")
-            svg_item = soup.find("svg", {"class": "octicon-code-square"})
+            svg_item = soup.find("a", {"class": "btn-link selected"})
             if svg_item is not None:
-                a_around_svg = svg_item.parent
+                a_around_svg = svg_item
                 total_dependents = self.get_int(
                     a_around_svg.text.replace("Repositories", "").replace("Repository", "").strip()
                 )
