@@ -1,4 +1,5 @@
 import json
+import time
 import logging
 import os
 import re
@@ -44,6 +45,7 @@ class GithubDependentsInfo:
         self.all_public_dependent_repos = []
         self.badges = {}
         self.result = {}
+        self.time_delay = options["time_delay"] if "time_delay" in options else 0.1
 
     def collect(self):
         if self.overwrite_progress or not self.load_progress():
@@ -123,6 +125,7 @@ class GithubDependentsInfo:
                     for u in paginate_container.findAll("a"):
                         if u.text == "Next":
                             nextExists = True
+                            time.sleep(self.time_delay)
                             url = u["href"]
                             page_number = page_number + 1
                             if self.debug is True:
