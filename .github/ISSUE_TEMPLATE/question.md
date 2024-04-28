@@ -16,9 +16,9 @@ assignees:
 
 <!-- What is your question -->
 
-How can I [...]?
+How can I \[...\]?
 
-Is it possible to [...]?
+Is it possible to \[...\]?
 
 ## 📎 Additional context
 

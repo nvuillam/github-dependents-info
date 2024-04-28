@@ -41,17 +41,11 @@ pandas = "^2.0.0"
 requests = "^2.31.0"
 
 [tool.poetry.dev-dependencies]
-bandit = "^1.7.5"
-black = {version = "^24.0.0", allow-prereleases = true}
 darglint = "^1.8.1"
-isort = {extras = ["colors"], version = "^5.13.2"}
 mypy = "^1.8"
 mypy-extensions = "^1.0.0"
 pre-commit = "^3.6.0"
-pydocstyle = "^6.3.0"
-pylint = "^3.0.0"
 pytest = "^8.0.1"
-pyupgrade = "^3.4.0"
 safety = "^3.0.1"
 coverage = "^7.3.4"
 coverage-badge = "^1.1.0"
@@ -59,55 +53,46 @@ pytest-html = "^4.1.1"
 pytest-cov = "^4.0.0"
 
 [tool.poetry.group.dev.dependencies]
-bandit = "^1.7.4"
 darglint = "^1.8.1"
-isort = {extras = ["colors"], version = "^5.12.0"}
 mypy = "^1.3"
 pre-commit = ">=2.20,<4.0"
-pydocstyle = "^6.3.0"
-pylint = "^3.0.0"
 pytest = ">=7.3.1,<9.0.0"
-pyupgrade = "^3.4.0"
 safety = ">=2.3.5,<4.0.0"
 coverage = ">=6.5,<8.0"
 coverage-badge = "^1.1.0"
 pytest-html = ">=3.2,<5.0"
 pytest-cov = "^4.0.0"
 
-[tool.black]
-# https://github.com/psf/black
-target-version = ["py39"]
+
+[tool.ruff]
+target-version = "py39"
 line-length = 120
-color = true
+# Enable Pyflakes `E` and `F` codes by default.
+lint.select = [
+    "E", "W",  # see: https://pypi.org/project/pycodestyle
+    "F",  # see: https://pypi.org/project/pyflakes
+    "I",  # isort
+    "D",  # see: https://pypi.org/project/pydocstyle
+    "UP", # pyupgrade
+    "S",  # bandit
+]
 
-exclude = '''
-/(
-    \.git
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-    | env
-    | venv
-)/
-'''
-
-[tool.isort]
-# https://github.com/timothycrosley/isort/
-py_version = 39
-line_length = 120
-
-known_typing = ["typing", "types", "typing_extensions", "mypy", "mypy_extensions"]
-sections = ["FUTURE", "TYPING", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
-include_trailing_comma = true
-profile = "black"
-multi_line_output = 3
-indent = 4
-color_output = true
+[tool.ruff.lint.per-file-ignores]
+"github_dependents_info/**" = [
+    "D100",  # todo
+    "D101",  # todo
+    "D102",  # todo
+    "D103",  # todo
+    "D107",  # todo
+    "D205",  # todo
+]
+"tests/**" = [
+    "D103",
+    "D104",
+    "D400",
+    "D415",
+    "S101",
+]
 
 [tool.mypy]
 # https://mypy.readthedocs.io/en/latest/config_file.html#using-a-pyproject-toml-file

@@ -22,8 +22,8 @@ Steps to reproduce the behavior:
 
 ### Environment
 
-* OS: [e.g. Linux / Windows / macOS]
-* Python version, get it with:
+- OS: \[e.g. Linux / Windows / macOS\]
+- Python version, get it with:
 
 ```bash
 python --version
