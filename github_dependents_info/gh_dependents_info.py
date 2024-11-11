@@ -15,27 +15,21 @@ from requests.packages.urllib3.util.retry import Retry
 class GithubDependentsInfo:
     def __init__(self, repo, **options) -> None:
         self.repo = repo
-        self.outputrepo = self.repo if "outputrepo" not in options else options["outputrepo"]
-        if self.outputrepo is None or self.outputrepo == "" or len(self.outputrepo) < 4:
+        self.outputrepo = options.get("outputrepo", self.repo)
+        if len(self.outputrepo or "") < 4:
             self.outputrepo = self.repo
         self.url_init = f"https://github.com/{self.repo}/network/dependents"
-        self.url_starts_with = f"/{self.repo}/network/dependents" + "?package_id="
-        self.sort_key = "name" if "sort_key" not in options else options["sort_key"]
-        self.min_stars = None if "min_stars" not in options else options["min_stars"]
-        self.json_output = True if "json_output" in options and options["json_output"] is True else False
-        self.merge_packages = True if "merge_packages" in options and options["merge_packages"] is True else False
-        self.doc_url = options["doc_url"] if "doc_url" in options else None
-        self.markdown_file = options["markdown_file"] if "markdown_file" in options else None
-        self.badge_color = options["badge_color"] if "badge_color" in options else "informational"
-        self.debug = True if "debug" in options and options["debug"] is True else False
-        self.overwrite_progress = (
-            True if "overwrite_progress" in options and options["overwrite_progress"] is True else False
-        )
-        self.csv_directory = (
-            Path(options["csv_directory"])
-            if ("csv_directory" in options and options["csv_directory"] is not None)
-            else None
-        )
+        self.url_starts_with = f"/{self.repo}/network/dependents?package_id="
+        self.sort_key = options.get("sort_key", "name")
+        self.min_stars = options.get("min_stars")
+        self.json_output = bool(options.get("json_output"))
+        self.merge_packages = bool(options.get("merge_packages"))
+        self.doc_url = options.get("doc_url")
+        self.markdown_file = options.get("markdown_file")
+        self.badge_color = options.get("badge_color", "informational")
+        self.debug = bool(options.get("debug"))
+        self.overwrite_progress = (bool(options.get("overwrite_progress")))
+        self.csv_directory = Path(options.get("csv_directory"))
         self.total_sum = 0
         self.total_public_sum = 0
         self.total_private_sum = 0
