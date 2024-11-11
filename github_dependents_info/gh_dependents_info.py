@@ -123,7 +123,7 @@ class GithubDependentsInfo:
                                 logging.info("  - browsing page " + str(page_number))
 
             # Manage results for package
-            result = sorted(result, key=lambda d: d[self.sort_key], reverse=True) if self.sort_key == "stars" else sorted(result, key=lambda d: d[self.sort_key])
+            result = sorted(result, key=lambda d: d[self.sort_key], reverse=self.sort_key == "stars")
             if self.debug is True:
                 for r in result:
                     logging.info(r)

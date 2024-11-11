@@ -5,7 +5,7 @@ Results available in JSON, markdown and badges.
 
 from importlib import metadata as importlib_metadata
 
-from .gh_dependents_info import GithubDependentsInfo
+from .gh_dependents_info import GithubDependentsInfo  # noqa: F401
 
 
 def get_version() -> str:
