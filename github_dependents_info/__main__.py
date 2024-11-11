@@ -18,7 +18,7 @@ def version_callback(print_version: bool) -> None:
     """Print the version of the package."""
     if print_version:
         console.print(f"[yellow]github-dependents-info[/] version: [bold blue]{version}[/]")
-        raise typer.Exit()
+        raise typer.Exit
 
 
 @app.command(name="")
@@ -86,40 +86,39 @@ def main(
     # Check minimum arguments
     if repo is None:
         raise ValueError("--repo argument is mandatory")
-    else:
-        # Manage default values :)
-        if outputrepo is None:
-            outputrepo = repo
-        if sort_key is None:
-            sort_key = "name"
-        if min_stars is None:
-            min_stars = 0
-        # Create GithubDependentsInfo instance
-        gh_deps_info = GithubDependentsInfo(
-            repo,
-            outputrepo=outputrepo,
-            debug=verbose,
-            overwrite_progress=overwrite,
-            sort_key=sort_key,
-            min_stars=min_stars,
-            json_output=json_output,
-            csv_directory=csv_directory,
-            badge_markdown_file=badge_markdown_file,
-            doc_url=doc_url,
-            markdown_file=markdown_file,
-            badge_color=badge_color,
-            merge_packages=merge_packages,
-        )
-        # Collect data
-        gh_deps_info.collect()
-        # Write output markdown
-        if markdown_file is not None:
-            gh_deps_info.build_markdown(file=markdown_file)
-        # Update existing markdown to add badge
-        if badge_markdown_file is not None:
-            gh_deps_info.write_badge(badge_markdown_file, "total_doc_url")
-        # Print text or json result
-        gh_deps_info.print_result()
+    # Manage default values :)
+    if outputrepo is None:
+        outputrepo = repo
+    if sort_key is None:
+        sort_key = "name"
+    if min_stars is None:
+        min_stars = 0
+    # Create GithubDependentsInfo instance
+    gh_deps_info = GithubDependentsInfo(
+        repo,
+        outputrepo=outputrepo,
+        debug=verbose,
+        overwrite_progress=overwrite,
+        sort_key=sort_key,
+        min_stars=min_stars,
+        json_output=json_output,
+        csv_directory=csv_directory,
+        badge_markdown_file=badge_markdown_file,
+        doc_url=doc_url,
+        markdown_file=markdown_file,
+        badge_color=badge_color,
+        merge_packages=merge_packages,
+    )
+    # Collect data
+    gh_deps_info.collect()
+    # Write output markdown
+    if markdown_file is not None:
+        gh_deps_info.build_markdown(file=markdown_file)
+    # Update existing markdown to add badge
+    if badge_markdown_file is not None:
+        gh_deps_info.write_badge(badge_markdown_file, "total_doc_url")
+    # Print text or json result
+    gh_deps_info.print_result()
 
 
 if __name__ == "__main__":
