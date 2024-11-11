@@ -28,7 +28,7 @@ class GithubDependentsInfo:
         self.markdown_file = options.get("markdown_file")
         self.badge_color = options.get("badge_color", "informational")
         self.debug = bool(options.get("debug"))
-        self.overwrite_progress = (bool(options.get("overwrite_progress")))
+        self.overwrite_progress = bool(options.get("overwrite_progress"))
         self.csv_directory = Path(options.get("csv_directory"))
         self.total_sum = 0
         self.total_public_sum = 0
