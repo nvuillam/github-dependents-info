@@ -36,6 +36,7 @@ class GithubDependentsInfo:
             if ("csv_directory" in options and options["csv_directory"] is not None)
             else None
         )
+        self.owner = options["owner"] if "owner" in options else None
         self.total_sum = 0
         self.total_public_sum = 0
         self.total_private_sum = 0
@@ -62,10 +63,14 @@ class GithubDependentsInfo:
             # Build start page url
             if package["id"] is not None:
                 url = self.url_init + "?package_id=" + package["id"]
+                if self.owner:
+                    url += "&owner=" + self.owner
                 if self.debug is True:
                     logging.info("Package " + package["name"] + ": browsing " + url + " ...")
             else:
                 url = self.url_init + ""
+                if self.owner:
+                    url += "?owner=" + self.owner
                 if self.debug is True:
                     logging.info("Package " + self.repo + ": browsing" + url + " ...")
             package["url"] = url

@@ -77,6 +77,7 @@ def main(
         is_eager=True,
         help="Prints the version of the github-dependents-info package.",
     ),
+    owner: str = typer.Option(None, "-o", "--owner", help="Owner of dependent repositories (ex: oxsecurity)"),
 ) -> None:
     # Init logger
     if verbose is True:
@@ -109,6 +110,7 @@ def main(
             markdown_file=markdown_file,
             badge_color=badge_color,
             merge_packages=merge_packages,
+            owner=owner,
         )
         # Collect data
         gh_deps_info.collect()
