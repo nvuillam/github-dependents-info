@@ -245,6 +245,7 @@ _________________
 | -d<br/> --docurl            | String  | _(optional)_ Hyperlink to use when clicking on badge markdown file badge. (Default: link to markdown file)                                                                               |
 | -p<br/> --mergepackages     | String  | _(optional)_ In case of multiple packages, merge their stats in a single one in markdown and json output                                                                                 |
 | -j<br/> --json              | String  | _(optional)_ Output in json format                                                                                                                                                       |
+| -u<br/> --owner             | String  | _(optional)_ If set, filters reposities to keep only those owned by the specified user/organization                                                                                      |
 | -v<br/> --version           | Boolean | _(optional)_ Displays version of github-dependents-info                                                                                                                                  |
 | --verbose                   | Boolean | _(optional)_ Verbose output                                                                                                                                                              |
 
