@@ -77,7 +77,12 @@ def main(
         is_eager=True,
         help="Prints the version of the github-dependents-info package.",
     ),
-    owner: str = typer.Option(None, "-o", "--owner", help="Owner of dependent repositories (ex: oxsecurity)"),
+    owner: str = typer.Option(
+        None,
+        "-u",
+        "--owner",
+        help="Filter dependent repositories with a specific owner (ex: oxsecurity)"
+    ),
 ) -> None:
     # Init logger
     if verbose is True:
