@@ -84,6 +84,7 @@ def test_collect_csv_multi_package():
                 continue
             assert os.path.isfile(csv_directory + os.path.sep + f"dependents_{package['name'].replace('/', '-')}.csv")
 
+
 def test_collect_stats_owner():
     repo = "nvuillam/npm-groovy-lint"
     gh_deps_info = GithubDependentsInfo(repo, debug=True, owner="nvuillam")

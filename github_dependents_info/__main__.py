@@ -1,9 +1,10 @@
 import logging
 
 import typer
+from rich.console import Console
+
 from github_dependents_info import version
 from github_dependents_info.gh_dependents_info import GithubDependentsInfo
-from rich.console import Console
 
 app = typer.Typer(
     name="github-dependents-info",
@@ -78,10 +79,7 @@ def main(
         help="Prints the version of the github-dependents-info package.",
     ),
     owner: str = typer.Option(
-        None,
-        "-u",
-        "--owner",
-        help="Filter dependent repositories with a specific owner (ex: oxsecurity)"
+        None, "-u", "--owner", help="Filter dependent repositories with a specific owner (ex: oxsecurity)"
     ),
 ) -> None:
     # Init logger
