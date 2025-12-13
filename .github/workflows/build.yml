@@ -1,6 +1,12 @@
 name: build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -33,10 +39,12 @@ jobs:
         run: |
           make check-codestyle
 
+      - name: Run safety checks
+        env:
+          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+        run: |
+          make check-safety
+
       - name: Run tests
         run: |
           make test
-
-      - name: Run safety checks
-        run: |
-          make check-safety
