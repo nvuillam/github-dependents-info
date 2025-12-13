@@ -8,7 +8,7 @@ name = "github-dependents-info"
 version = "1.6.3"
 description = "Collect information about dependencies between a github repo and other repositories. Results available in JSON, markdown and badges."
 readme = "README.md"
-license = {file = "LICENSE"}
+license = "MIT"
 authors = [
   {name = "nvuillam", email = "nicolas.vuillamy@gmail.com"},
 ]
@@ -23,11 +23,13 @@ classifiers = [
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Libraries :: Python Modules",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.9",
 ]
 dynamic = ["dependencies"]
+
+[project.license-files]
+paths = ["LICENSE"]
 
 [project.urls]
 Homepage = "https://github.com/nvuillam/github-dependents-info"
@@ -39,6 +41,7 @@ Repository = "https://github.com/nvuillam/github-dependents-info"
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 
+click = ">=8.1.7,<8.2"
 typer = {extras = ["all"], version = ">=0.9.4,<0.10"}
 rich = ">=13.9.4,<14.0"
 beautifulsoup4 = "4.12.3"
@@ -64,6 +67,7 @@ coverage-badge = "^1.1.0"
 cryptography = ">=44.0.1"
 pytest-html = "^4.1.1"
 pytest-cov = "^4.0.0"
+marshmallow = ">=3.20,<4.0"
 
 [tool.black]
 # https://github.com/psf/black
