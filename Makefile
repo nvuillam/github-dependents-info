@@ -20,7 +20,7 @@ poetry-remove:
 .PHONY: install
 install:
 	poetry lock -n && poetry export --without-hashes > requirements.txt
-	poetry install -n
+	poetry install -n --with dev
 	-poetry run mypy --install-types --non-interactive ./
 
 .PHONY: pre-commit-install
@@ -54,7 +54,7 @@ mypy:
 .PHONY: check-safety
 check-safety:
 	poetry check
-	poetry run safety check --full-report -i 51457
+	poetry run safety scan --target . --policy-file .safety-policy.yml --detailed-output
 	poetry run bandit -ll --recursive github_dependents_info tests
 
 .PHONY: lint

@@ -326,14 +326,14 @@ jobs:
     steps:
       # Git Checkout
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       # Collect data & generate markdown
       - name: GitHub Dependents Info
-        uses: nvuillam/github-dependents-info@v1.5.1 # If you trust me enough you can replace version by "main" :)
+        uses: nvuillam/github-dependents-info@v1.6.3 # If you want to always have the latest version, you can use nvuillam/github-dependents-info@main :)
         # See documentation for variables details: https://github.com/nvuillam/github-dependents-info?tab=readme-ov-file#%EF%B8%8F-usage
         with:
           repo: ${{ github.repository }}
@@ -352,7 +352,7 @@ jobs:
       # Create pull request
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN  }}
           branch: github-dependents-info-auto-update

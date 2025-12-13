@@ -40,6 +40,7 @@ def main(
     badge_color: str = typer.Option("informational", "-c", "--markdownbadgecolor", help="Markdown badge color"),
     sort_key: str = typer.Option(None, "-s", "--sort", help="Sort of name(default) or stars"),
     min_stars: int = typer.Option(None, "-x", "--minstars", help="Filter dependents with less than X stars"),
+    time_delay: float = typer.Option(0.1, "-t", "--timedelay", help="seconds delayed between two requests to github"),
     json_output: bool = typer.Option(
         False,
         "-j",
@@ -114,6 +115,7 @@ def main(
             badge_color=badge_color,
             merge_packages=merge_packages,
             owner=owner,
+            time_delay=time_delay,
         )
         # Collect data
         gh_deps_info.collect()
