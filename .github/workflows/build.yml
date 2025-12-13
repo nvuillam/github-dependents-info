@@ -15,7 +15,7 @@ jobs:
       SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
     strategy:
       matrix:
-        python-version: ["3.12"]
+        python-version: ["3.12", "3.13", "3.14", "3.15"]
 
     steps:
       - uses: actions/checkout@v6
