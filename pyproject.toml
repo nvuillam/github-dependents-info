@@ -41,7 +41,7 @@ python = ">=3.10,<4.0"
 
 click = ">=8.3.1,<8.4"
 typer = {extras = ["all"], version = ">=0.20,<0.21"}
-rich = ">=13.9.4,<14.0"
+rich = ">=14.2,<14.3"
 beautifulsoup4 = "4.14.3"
 pandas = ">=2.3.3,<3.0"
 requests = "^2.32.5"
