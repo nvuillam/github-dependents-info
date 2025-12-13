@@ -40,7 +40,7 @@ jobs:
           make check-codestyle
 
       - name: Run safety checks
-        if: secrets.SAFETY_API_KEY != ''
+        if: ${{ secrets.SAFETY_API_KEY != '' }}
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
         run: |
