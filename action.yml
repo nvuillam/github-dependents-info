@@ -61,6 +61,10 @@ inputs:
     description: "Filter dependent repositories by owner (example: oxsecurity)"
     required: false
     default: ""
+  max-scraped-pages:
+    description: "Maximum number of pages to scrape per package (0 means no limit)"
+    required: false
+    default: "0"
 
 runs:
   using: "docker"
@@ -77,6 +81,7 @@ runs:
     - --timedelay=${{ inputs.timedelay }}
     - ${{ inputs.csvdirectory != '' && format('--csvdirectory={0}', inputs.csvdirectory) || null }}
     - ${{ inputs.owner != '' && format('--owner={0}', inputs.owner) || null }}
+    - ${{ inputs.max-scraped-pages != '0' && format('--max-scraped-pages={0}', inputs.max-scraped-pages) || null }}
     - ${{ inputs.json == 'true' && '--json' || null }}
     - ${{ inputs.mergepackages == 'true' && '--mergepackages' || null }}
     - ${{ inputs.verbose == 'true' && '--verbose' || null }}
