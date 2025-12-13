@@ -1,9 +1,7 @@
 """Tests for CLI argument parsing"""
 
-from typer.testing import CliRunner
-
 from github_dependents_info.__main__ import app
-
+from typer.testing import CliRunner
 
 runner = CliRunner()
 
