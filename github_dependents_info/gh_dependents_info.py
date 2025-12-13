@@ -77,7 +77,7 @@ class GithubDependentsInfo:
                     if self.owner:
                         url += "?owner=" + self.owner
                     if self.debug is True:
-                        logging.info("Package " + self.repo + ": browsing" + url + " ...")
+                        logging.info("Package " + self.repo + ": browsing " + url + " ...")
                 package["url"] = url
                 package["public_dependent_stars"] = 0
 
@@ -500,7 +500,6 @@ class GithubDependentsInfo:
 
         # Process all pages
         result = []
-        total_public_stars = 0
 
         for page_content in pages_content:
             if isinstance(page_content, Exception):
@@ -538,11 +537,13 @@ class GithubDependentsInfo:
                 # Skip result if less than minimum stars
                 if self.min_stars is not None and result_item["stars"] < self.min_stars:
                     continue
-                result += [result_item]
-                total_public_stars += result_item["stars"]
+                result.append(result_item)
 
         # Remove duplicates using dictionary comprehension
         unique_result = list({item["name"]: item for item in result}.values())
+
+        # Calculate total stars after deduplication
+        total_public_stars = sum(item["stars"] for item in unique_result)
 
         return unique_result, total_dependents, total_public_stars
 
