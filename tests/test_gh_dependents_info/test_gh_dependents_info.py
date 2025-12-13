@@ -95,9 +95,9 @@ def test_collect_csv_multi_package():
             assert os.path.isfile(csv_directory + os.path.sep + f"dependents_{package['name'].replace('/', '-')}.csv")
         assert packages_with_entries >= 2
 
+
 def test_collect_stats_owner():
     repo = "nvuillam/npm-groovy-lint"
     gh_deps_info = GithubDependentsInfo(repo, debug=True, owner="nvuillam")
     repo_stats = gh_deps_info.collect()
     assert repo_stats["public_dependents_number"] < 10
-
