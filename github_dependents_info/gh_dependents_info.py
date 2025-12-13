@@ -480,12 +480,12 @@ class GithubDependentsInfo:
             if next_link is None:
                 break
 
-            urls_to_fetch += [next_link]
+            urls_to_fetch.append(next_link)
             # Fetch the next page to discover more pages
             try:
                 current_content = await self.fetch_page(client, next_link, semaphore)
                 current_soup = BeautifulSoup(current_content, "html.parser")
-            except Exception as e:
+            except (httpx.HTTPError, httpx.TimeoutException) as e:
                 if self.debug:
                     logging.warning(f"Failed to fetch page during discovery: {e}")
                 break
