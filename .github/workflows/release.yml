@@ -9,8 +9,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.9]
-        poetry-version: [1.2.2]
+        python-version: ["3.12"]
+        poetry-version: ["2.2.1"]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
