@@ -9,6 +9,7 @@ version = "1.6.3"
 description = "Collect information about dependencies between a github repo and other repositories. Results available in JSON, markdown and badges."
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE"]
 authors = [
   {name = "nvuillam", email = "nicolas.vuillamy@gmail.com"},
 ]
@@ -27,9 +28,6 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
 ]
 dynamic = ["dependencies"]
-
-[project.license-files]
-paths = ["LICENSE"]
 
 [project.urls]
 Homepage = "https://github.com/nvuillam/github-dependents-info"
