@@ -54,7 +54,7 @@ mypy:
 .PHONY: check-safety
 check-safety:
 	poetry check
-	poetry run safety check --full-report -i 51457
+	poetry run safety scan --target . --policy-file .safety-policy.yml --detailed-output
 	poetry run bandit -ll --recursive github_dependents_info tests
 
 .PHONY: lint
