@@ -93,18 +93,23 @@ class GithubDependentsInfo:
                 total_public_stars = 0
 
                 # Browse page dependents
-                for t in soup.findAll("div", {"class": "Box-row"}):
+                for t in soup.find_all("div", {"class": "Box-row"}):
+                    owner_repo = self._extract_owner_repo(t)
+                    if owner_repo is None:
+                        if self.debug:
+                            logging.warning("Skipping dependent row without repository link")
+                        continue
+                    owner_name, repo_name = owner_repo
+                    star_svg = t.find("svg", {"class": "octicon-star"})
+                    stars_text = "0"
+                    if star_svg is not None and star_svg.parent is not None:
+                        stars_text = star_svg.parent.get_text(strip=True)
                     result_item = {
-                        "name": "{}/{}".format(
-                            t.find("a", {"data-repository-hovercards-enabled": ""}).text,
-                            t.find("a", {"data-hovercard-type": "repository"}).text,
-                        ),
-                        "stars": self.get_int(
-                            t.find("svg", {"class": "octicon-star"}).parent.text.strip().replace(",", "")
-                        ),
+                        "name": f"{owner_name}/{repo_name}",
+                        "stars": self.get_int(stars_text.replace(",", "")),
                     }
                     # Collect avatar image
-                    image = t.findAll("img", {"class": "avatar"})
+                    image = t.find_all("img", {"class": "avatar"})
                     if len(image) > 0 and image[0].attrs and "src" in image[0].attrs:
                         result_item["img"] = image[0].attrs["src"]
                     # Split owner and name
@@ -122,7 +127,7 @@ class GithubDependentsInfo:
                 nextExists = False
                 paginate_container = soup.find("div", {"class": "paginate-container"})
                 if paginate_container is not None:
-                    for u in paginate_container.findAll("a"):
+                    for u in paginate_container.find_all("a"):
                         if u.text == "Next":
                             nextExists = True
                             time.sleep(self.time_delay)
@@ -205,6 +210,40 @@ class GithubDependentsInfo:
         self.badges["stars"] = self.build_badge("Used%20by%20(stars)", self.total_stars_sum)
         # Build final result
         return self.build_result()
+
+    def _extract_owner_repo(self, dependent_row):
+        repo_anchor = dependent_row.find("a", {"data-hovercard-type": "repository"})
+        if repo_anchor is None:
+            repo_anchor = dependent_row.find("a", href=re.compile(r"/[^/]+/[^/]+"))
+        if repo_anchor is None:
+            return None
+        repo_name = (repo_anchor.text or "").strip()
+        owner_name = ""
+        href_value = (repo_anchor.get("href") or "").split("?")[0].strip("/")
+        path_parts = [part for part in href_value.split("/") if part]
+        if len(path_parts) >= 2:
+            owner_name = path_parts[-2]
+            if not repo_name:
+                repo_name = path_parts[-1]
+        elif len(path_parts) == 1 and not repo_name:
+            repo_name = path_parts[-1]
+
+        if not owner_name:
+            owner_anchor = dependent_row.find("a", {"data-hovercard-type": re.compile("(user|organization)")})
+            if owner_anchor is not None and owner_anchor.text:
+                owner_name = owner_anchor.text.strip()
+
+        if not owner_name and repo_name and "/" in repo_name:
+            splits = repo_name.split("/", 1)
+            owner_name, repo_name = splits[0], splits[1]
+
+        owner_name = owner_name.strip()
+        repo_name = repo_name.strip()
+
+        if owner_name and repo_name:
+            return owner_name, repo_name
+
+        return None
 
     # Get first url to see if there are multiple packages
     def compute_packages(self):
