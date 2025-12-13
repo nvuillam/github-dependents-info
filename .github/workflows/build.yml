@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
     strategy:
       matrix:
         python-version: ["3.12"]
@@ -40,9 +42,9 @@ jobs:
           make check-codestyle
 
       - name: Run safety checks
-        if: ${{ secrets.SAFETY_API_KEY != '' }}
+        if: ${{ env.SAFETY_API_KEY != '' }}
         env:
-          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+          SAFETY_API_KEY: ${{ env.SAFETY_API_KEY }}
         run: |
           make check-safety
 
