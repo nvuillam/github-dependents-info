@@ -441,8 +441,8 @@ class GithubDependentsInfo:
         semaphore = asyncio.Semaphore(self.max_concurrent_requests)
 
         # Fetch initial page
-        content = await self.fetch_page(client, url, semaphore)
-        soup = BeautifulSoup(content, "html.parser")
+        initial_content = await self.fetch_page(client, url, semaphore)
+        soup = BeautifulSoup(initial_content, "html.parser")
 
         # Get total number of dependents from UI
         svg_item = soup.find("a", {"class": "btn-link selected"})
@@ -455,9 +455,9 @@ class GithubDependentsInfo:
             total_dependents = 0
 
         # Discover all page URLs first
-        urls_to_fetch = [url]
+        pages_content = [initial_content]  # Store the initial page content
+        urls_to_fetch = []  # Additional pages to fetch
         page_number = 1
-        current_url = url
         current_soup = soup
 
         while True:
@@ -480,7 +480,7 @@ class GithubDependentsInfo:
             if next_link is None:
                 break
 
-            urls_to_fetch.append(next_link)
+            urls_to_fetch += [next_link]
             # Fetch the next page to discover more pages
             try:
                 current_content = await self.fetch_page(client, next_link, semaphore)
@@ -490,12 +490,13 @@ class GithubDependentsInfo:
                     logging.warning(f"Failed to fetch page during discovery: {e}")
                 break
 
-        if self.debug and len(urls_to_fetch) > 1:
-            logging.info(f"  - fetching {len(urls_to_fetch)} pages in parallel...")
-
-        # Now fetch all pages in parallel (re-fetching some we already have, but that's fine for simplicity)
-        tasks = [self.fetch_page(client, page_url, semaphore) for page_url in urls_to_fetch]
-        pages_content = await asyncio.gather(*tasks, return_exceptions=True)
+        # Fetch additional pages in parallel if any
+        if urls_to_fetch:
+            if self.debug:
+                logging.info(f"  - fetching {len(urls_to_fetch)} additional pages in parallel...")
+            tasks = [self.fetch_page(client, page_url, semaphore) for page_url in urls_to_fetch]
+            additional_pages = await asyncio.gather(*tasks, return_exceptions=True)
+            pages_content += additional_pages
 
         # Process all pages
         result = []
@@ -537,16 +538,11 @@ class GithubDependentsInfo:
                 # Skip result if less than minimum stars
                 if self.min_stars is not None and result_item["stars"] < self.min_stars:
                     continue
-                result.append(result_item)
+                result += [result_item]
                 total_public_stars += result_item["stars"]
 
-        # Remove duplicates that may have been introduced
-        seen = set()
-        unique_result = []
-        for item in result:
-            if item["name"] not in seen:
-                seen.add(item["name"])
-                unique_result.append(item)
+        # Remove duplicates using dictionary comprehension
+        unique_result = list({item["name"]: item for item in result}.values())
 
         return unique_result, total_dependents, total_public_stars
 
