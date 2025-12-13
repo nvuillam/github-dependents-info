@@ -1,4 +1,4 @@
-version: '3.0'
+version: "3.0"
 
 scanning-settings:
   max-depth: 6
@@ -6,7 +6,6 @@ scanning-settings:
   include-files: []
   system:
     targets: []
-
 
 report:
   dependency-vulnerabilities:
@@ -18,10 +17,9 @@ report:
       vulnerabilities:
         "51457":
           reason: Legacy ignore migrated from Safety 2.x `-i 51457` flag
-          expires: '2099-12-31'
+          expires: "2099-12-31"
           specifications: []
       cvss-severity: []
-
 
 fail-scan-with-exit-code:
   dependency-vulnerabilities:
@@ -55,5 +53,3 @@ installation:
         cvss-severity: []
       block-on-any-of:
         cvss-severity: []
-
-
