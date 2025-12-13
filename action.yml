@@ -8,6 +8,7 @@ inputs:
   outputrepo:
     description: "Owner and name of the output repository, if different from repo (example: nvuillam/node-sarif-builder)"
     required: false
+    default: ""
   markdownfile:
     description: "Path and name of the output markdown file"
     required: false
@@ -16,6 +17,14 @@ inputs:
     description: "Path and name of the file where to replace badges (example: README.md). Must contain tags <!-- gh-dependents-info-used-by-start --><!-- gh-dependents-info-used-by-end -->"
     required: false
     default: README.md
+  docurl:
+    description: "Custom URL to use for the badges hyperlink (defaults to generated markdown)"
+    required: false
+    default: ""
+  markdownbadgecolor:
+    description: "Color of the generated markdown badge"
+    required: false
+    default: informational
   sort:
     description: "Sort criteria: stars (default) or name"
     required: false
@@ -24,29 +33,54 @@ inputs:
     description: "Minimum number of stars to appear in the results"
     required: false
     default: "0"
-  mergepackages:
-    description: "If multiple packages, merge in a single result. Default: true"
+  timedelay:
+    description: "Delay in seconds between GitHub requests"
     required: false
-    default: "true"
+    default: "0.1"
+  csvdirectory:
+    description: "Directory path where CSV files should be written"
+    required: false
+    default: ""
+  mergepackages:
+    description: "If multiple packages, merge them into a single result when true"
+    required: false
+    default: "false"
+  json:
+    description: "Set to true to emit JSON output"
+    required: false
+    default: "false"
+  verbose:
+    description: "Set to true to enable verbose logging"
+    required: false
+    default: "false"
+  overwrite:
+    description: "Set to true to overwrite existing CSV progress files"
+    required: false
+    default: "false"
+  owner:
+    description: "Filter dependent repositories by owner (example: oxsecurity)"
+    required: false
+    default: ""
 
 runs:
   using: "docker"
   image: "docker://nvuillam/github-dependents-info:v1.6.3"
   args:
-    - --repo
-    - ${{ inputs.repo }}
-    - --outputrepo
-    - ${{ inputs.outputrepo }}
-    - --markdownfile
-    - ${{ inputs.markdownfile }}
-    - --badgemarkdownfile
-    - ${{ inputs.badgemarkdownfile }}
-    - --sort
-    - ${{ inputs.sort }}
-    - --minstars
-    - ${{ inputs.minstars }}
-    - --mergepackages
-    - --verbose
+    - --repo=${{ inputs.repo }}
+    - ${{ inputs.outputrepo != '' && format('--outputrepo={0}', inputs.outputrepo) || null }}
+    - --markdownfile=${{ inputs.markdownfile }}
+    - --badgemarkdownfile=${{ inputs.badgemarkdownfile }}
+    - ${{ inputs.docurl != '' && format('--docurl={0}', inputs.docurl) || null }}
+    - --markdownbadgecolor=${{ inputs.markdownbadgecolor }}
+    - --sort=${{ inputs.sort }}
+    - --minstars=${{ inputs.minstars }}
+    - --timedelay=${{ inputs.timedelay }}
+    - ${{ inputs.csvdirectory != '' && format('--csvdirectory={0}', inputs.csvdirectory) || null }}
+    - ${{ inputs.owner != '' && format('--owner={0}', inputs.owner) || null }}
+    - ${{ inputs.json == 'true' && '--json' || null }}
+    - ${{ inputs.mergepackages == 'true' && '--mergepackages' || null }}
+    - ${{ inputs.verbose == 'true' && '--verbose' || null }}
+    - ${{ inputs.overwrite == 'true' && '--overwrite' || null }}
 
 branding:
   icon: "users"

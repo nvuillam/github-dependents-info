@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Fix total dependents count (#607)
 - Add capability to filter by owner
 - Refactor update logic in sources_all_df to ensure proper data type handling
+- Update GitHub Action to expose all options
 - CI
   - Upgrade MegaLinter
   - Refactor test classes so they run faster
