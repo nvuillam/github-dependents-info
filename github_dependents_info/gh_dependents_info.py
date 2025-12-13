@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 import os
@@ -5,12 +6,10 @@ import re
 import time
 from pathlib import Path
 
+import httpx
 import numpy as np
 import pandas as pd
-import requests
 from bs4 import BeautifulSoup
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
 
 
 class GithubDependentsInfo:
@@ -39,6 +38,7 @@ class GithubDependentsInfo:
         )
         self.owner = options["owner"] if "owner" in options else None
         self.max_scraped_pages = options["max_scraped_pages"] if "max_scraped_pages" in options else 0
+        self.max_concurrent_requests = options.get("max_concurrent_requests", 10)
         self.total_sum = 0
         self.total_public_sum = 0
         self.total_private_sum = 0
@@ -50,149 +50,85 @@ class GithubDependentsInfo:
         self.time_delay = options["time_delay"] if "time_delay" in options else 0.1
 
     def collect(self):
+        """Main entry point - synchronous wrapper for async collection."""
+        return asyncio.run(self.collect_async())
+
+    async def collect_async(self):
         if self.overwrite_progress or not self.load_progress():
-            self.compute_packages()
+            await self.compute_packages_async()
             self.save_progress_packages_list()  # only saves if csv_directory is provided
 
-        # for each package, get count by parsing GitHub HTML
-        for package in self.packages:
-            # check if we have already computed this package on previous crawl
-            if "public_dependents" in package:
-                continue
+        async with self.get_http_client() as client:
+            # Process packages sequentially to avoid overwhelming GitHub
+            for package in self.packages:
+                # check if we have already computed this package on previous crawl
+                if "public_dependents" in package:
+                    continue
 
-            nextExists = True
-            result = []
+                # Build start page url
+                if package["id"] is not None:
+                    url = self.url_init + "?package_id=" + package["id"]
+                    if self.owner:
+                        url += "&owner=" + self.owner
+                    if self.debug is True:
+                        logging.info("Package " + package["name"] + ": browsing " + url + " ...")
+                else:
+                    url = self.url_init + ""
+                    if self.owner:
+                        url += "?owner=" + self.owner
+                    if self.debug is True:
+                        logging.info("Package " + self.repo + ": browsing" + url + " ...")
+                package["url"] = url
+                package["public_dependent_stars"] = 0
 
-            # Build start page url
-            if package["id"] is not None:
-                url = self.url_init + "?package_id=" + package["id"]
-                if self.owner:
-                    url += "&owner=" + self.owner
+                # Fetch all pages for this package in parallel
+                result, total_dependents, total_public_stars = await self.fetch_all_package_pages(client, package)
+
+                # Manage results for package
+                if self.sort_key == "stars":
+                    result = sorted(result, key=lambda d: d[self.sort_key], reverse=True)
+                else:
+                    result = sorted(result, key=lambda d: d[self.sort_key])
                 if self.debug is True:
-                    logging.info("Package " + package["name"] + ": browsing " + url + " ...")
-            else:
-                url = self.url_init + ""
-                if self.owner:
-                    url += "?owner=" + self.owner
-                if self.debug is True:
-                    logging.info("Package " + self.repo + ": browsing" + url + " ...")
-            package["url"] = url
-            package["public_dependent_stars"] = 0
-            page_number = 1
+                    for r in result:
+                        logging.info(r)
 
-            # Get total number of dependents from UI
-            r = self.requests_retry_session().get(url)
-            soup = BeautifulSoup(r.content, "html.parser")
-            svg_item = soup.find("a", {"class": "btn-link selected"})
-            if svg_item is not None:
-                a_around_svg = svg_item
-                total_dependents = self.get_int(
-                    a_around_svg.text.replace("Repositories", "").replace("Repository", "").strip()
+                # Build package stats
+                total_public_dependents = len(result)
+                package["public_dependents"] = result
+                package["public_dependents_number"] = total_public_dependents
+                package["public_dependent_stars"] = total_public_stars
+                package["private_dependents_number"] = total_dependents - total_public_dependents
+                package["total_dependents_number"] = total_dependents if total_dependents > 0 else total_public_dependents
+
+                # Build package badges
+                package["badges"] = {}
+                package["badges"]["total"] = self.build_badge(
+                    "Used%20by", package["total_dependents_number"], url=package["url"]
                 )
-            else:
-                total_dependents = 0
+                package["badges"]["public"] = self.build_badge(
+                    "Used%20by%20(public)", package["public_dependents_number"], url=package["url"]
+                )
+                package["badges"]["private"] = self.build_badge(
+                    "Used%20by%20(private)", package["private_dependents_number"], url=package["url"]
+                )
+                package["badges"]["stars"] = self.build_badge(
+                    "Used%20by%20(stars)", package["public_dependent_stars"], url=package["url"]
+                )
 
-            # Parse all dependent packages pages
-            while nextExists:
-                r = self.requests_retry_session().get(url)
-                soup = BeautifulSoup(r.content, "html.parser")
-                total_public_stars = 0
+                # Build total stats
+                self.all_public_dependent_repos += result
+                self.total_sum += package["total_dependents_number"]
+                self.total_public_sum += package["public_dependents_number"]
+                self.total_private_sum += package["private_dependents_number"]
+                self.total_stars_sum += package["public_dependent_stars"]
 
-                # Browse page dependents
-                for t in soup.find_all("div", {"class": "Box-row"}):
-                    owner_repo = self._extract_owner_repo(t)
-                    if owner_repo is None:
-                        if self.debug:
-                            logging.warning("Skipping dependent row without repository link")
-                        continue
-                    owner_name, repo_name = owner_repo
-                    star_svg = t.find("svg", {"class": "octicon-star"})
-                    stars_text = "0"
-                    if star_svg is not None and star_svg.parent is not None:
-                        stars_text = star_svg.parent.get_text(strip=True)
-                    result_item = {
-                        "name": f"{owner_name}/{repo_name}",
-                        "stars": self.get_int(stars_text.replace(",", "")),
-                    }
-                    # Collect avatar image
-                    image = t.find_all("img", {"class": "avatar"})
-                    if len(image) > 0 and image[0].attrs and "src" in image[0].attrs:
-                        result_item["img"] = image[0].attrs["src"]
-                    # Split owner and name
-                    if "/" in result_item["name"]:
-                        splits = str(result_item["name"]).split("/")
-                        result_item["owner"] = splits[0]
-                        result_item["repo_name"] = splits[1]
-                    # Skip result if less than minimum stars
-                    if self.min_stars is not None and result_item["stars"] < self.min_stars:
-                        continue
-                    result += [result_item]
-                    total_public_stars += result_item["stars"]
-
-                # Check next page
-                nextExists = False
-                paginate_container = soup.find("div", {"class": "paginate-container"})
-                if paginate_container is not None:
-                    for u in paginate_container.find_all("a"):
-                        if u.text == "Next":
-                            # Check if we've reached the max pages limit
-                            if self.max_scraped_pages > 0 and page_number >= self.max_scraped_pages:
-                                nextExists = False
-                                if self.debug is True:
-                                    logging.info(f"  - reached max scraped pages limit ({self.max_scraped_pages})")
-                                break
-                            nextExists = True
-                            time.sleep(self.time_delay)
-                            url = u["href"]
-                            page_number = page_number + 1
-                            if self.debug is True:
-                                logging.info("  - browsing page " + str(page_number))
-
-            # Manage results for package
-            if self.sort_key == "stars":
-                result = sorted(result, key=lambda d: d[self.sort_key], reverse=True)
-            else:
-                result = sorted(result, key=lambda d: d[self.sort_key])
-            if self.debug is True:
-                for r in result:
-                    logging.info(r)
-
-            # Build package stats
-            total_public_dependents = len(result)
-            package["public_dependents"] = result
-            package["public_dependents_number"] = total_public_dependents
-            package["public_dependent_stars"] = total_public_stars
-            package["private_dependents_number"] = total_dependents - total_public_dependents
-            package["total_dependents_number"] = total_dependents if total_dependents > 0 else total_public_dependents
-
-            # Build package badges
-            package["badges"] = {}
-            package["badges"]["total"] = self.build_badge(
-                "Used%20by", package["total_dependents_number"], url=package["url"]
-            )
-            package["badges"]["public"] = self.build_badge(
-                "Used%20by%20(public)", package["public_dependents_number"], url=package["url"]
-            )
-            package["badges"]["private"] = self.build_badge(
-                "Used%20by%20(private)", package["private_dependents_number"], url=package["url"]
-            )
-            package["badges"]["stars"] = self.build_badge(
-                "Used%20by%20(stars)", package["public_dependent_stars"], url=package["url"]
-            )
-
-            # Build total stats
-            self.all_public_dependent_repos += result
-            self.total_sum += package["total_dependents_number"]
-            self.total_public_sum += package["public_dependents_number"]
-            self.total_private_sum += package["private_dependents_number"]
-            self.total_stars_sum += package["public_dependent_stars"]
-
-            # Output
-            if self.debug is True:
-                logging.info("Total for package: " + str(total_public_dependents))
-                logging.info("")
-            # Save crawl progress
-            self.save_progress(package)  # only saves if csv_directory is provided
+                # Output
+                if self.debug is True:
+                    logging.info("Total for package: " + str(total_public_dependents))
+                    logging.info("")
+                # Save crawl progress
+                self.save_progress(package)  # only saves if csv_directory is provided
 
         # make all_dependent_repos unique
         self.all_public_dependent_repos = list({v["name"]: v for v in self.all_public_dependent_repos}.values())
@@ -258,20 +194,22 @@ class GithubDependentsInfo:
         return None
 
     # Get first url to see if there are multiple packages
-    def compute_packages(self):
-        r = self.requests_retry_session().get(self.url_init)
-        soup = BeautifulSoup(r.content, "html.parser")
-        for a in soup.find_all("a", href=True):
-            if a["href"].startswith(self.url_starts_with):
-                package_id = a["href"].rsplit("=", 1)[1]
-                package_name = a.find("span").text.strip()
-                if "{{" in package_name:
-                    continue
-                if self.debug is True:
-                    logging.info(package_name)
-                self.packages += [{"id": package_id, "name": package_name}]
-        if len(self.packages) == 0:
-            self.packages = [{"id": None, "name": self.repo}]
+    async def compute_packages_async(self):
+        async with self.get_http_client() as client:
+            semaphore = asyncio.Semaphore(self.max_concurrent_requests)
+            content = await self.fetch_page(client, self.url_init, semaphore)
+            soup = BeautifulSoup(content, "html.parser")
+            for a in soup.find_all("a", href=True):
+                if a["href"].startswith(self.url_starts_with):
+                    package_id = a["href"].rsplit("=", 1)[1]
+                    package_name = a.find("span").text.strip()
+                    if "{{" in package_name:
+                        continue
+                    if self.debug is True:
+                        logging.info(package_name)
+                    self.packages += [{"id": package_id, "name": package_name}]
+            if len(self.packages) == 0:
+                self.packages = [{"id": None, "name": self.repo}]
 
     # Save progress during the crawl
     def save_progress(self, package):
@@ -477,25 +415,138 @@ class GithubDependentsInfo:
             + f"&color={self.badge_color}&logo=slickpic)]({url})"
         )
 
-    def requests_retry_session(
-        self,
-        retries=10,
-        backoff_factor=2,
-        status_forcelist=(429, 500, 502, 503, 504),
-        session=None,
-    ):
-        session = session or requests.Session()
-        retry = Retry(
-            total=retries,
-            read=retries,
-            connect=retries,
-            backoff_factor=backoff_factor,
-            status_forcelist=status_forcelist,
+    def get_http_client(self):
+        """Create an httpx client with retry configuration."""
+        transport = httpx.AsyncHTTPTransport(retries=10)
+        return httpx.AsyncClient(
+            transport=transport,
+            timeout=30.0,
+            follow_redirects=True,
         )
-        adapter = HTTPAdapter(max_retries=retry)
-        session.mount("http://", adapter)
-        session.mount("https://", adapter)
-        return session
+
+    async def fetch_page(self, client, url, semaphore):
+        """Fetch a single page with rate limiting."""
+        async with semaphore:
+            await asyncio.sleep(self.time_delay)
+            response = await client.get(url)
+            response.raise_for_status()
+            return response.text
+
+    async def fetch_all_package_pages(self, client, package):
+        """Fetch all pages for a package in parallel."""
+        # First, get the initial page to determine total dependents and discover all page URLs
+        url = package["url"]
+        semaphore = asyncio.Semaphore(self.max_concurrent_requests)
+        
+        # Fetch initial page
+        content = await self.fetch_page(client, url, semaphore)
+        soup = BeautifulSoup(content, "html.parser")
+        
+        # Get total number of dependents from UI
+        svg_item = soup.find("a", {"class": "btn-link selected"})
+        if svg_item is not None:
+            a_around_svg = svg_item
+            total_dependents = self.get_int(
+                a_around_svg.text.replace("Repositories", "").replace("Repository", "").strip()
+            )
+        else:
+            total_dependents = 0
+        
+        # Discover all page URLs first
+        urls_to_fetch = [url]
+        page_number = 1
+        current_url = url
+        current_soup = soup
+        
+        while True:
+            next_link = None
+            paginate_container = current_soup.find("div", {"class": "paginate-container"})
+            if paginate_container is not None:
+                for u in paginate_container.find_all("a"):
+                    if u.text == "Next":
+                        # Check if we've reached the max pages limit
+                        if self.max_scraped_pages > 0 and page_number >= self.max_scraped_pages:
+                            if self.debug is True:
+                                logging.info(f"  - reached max scraped pages limit ({self.max_scraped_pages})")
+                            break
+                        next_link = u["href"]
+                        page_number += 1
+                        if self.debug is True:
+                            logging.info(f"  - discovered page {page_number}")
+                        break
+            
+            if next_link is None:
+                break
+            
+            urls_to_fetch.append(next_link)
+            # Fetch the next page to discover more pages
+            try:
+                current_content = await self.fetch_page(client, next_link, semaphore)
+                current_soup = BeautifulSoup(current_content, "html.parser")
+            except Exception as e:
+                if self.debug:
+                    logging.warning(f"Failed to fetch page during discovery: {e}")
+                break
+        
+        if self.debug and len(urls_to_fetch) > 1:
+            logging.info(f"  - fetching {len(urls_to_fetch)} pages in parallel...")
+        
+        # Now fetch all pages in parallel (re-fetching some we already have, but that's fine for simplicity)
+        tasks = [self.fetch_page(client, page_url, semaphore) for page_url in urls_to_fetch]
+        pages_content = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # Process all pages
+        result = []
+        total_public_stars = 0
+        
+        for page_content in pages_content:
+            if isinstance(page_content, Exception):
+                if self.debug:
+                    logging.warning(f"Failed to fetch page: {page_content}")
+                continue
+                
+            soup = BeautifulSoup(page_content, "html.parser")
+            
+            # Browse page dependents
+            for t in soup.find_all("div", {"class": "Box-row"}):
+                owner_repo = self._extract_owner_repo(t)
+                if owner_repo is None:
+                    if self.debug:
+                        logging.warning("Skipping dependent row without repository link")
+                    continue
+                owner_name, repo_name = owner_repo
+                star_svg = t.find("svg", {"class": "octicon-star"})
+                stars_text = "0"
+                if star_svg is not None and star_svg.parent is not None:
+                    stars_text = star_svg.parent.get_text(strip=True)
+                result_item = {
+                    "name": f"{owner_name}/{repo_name}",
+                    "stars": self.get_int(stars_text.replace(",", "")),
+                }
+                # Collect avatar image
+                image = t.find_all("img", {"class": "avatar"})
+                if len(image) > 0 and image[0].attrs and "src" in image[0].attrs:
+                    result_item["img"] = image[0].attrs["src"]
+                # Split owner and name
+                if "/" in result_item["name"]:
+                    splits = str(result_item["name"]).split("/")
+                    result_item["owner"] = splits[0]
+                    result_item["repo_name"] = splits[1]
+                # Skip result if less than minimum stars
+                if self.min_stars is not None and result_item["stars"] < self.min_stars:
+                    continue
+                result.append(result_item)
+                total_public_stars += result_item["stars"]
+        
+        # Remove duplicates that may have been introduced
+        seen = set()
+        unique_result = []
+        for item in result:
+            if item["name"] not in seen:
+                seen.add(item["name"])
+                unique_result.append(item)
+        
+        return unique_result, total_dependents, total_public_stars
 
     # Write badge in markdown file
     def write_badge(self, file_path="README.md", badge_key="total"):

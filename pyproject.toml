@@ -44,7 +44,7 @@ typer = {extras = ["all"], version = ">=0.20,<0.21"}
 rich = ">=14.2,<14.3"
 beautifulsoup4 = "4.14.3"
 pandas = ">=2.3.3,<3.0"
-requests = "^2.32.5"
+httpx = "^0.28.1"
 idna = ">=3.11"
 
 [tool.poetry.group.dev.dependencies]
