@@ -101,3 +101,12 @@ def test_collect_stats_owner():
     gh_deps_info = GithubDependentsInfo(repo, debug=True, owner="nvuillam")
     repo_stats = gh_deps_info.collect()
     assert repo_stats["public_dependents_number"] < 10
+
+
+def test_collect_stats_max_scraped_pages():
+    repo = SINGLE_PACKAGE_REPO
+    gh_deps_info = GithubDependentsInfo(repo, debug=True, sort_key="stars", max_scraped_pages=1)
+    repo_stats = gh_deps_info.collect()
+    # With max_scraped_pages=1, we should get at most 30 dependents (1 page = ~30 items)
+    assert repo_stats["public_dependents_number"] > 0
+    assert repo_stats["public_dependents_number"] <= 30

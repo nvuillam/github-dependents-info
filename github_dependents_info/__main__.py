@@ -81,6 +81,9 @@ def main(
     owner: str = typer.Option(
         None, "-u", "--owner", help="Filter dependent repositories with a specific owner (ex: oxsecurity)"
     ),
+    max_scraped_pages: int = typer.Option(
+        0, "-n", "--max-scraped-pages", help="Maximum number of pages to scrape per package (0 means no limit)"
+    ),
 ) -> None:
     # Init logger
     if verbose is True:
@@ -115,6 +118,7 @@ def main(
             merge_packages=merge_packages,
             owner=owner,
             time_delay=time_delay,
+            max_scraped_pages=max_scraped_pages,
         )
         # Collect data
         gh_deps_info.collect()

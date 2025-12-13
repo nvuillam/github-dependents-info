@@ -38,6 +38,7 @@ class GithubDependentsInfo:
             else None
         )
         self.owner = options["owner"] if "owner" in options else None
+        self.max_scraped_pages = options["max_scraped_pages"] if "max_scraped_pages" in options else 0
         self.total_sum = 0
         self.total_public_sum = 0
         self.total_private_sum = 0
@@ -134,6 +135,12 @@ class GithubDependentsInfo:
                 if paginate_container is not None:
                     for u in paginate_container.find_all("a"):
                         if u.text == "Next":
+                            # Check if we've reached the max pages limit
+                            if self.max_scraped_pages > 0 and page_number >= self.max_scraped_pages:
+                                nextExists = False
+                                if self.debug is True:
+                                    logging.info(f"  - reached max scraped pages limit ({self.max_scraped_pages})")
+                                break
                             nextExists = True
                             time.sleep(self.time_delay)
                             url = u["href"]
