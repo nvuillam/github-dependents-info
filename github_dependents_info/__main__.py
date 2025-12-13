@@ -48,7 +48,6 @@ def main(
     ),
     csv_directory: str = typer.Option(
         None,
-        "-c",
         "--csvdirectory",
         help="Path to directory for CSV files",
     ),
@@ -60,7 +59,6 @@ def main(
     ),
     verbose: bool = typer.Option(
         False,
-        "-d",
         "--verbose",
         help="Prints the version of github-dependents-info package",
     ),
