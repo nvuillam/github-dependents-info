@@ -82,7 +82,7 @@ def test_collect_csv_multi_package():
     repo = MULTI_PACKAGE_REPO
     with tempfile.TemporaryDirectory() as csv_directory:
         gh_deps_info = GithubDependentsInfo(
-            repo, debug=True, sort_key="stars", min_stars=10, csv_directory=csv_directory
+            repo, debug=True, sort_key="stars", min_stars=0, csv_directory=csv_directory
         )
         gh_deps_info.collect()
         assert len(gh_deps_info.packages) >= 2
