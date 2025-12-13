@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
     strategy:
       matrix:
         python-version: ["3.12"]
@@ -18,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -40,8 +42,9 @@ jobs:
           make check-codestyle
 
       - name: Run safety checks
+        if: ${{ env.SAFETY_API_KEY != '' }}
         env:
-          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+          SAFETY_API_KEY: ${{ env.SAFETY_API_KEY }}
         run: |
           make check-safety
 

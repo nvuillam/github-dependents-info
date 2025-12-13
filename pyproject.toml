@@ -39,10 +39,10 @@ Repository = "https://github.com/nvuillam/github-dependents-info"
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 
-click = ">=8.1.7,<8.2"
-typer = {extras = ["all"], version = ">=0.9.4,<0.10"}
-rich = ">=13.9.4,<14.0"
-beautifulsoup4 = "4.12.3"
+click = ">=8.3.1,<8.4"
+typer = {extras = ["all"], version = ">=0.20,<0.21"}
+rich = ">=14.2,<14.3"
+beautifulsoup4 = "4.14.3"
 pandas = ">=2.3.3,<3.0"
 requests = "^2.32.5"
 idna = ">=3.11"
@@ -51,21 +51,21 @@ idna = ">=3.11"
 bandit = "^1.7.5"
 black = "^25.0.0"
 darglint = "^1.8.1"
-isort = {extras = ["colors"], version = "^5.13.2"}
+isort = {extras = ["colors"], version = "^7.0.0"}
 mypy = "^1.8"
 mypy-extensions = "^1.0.0"
-pre-commit = "^3.6.0"
+pre-commit = "^4.0.0"
 pydocstyle = "^6.3.0"
-pylint = "^3.0.0"
-pytest = "^8.0.1"
+pylint = "^4.0.0"
+pytest = "^9.0.0"
 pyupgrade = "^3.4.0"
 safety = "^3.0.1"
 coverage = "^7.3.4"
 coverage-badge = "^1.1.0"
 cryptography = ">=44.0.1"
 pytest-html = "^4.1.1"
-pytest-cov = "^4.0.0"
-marshmallow = ">=3.20,<4.0"
+pytest-cov = "^7.0.0"
+marshmallow = ">=4.1,<4.2"
 
 [tool.black]
 # https://github.com/psf/black
