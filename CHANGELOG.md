@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
-- Add your updates here :)
+- Upgrade project
+- Upgrade dependencies
+- CI: Upgrade MegaLinter
 
 ## [1.6.3] 2023-03-03
 

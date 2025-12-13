@@ -1,18 +1,24 @@
 name: build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9"]
+        python-version: ["3.12"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -20,23 +26,25 @@ jobs:
         run: make poetry-download
 
       - name: Set up cache
-        uses: actions/cache@v4.0.1
+        uses: actions/cache@v5
         with:
           path: .venv
           key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
       - name: Install dependencies
         run: |
           poetry config virtualenvs.in-project true
-          poetry install
+          poetry install --with dev
 
       - name: Run style checks
         run: |
           make check-codestyle
 
+      - name: Run safety checks
+        env:
+          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+        run: |
+          make check-safety
+
       - name: Run tests
         run: |
           make test
-
-      - name: Run safety checks
-        run: |
-          make check-safety
