@@ -12,6 +12,7 @@ SINGLE_PACKAGE_REPO_PUBLIC_DEPENDENTS_MIN = 10
 MULTI_PACKAGE_REPO = "nvuillam/github-dependents-info"
 MULTI_PACKAGE_REPO_PUBLIC_DEPENDENTS_MIN = 10
 
+
 def test_collect_stats_single_package():
     # Check generate single package stats file
     repo = SINGLE_PACKAGE_REPO
