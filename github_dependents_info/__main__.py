@@ -57,6 +57,12 @@ def main(
         "--mergepackages",
         help="In case of multiple packages, merges results into a single list",
     ),
+    page_size: int = typer.Option(
+        500,
+        "--page-size",
+        min=1,
+        help="Maximum number of repositories per generated markdown page",
+    ),
     verbose: bool = typer.Option(
         False,
         "-d",
@@ -109,6 +115,7 @@ def main(
             markdown_file=markdown_file,
             badge_color=badge_color,
             merge_packages=merge_packages,
+            page_size=page_size,
         )
         # Collect data
         gh_deps_info.collect()

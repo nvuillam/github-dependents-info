@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import re
+from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -13,6 +14,8 @@ from requests.packages.urllib3.util.retry import Retry
 
 
 class GithubDependentsInfo:
+    DEFAULT_PAGE_SIZE = 500
+
     def __init__(self, repo, **options) -> None:
         self.repo = repo
         self.outputrepo = self.repo if "outputrepo" not in options else options["outputrepo"]
@@ -36,6 +39,7 @@ class GithubDependentsInfo:
             if ("csv_directory" in options and options["csv_directory"] is not None)
             else None
         )
+        self.page_size = self._sanitize_page_size(options.get("page_size", self.DEFAULT_PAGE_SIZE))
         self.total_sum = 0
         self.total_public_sum = 0
         self.total_private_sum = 0
@@ -296,103 +300,197 @@ class GithubDependentsInfo:
         return len(self.packages) > 0
 
     # Build result
-    def build_result(self):
-        self.result = {
-            "all_public_dependent_repos": self.all_public_dependent_repos,
-            "total_dependents_number": self.total_sum,
-            "public_dependents_number": self.total_public_sum,
-            "private_dependents_number": self.total_private_sum,
-            "public_dependents_stars": self.total_stars_sum,
-            "badges": self.badges,
-        }
-        if self.merge_packages is False:
-            self.result["packages"] = (self.packages,)
-        return self.result
-
-    # Print output
-    def print_result(self):
-        if self.json_output is True:
-            print(json.dumps(self.result, indent=4))
-        else:
-            print("Total: " + str(self.total_sum))
-            print("Public: " + str(self.total_public_sum) + " (" + str(self.total_stars_sum) + " stars)")
-            print("Private: " + str(self.total_private_sum))
-
     def build_markdown(self, **options) -> str:
+        pages_data = self._paginate_dependents()
+        total_pages = len(pages_data)
+        base_file = options.get("file")
+        page_paths = self._build_paginated_file_paths(base_file, total_pages)
+        page_links = [self._format_link_target(path) if path else None for path in page_paths]
+
+        rendered_pages = []
+        for page_number, page_data in enumerate(pages_data, start=1):
+            md_lines = self._build_markdown_page(page_number, total_pages, page_data, page_links)
+            md_lines_str = "\n".join(md_lines)
+            rendered_pages.append(md_lines_str)
+
+            target_file = page_paths[page_number - 1]
+            if target_file is not None:
+                self._write_markdown_file(target_file, md_lines_str)
+
+        if rendered_pages:
+            return "\n\n".join(rendered_pages)
+        return ""
+
+    def _build_markdown_page(self, page_number, total_pages, page_data, page_links):
         md_lines = [f"# Dependents stats for {self.repo}", ""]
+        md_lines += self._build_navigation_lines(page_number, total_pages, page_links)
+        md_lines += self._build_summary_lines()
 
-        # Summary table
-        if len(self.packages) > 1 and self.merge_packages is False:
-            # Summary badges if there are multiple packages
-            md_lines += [
-                self.badges["total"],
-                self.badges["public"],
-                self.badges["private"],
-                self.badges["stars"],
-                "",
-            ]
-
-            md_lines += [
-                "| Package    | Total  | Public | Private | Stars |",
-                "| :--------  | -----: | -----: | -----:  | ----: |",
-            ]
-            for package in self.packages:
-                name = "[" + package["name"] + "](#package-" + package["name"].replace("/", "").replace("@", "") + ")"
-                badge_1 = package["badges"]["total"]
-                badge_2 = package["badges"]["public"]
-                badge_3 = package["badges"]["private"]
-                badge_4 = package["badges"]["stars"]
-                md_lines += [f"| {name}    | {badge_1}  | {badge_2} | {badge_3} | {badge_4} |"]
-            md_lines += [""]
-
-        # Single dependents list
         if self.merge_packages is True:
-            md_lines += [
-                self.badges["total"],
-                self.badges["public"],
-                self.badges["private"],
-                self.badges["stars"],
-                "",
-            ]
-            md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
-            for repo1 in self.all_public_dependent_repos:
-                self.build_repo_md_line(md_lines, repo1)
-        # Dependents by package
+            md_lines += self._build_merge_packages_section(page_data.get("merged_repos", []))
         else:
-            for package in self.packages:
-                md_lines += ["## Package " + package["name"], ""]
-                if len(package["public_dependents"]) == 0:
-                    md_lines += ["No dependent repositories"]
-                else:
-                    md_lines += [
-                        package["badges"]["total"],
-                        package["badges"]["public"],
-                        package["badges"]["private"],
-                        package["badges"]["stars"],
-                        "",
-                    ]
-                    md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
-                    for repo1 in package["public_dependents"]:
-                        self.build_repo_md_line(md_lines, repo1)
-                md_lines += [""]
+            page_packages = page_data.get("packages", {})
+            include_empty_packages = page_number == 1
+            md_lines += self._build_packages_section(page_packages, include_empty_packages)
 
-        # footer
-        md_lines += [""]
+        md_lines += self._build_navigation_lines(page_number, total_pages, page_links)
         md_lines += [
+            "",
             "_Generated using [github-dependents-info]"
             "(https://github.com/nvuillam/github-dependents-info), "
-            "by [Nicolas Vuillamy](https://github.com/nvuillam)_"
+            "by [Nicolas Vuillamy](https://github.com/nvuillam)_",
         ]
-        md_lines_str = "\n".join(md_lines)
+        return md_lines
 
-        # Write in file if requested
-        if "file" in options:
-            os.makedirs(os.path.dirname(options["file"]), exist_ok=True)
-            with open(options["file"], "w", encoding="utf-8") as f:
-                f.write(md_lines_str)
-                if self.json_output is False:
-                    print("Wrote markdown file " + options["file"])
-        return md_lines_str
+    def _build_summary_lines(self):
+        if len(self.packages) <= 1 or self.merge_packages is True:
+            return []
+        lines = [
+            self.badges["total"],
+            self.badges["public"],
+            self.badges["private"],
+            self.badges["stars"],
+            "",
+            "| Package    | Total  | Public | Private | Stars |",
+            "| :--------  | -----: | -----: | -----:  | ----: |",
+        ]
+        for package in self.packages:
+            anchor_name = package["name"].replace("/", "").replace("@", "")
+            name = "[" + package["name"] + "](#package-" + anchor_name + ")"
+            badge_1 = package["badges"]["total"]
+            badge_2 = package["badges"]["public"]
+            badge_3 = package["badges"]["private"]
+            badge_4 = package["badges"]["stars"]
+            lines += [f"| {name}    | {badge_1}  | {badge_2} | {badge_3} | {badge_4} |"]
+        lines += [""]
+        return lines
+
+    def _build_merge_packages_section(self, repos_slice):
+        lines = [
+            self.badges["total"],
+            self.badges["public"],
+            self.badges["private"],
+            self.badges["stars"],
+            "",
+        ]
+        if len(repos_slice) == 0:
+            lines += ["No dependent repositories", ""]
+            return lines
+        lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
+        for repo1 in repos_slice:
+            self.build_repo_md_line(lines, repo1)
+        lines += [""]
+        return lines
+
+    def _build_packages_section(self, page_packages, include_empty_packages):
+        lines = []
+        for index, package in enumerate(self.packages):
+            repos_slice = page_packages.get(index)
+            should_render = repos_slice is not None
+            if include_empty_packages and len(package.get("public_dependents", [])) == 0:
+                should_render = True
+            if should_render is False:
+                continue
+            lines += ["## Package " + package["name"], ""]
+            if not repos_slice:
+                lines += ["No dependent repositories", ""]
+                continue
+            lines += [
+                package["badges"]["total"],
+                package["badges"]["public"],
+                package["badges"]["private"],
+                package["badges"]["stars"],
+                "",
+                "| Repository | Stars  |",
+                "| :--------  | -----: |",
+            ]
+            for repo1 in repos_slice:
+                self.build_repo_md_line(lines, repo1)
+            lines += [""]
+        return lines
+
+    def _build_navigation_lines(self, page_number, total_pages, page_links):
+        if total_pages <= 1:
+            return []
+        nav_parts = [f"Page {page_number} of {total_pages}"]
+        if page_number > 1:
+            previous_link = page_links[page_number - 2] if page_links else None
+            if previous_link is not None:
+                nav_parts.append(f"[Previous]({previous_link})")
+            else:
+                nav_parts.append("Previous")
+        if page_number < total_pages:
+            next_link = page_links[page_number] if page_links else None
+            if next_link is not None:
+                nav_parts.append(f"[Next]({next_link})")
+            else:
+                nav_parts.append("Next")
+        return ["_" + " • ".join(nav_parts) + "_", ""]
+
+    def _sanitize_page_size(self, page_size):
+        try:
+            page_size_int = int(page_size)
+        except (TypeError, ValueError):
+            return self.DEFAULT_PAGE_SIZE
+        if page_size_int <= 0:
+            return self.DEFAULT_PAGE_SIZE
+        return page_size_int
+
+    def _paginate_dependents(self):
+        if self.merge_packages is True:
+            return self._paginate_merged_dependents()
+        return self._paginate_package_dependents()
+
+    def _paginate_merged_dependents(self):
+        repos = self.all_public_dependent_repos or []
+        if len(repos) == 0:
+            return [{"merged_repos": []}]
+        pages = []
+        for start in range(0, len(repos), self.page_size):
+            pages.append({"merged_repos": repos[start : start + self.page_size]})
+        return pages
+
+    def _paginate_package_dependents(self):
+        flat_entries = []
+        for idx, package in enumerate(self.packages):
+            for repo in package.get("public_dependents", []):
+                flat_entries.append((idx, repo))
+        if len(flat_entries) == 0:
+            return [{"packages": {}}]
+        pages = []
+        for start in range(0, len(flat_entries), self.page_size):
+            slice_entries = flat_entries[start : start + self.page_size]
+            package_map = defaultdict(list)
+            for pkg_index, repo in slice_entries:
+                package_map[pkg_index].append(repo)
+            pages.append({"packages": dict(package_map)})
+        return pages
+
+    def _build_paginated_file_paths(self, base_file, total_pages):
+        if base_file is None:
+            return [None] * total_pages
+        paths = []
+        root, ext = os.path.splitext(base_file)
+        ext = ext if ext != "" else ".md"
+        for page_number in range(1, total_pages + 1):
+            if page_number == 1:
+                paths.append(base_file)
+            else:
+                paths.append(f"{root}-page-{page_number}{ext}")
+        return paths
+
+    def _write_markdown_file(self, file_path, content):
+        directory = os.path.dirname(file_path)
+        if directory:
+            os.makedirs(directory, exist_ok=True)
+        with open(file_path, "w", encoding="utf-8") as file:
+            file.write(content)
+        if self.json_output is False:
+            print("Wrote markdown file " + file_path)
+
+    def _format_link_target(self, file_path):
+        basename = os.path.basename(file_path)
+        return basename.replace(" ", "%20")
 
     def build_repo_md_line(self, md_lines, repo1):
         repo_label = repo1["name"]

@@ -51,6 +51,29 @@ def test_collect_stats_multi_package():
         assert md_content.count("\n") > 100
 
 
+def test_markdown_pagination_creates_multiple_files():
+    repo = "nvuillam/npm-groovy-lint"
+    with tempfile.TemporaryDirectory() as tmp_directory:
+        base_file = os.path.join(tmp_directory, "dependents.md")
+        gh_deps_info = GithubDependentsInfo(
+            repo,
+            debug=True,
+            sort_key="stars",
+            page_size=1,
+            markdown_file=base_file,
+        )
+        gh_deps_info.collect()
+        md = gh_deps_info.build_markdown(file=base_file)
+        assert md != ""
+        assert os.path.isfile(base_file)
+        second_page = os.path.join(tmp_directory, "dependents-page-2.md")
+        assert os.path.isfile(second_page)
+        with open(second_page, encoding="utf-8") as page_file:
+            page_two_content = page_file.read()
+        assert "Page 2 of" in page_two_content
+        assert "[Previous](dependents.md)" in page_two_content
+
+
 def test_collect_stats_min_stars():
     repo = "nvuillam/npm-groovy-lint"
     gh_deps_info = GithubDependentsInfo(repo, debug=True, sort_key="stars", min_stars=10)
