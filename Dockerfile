@@ -1,7 +1,6 @@
 FROM python:3.12.2-alpine3.18
 WORKDIR /
 ARG GITHUB_DEPENDENTS_INFO_VERSION=latest
-ARG GITHUB_TOKEN
 
 RUN pip install --no-cache-dir github-dependents-info
 
