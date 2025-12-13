@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
     strategy:
       matrix:
         python-version: ["3.12"]
@@ -40,9 +42,9 @@ jobs:
           make check-codestyle
 
       - name: Run safety checks
-        if: github.repository == 'nvuillam/github-dependents-info' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
+        if: ${{ env.SAFETY_API_KEY != '' }}
         env:
-          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+          SAFETY_API_KEY: ${{ env.SAFETY_API_KEY }}
         run: |
           make check-safety
 
