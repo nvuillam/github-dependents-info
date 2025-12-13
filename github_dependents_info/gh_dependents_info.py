@@ -99,7 +99,9 @@ class GithubDependentsInfo:
                 package["public_dependents_number"] = total_public_dependents
                 package["public_dependent_stars"] = total_public_stars
                 package["private_dependents_number"] = total_dependents - total_public_dependents
-                package["total_dependents_number"] = total_dependents if total_dependents > 0 else total_public_dependents
+                package["total_dependents_number"] = (
+                    total_dependents if total_dependents > 0 else total_public_dependents
+                )
 
                 # Build package badges
                 package["badges"] = {}
@@ -437,11 +439,11 @@ class GithubDependentsInfo:
         # First, get the initial page to determine total dependents and discover all page URLs
         url = package["url"]
         semaphore = asyncio.Semaphore(self.max_concurrent_requests)
-        
+
         # Fetch initial page
         content = await self.fetch_page(client, url, semaphore)
         soup = BeautifulSoup(content, "html.parser")
-        
+
         # Get total number of dependents from UI
         svg_item = soup.find("a", {"class": "btn-link selected"})
         if svg_item is not None:
@@ -451,13 +453,13 @@ class GithubDependentsInfo:
             )
         else:
             total_dependents = 0
-        
+
         # Discover all page URLs first
         urls_to_fetch = [url]
         page_number = 1
         current_url = url
         current_soup = soup
-        
+
         while True:
             next_link = None
             paginate_container = current_soup.find("div", {"class": "paginate-container"})
@@ -474,10 +476,10 @@ class GithubDependentsInfo:
                         if self.debug is True:
                             logging.info(f"  - discovered page {page_number}")
                         break
-            
+
             if next_link is None:
                 break
-            
+
             urls_to_fetch.append(next_link)
             # Fetch the next page to discover more pages
             try:
@@ -487,26 +489,26 @@ class GithubDependentsInfo:
                 if self.debug:
                     logging.warning(f"Failed to fetch page during discovery: {e}")
                 break
-        
+
         if self.debug and len(urls_to_fetch) > 1:
             logging.info(f"  - fetching {len(urls_to_fetch)} pages in parallel...")
-        
+
         # Now fetch all pages in parallel (re-fetching some we already have, but that's fine for simplicity)
         tasks = [self.fetch_page(client, page_url, semaphore) for page_url in urls_to_fetch]
         pages_content = await asyncio.gather(*tasks, return_exceptions=True)
-        
+
         # Process all pages
         result = []
         total_public_stars = 0
-        
+
         for page_content in pages_content:
             if isinstance(page_content, Exception):
                 if self.debug:
                     logging.warning(f"Failed to fetch page: {page_content}")
                 continue
-                
+
             soup = BeautifulSoup(page_content, "html.parser")
-            
+
             # Browse page dependents
             for t in soup.find_all("div", {"class": "Box-row"}):
                 owner_repo = self._extract_owner_repo(t)
@@ -537,7 +539,7 @@ class GithubDependentsInfo:
                     continue
                 result.append(result_item)
                 total_public_stars += result_item["stars"]
-        
+
         # Remove duplicates that may have been introduced
         seen = set()
         unique_result = []
@@ -545,7 +547,7 @@ class GithubDependentsInfo:
             if item["name"] not in seen:
                 seen.add(item["name"])
                 unique_result.append(item)
-        
+
         return unique_result, total_dependents, total_public_stars
 
     # Write badge in markdown file
