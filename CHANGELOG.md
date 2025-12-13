@@ -8,7 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Upgrade project
 - Upgrade dependencies
-- CI: Upgrade MegaLinter
+- Fix total dependents count (#607)
+- Refactor update logic in sources_all_df to ensure proper data type handling
+- CI
+  - Upgrade MegaLinter
+  - Refactor test classes so they run faster
 
 ## [1.6.3] 2023-03-03
 

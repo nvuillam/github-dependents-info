@@ -1,8 +1,8 @@
 import json
-import time
 import logging
 import os
 import re
+import time
 from pathlib import Path
 
 import numpy as np
@@ -242,7 +242,10 @@ class GithubDependentsInfo:
                 # update the row with the new information
                 sources_all_df.set_index("name", inplace=True)
                 source_df = pd.json_normalize(source_info).set_index("name", drop=True)
-                sources_all_df.update(source_df)
+                for column in source_df.columns:
+                    if source_df[column].dtype == object and column in sources_all_df.columns:
+                        sources_all_df[column] = sources_all_df[column].astype("object")
+                    sources_all_df.loc[source_df.index, column] = source_df[column]
                 sources_all_df.reset_index(inplace=True, drop=False)
                 sources_all_df.to_csv(file_path_sources, mode="w", header=True)
             else:
