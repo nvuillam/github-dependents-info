@@ -85,6 +85,7 @@ def test_collect_csv_multi_package():
             repo, debug=True, sort_key="stars", min_stars=10, csv_directory=csv_directory
         )
         gh_deps_info.collect()
+        assert len(gh_deps_info.packages) >= 2
         assert os.path.isfile(csv_directory + os.path.sep + f"packages_{repo.replace('/', '-')}.csv")
         packages_with_entries = 0
         for package in gh_deps_info.packages:
