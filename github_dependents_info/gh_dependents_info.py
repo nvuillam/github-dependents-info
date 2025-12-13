@@ -73,7 +73,7 @@ class GithubDependentsInfo:
                     if self.debug is True:
                         logging.info("Package " + package["name"] + ": browsing " + url + " ...")
                 else:
-                    url = self.url_init + ""
+                    url = self.url_init
                     if self.owner:
                         url += "?owner=" + self.owner
                     if self.debug is True:
@@ -485,7 +485,7 @@ class GithubDependentsInfo:
             try:
                 current_content = await self.fetch_page(client, next_link, semaphore)
                 current_soup = BeautifulSoup(current_content, "html.parser")
-            except (httpx.HTTPError, httpx.TimeoutException) as e:
+            except (httpx.RequestError, httpx.TimeoutException) as e:
                 if self.debug:
                     logging.warning(f"Failed to fetch page during discovery: {e}")
                 break
