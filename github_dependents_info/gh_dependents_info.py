@@ -550,7 +550,7 @@ class GithubDependentsInfo:
         # Add page navigation at bottom if multiple pages
         if total_pages > 1:
             nav_line = self._build_page_navigation(page_num, total_pages, **options)
-            md_lines += [nav_line, ""]
+            md_lines += [f"<div align=\"center\">{nav_line}</div>", ""]
 
         # footer
         md_lines += self._build_footer()
@@ -576,19 +576,19 @@ class GithubDependentsInfo:
                 prev_file = f"{base_name}{extension}"
             else:
                 prev_file = f"{base_name}-{page_num - 1}{extension}"
-            nav_parts.append(f"[⬅️ Previous]({prev_file})")
+            nav_parts.append(f"<a href=\"{prev_file}\">⬅️ Previous</a>")
         else:
-            nav_parts.append("⬅️ Previous")
+            nav_parts.append("<span>⬅️ Previous</span>")
 
         # Page indicator
-        nav_parts.append(f"Page {page_num} of {total_pages}")
+        nav_parts.append(f"<span>Page {page_num} of {total_pages}</span>")
 
         # Next link
         if page_num < total_pages:
             next_file = f"{base_name}-{page_num + 1}{extension}"
-            nav_parts.append(f"[Next ➡️]({next_file})")
+            nav_parts.append(f"<a href=\"{next_file}\">Next ➡️</a>")
         else:
-            nav_parts.append("Next ➡️")
+            nav_parts.append("<span>Next ➡️</span>")
 
         return " | ".join(nav_parts)
 
