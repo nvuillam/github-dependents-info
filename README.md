@@ -236,22 +236,22 @@ _________________
     github-dependents-info [OPTIONS]
 ```
 
-| Parameter | Type   | Description                                  |
-|-----------|--------|----------------------------------------------|
-| --repo    | String | Repository. Example: `oxsecurity/megalinter` |
-| -b<br/> --badgemarkdownfile | String  | _(optional)_ Path to markdown file where to insert/update **Used by** badge <br/> (must contain tags `<!-- gh-dependents-info-used-by-start -->` … `<!-- gh-dependents-info-used-by-end -->`) |
-| -s<br/> --sort              | String  | _(optional)_ Sort order: name (default) or stars                                                                                                                                         |
-| -x<br/> --minstars          | String  | _(optional)_ If set, filters repositories to keep only those with more than X stars                                                                                                      |
-| -m<br/> --markdownfile      | String  | _(optional)_ Output markdown file file                                                                                                                                                   |
-| -d<br/> --docurl            | String  | _(optional)_ Hyperlink to use when clicking on badge markdown file badge. (Default: link to markdown file)                                                                               |
-| -p<br/> --mergepackages     | String  | _(optional)_ In case of multiple packages, merge their stats in a single one in markdown and json output                                                                                 |
-| -j<br/> --json              | String  | _(optional)_ Output in json format                                                                                                                                                       |
-| -u<br/> --owner             | String  | _(optional)_ If set, filters repositories to keep only those owned by the specified user/organization                                                                                      |
-| -n<br/> --max-scraped-pages | Integer | _(optional)_ Maximum number of GitHub pages to scrape per package (0 uses all available pages)                                                                                             |
-| --pagination<br/> --no-pagination | Boolean | _(optional)_ Enable (default) or disable pagination when writing markdown output                                                                                                    |
-| --page-size                 | Integer | _(optional)_ Number of repositories per markdown page when pagination is enabled (default: 500)                                                                                           |
-| -v<br/> --version           | Boolean | _(optional)_ Displays version of github-dependents-info                                                                                                                                  |
-| --verbose                   | Boolean | _(optional)_ Verbose output                                                                                                                                                              |
+| Parameter                         | Type    | Description                                                                                                                                                                                   |
+|-----------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --repo                            | String  | Repository. Example: `oxsecurity/megalinter`                                                                                                                                                  |
+| -b<br/> --badgemarkdownfile       | String  | _(optional)_ Path to markdown file where to insert/update **Used by** badge <br/> (must contain tags `<!-- gh-dependents-info-used-by-start -->` … `<!-- gh-dependents-info-used-by-end -->`) |
+| -s<br/> --sort                    | String  | _(optional)_ Sort order: name (default) or stars                                                                                                                                              |
+| -x<br/> --minstars                | String  | _(optional)_ If set, filters repositories to keep only those with more than X stars                                                                                                           |
+| -m<br/> --markdownfile            | String  | _(optional)_ Output markdown file file                                                                                                                                                        |
+| -d<br/> --docurl                  | String  | _(optional)_ Hyperlink to use when clicking on badge markdown file badge. (Default: link to markdown file)                                                                                    |
+| -p<br/> --mergepackages           | String  | _(optional)_ In case of multiple packages, merge their stats in a single one in markdown and json output                                                                                      |
+| -j<br/> --json                    | String  | _(optional)_ Output in json format                                                                                                                                                            |
+| -u<br/> --owner                   | String  | _(optional)_ If set, filters repositories to keep only those owned by the specified user/organization                                                                                         |
+| -n<br/> --max-scraped-pages       | Integer | _(optional)_ Maximum number of GitHub pages to scrape per package (0 uses all available pages)                                                                                                |
+| --pagination<br/> --no-pagination | Boolean | _(optional)_ Enable (default) or disable pagination when writing markdown output                                                                                                              |
+| --page-size                       | Integer | _(optional)_ Number of repositories per markdown page when pagination is enabled (default: 500)                                                                                               |
+| -v<br/> --version                 | Boolean | _(optional)_ Displays version of github-dependents-info                                                                                                                                       |
+| --verbose                         | Boolean | _(optional)_ Verbose output                                                                                                                                                                   |
 
 Badge tags example (the tool replaces everything between the markers):
 
