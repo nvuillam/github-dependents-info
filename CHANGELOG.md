@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Insert your updates here :)
 
+## [2.0.2] 2025-12-14
+
+- Fix retry mechanism to handle large results
+
+## [2.0.1] 2025-12-14
+
+- Fix Github Action
+
 ## [2.0.0] 2025-12-14
 
 ### Features

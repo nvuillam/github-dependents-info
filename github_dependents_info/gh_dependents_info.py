@@ -50,6 +50,10 @@ class GithubDependentsInfo:
         self.badges = {}
         self.result = {}
         self.time_delay = options["time_delay"] if "time_delay" in options else 0.1
+        self.http_retry_attempts = options.get("http_retry_attempts", 5)
+        self.http_retry_initial_delay = options.get("http_retry_initial_delay", max(self.time_delay, 1.0))
+        self.http_retry_backoff = options.get("http_retry_backoff", 2.0)
+        self.http_retry_max_delay = options.get("http_retry_max_delay", 60.0)
 
     def collect(self):
         """Main entry point - synchronous wrapper for async collection."""
@@ -627,13 +631,64 @@ class GithubDependentsInfo:
             follow_redirects=True,
         )
 
+    def _compute_retry_delay(self, attempt: int, response: httpx.Response | None = None) -> float:
+        """Calculate delay before next retry using headers or exponential backoff."""
+        if response is not None:
+            retry_after = response.headers.get("Retry-After")
+            if retry_after:
+                try:
+                    wait_seconds = float(retry_after)
+                    if wait_seconds > 0:
+                        return min(wait_seconds, self.http_retry_max_delay)
+                except ValueError:
+                    pass
+        delay = self.http_retry_initial_delay * (self.http_retry_backoff ** max(attempt - 1, 0))
+        return min(delay, self.http_retry_max_delay)
+
     async def fetch_page(self, client, url, semaphore):
         """Fetch a single page with rate limiting."""
-        async with semaphore:
-            await asyncio.sleep(self.time_delay)
-            response = await client.get(url)
-            response.raise_for_status()
-            return response.text
+        last_error = None
+        for attempt in range(1, self.http_retry_attempts + 1):
+            try:
+                async with semaphore:
+                    await asyncio.sleep(self.time_delay)
+                    response = await client.get(url)
+                response.raise_for_status()
+                return response.text
+            except httpx.HTTPStatusError as exc:  # type: ignore[attr-defined]
+                last_error = exc
+                status_code = exc.response.status_code
+                should_retry = status_code == 429 or 500 <= status_code < 600
+                if not should_retry or attempt == self.http_retry_attempts:
+                    raise
+                delay = self._compute_retry_delay(attempt, response=exc.response)
+                if self.debug:
+                    logging.warning(
+                        "HTTP %s while fetching %s (attempt %s/%s). Retrying in %.1fs",
+                        status_code,
+                        url,
+                        attempt,
+                        self.http_retry_attempts,
+                        delay,
+                    )
+                await asyncio.sleep(delay)
+            except (httpx.RequestError, httpx.TimeoutException) as exc:  # type: ignore[attr-defined]
+                last_error = exc
+                if attempt == self.http_retry_attempts:
+                    raise
+                delay = self._compute_retry_delay(attempt)
+                if self.debug:
+                    logging.warning(
+                        "Request error while fetching %s (attempt %s/%s): %s. Retrying in %.1fs",
+                        url,
+                        attempt,
+                        self.http_retry_attempts,
+                        exc,
+                        delay,
+                    )
+                await asyncio.sleep(delay)
+        if last_error is not None:
+            raise last_error
 
     async def fetch_all_package_pages(self, client, package):
         """Fetch all pages for a package in parallel."""
