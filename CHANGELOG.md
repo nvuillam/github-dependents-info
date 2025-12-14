@@ -14,11 +14,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Replace synchronous `requests` calls with async `httpx` and parallel scraping for faster data collection (#750)
 - Refactor update logic in sources_all_df to ensure proper data type handling and keep resumed crawls consistent (#749)
 - Update GitHub Action to expose all options (owner, pagination, CSV, verbosity, etc.) and refresh default inputs (#745, #746)
-- Update release workflow to reuse pinned Python/Poetry versions and publish with refreshed Docker tags (#746)
 - CI
   - Upgrade MegaLinter, pytest, and related tooling; refactor CLI tests to share fixtures and run faster (#743)
   - Test on Python 3.10, 3.11, 3.12, 3.13, 3.14 and gate safety scans on secret availability (#747, #742)
   - Refresh workflow actions (setup-python 6.1.0, create-pull-request v8, cache/upload-artifact v6)
+  - Update release workflow to reuse pinned Python/Poetry versions and publish with refreshed Docker tags (#746)
 
 ## [1.6.3] 2023-03-03
 
