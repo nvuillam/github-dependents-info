@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Test on Python 3.10, 3.11, 3.12, 3.13, 3.14 and gate safety scans on secret availability (#747, #742)
 - Refresh workflow actions (setup-python 6.1.0, create-pull-request v8, cache/upload-artifact v6)
 - Update release workflow to reuse pinned Python/Poetry versions and publish with refreshed Docker tags (#746)
+- Add release-version in Makefile
 
 ## [1.6.3] 2023-03-03
 

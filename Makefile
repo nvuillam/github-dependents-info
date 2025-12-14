@@ -65,6 +65,19 @@ update-dev-deps:
 	poetry add -D bandit@latest darglint@latest "isort[colors]@latest" mypy@latest pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest coverage-badge@latest pytest-html@latest pytest-cov@latest
 	poetry add -D --allow-prereleases black@latest
 
+.PHONY: release-version
+# Example: make release-version VERSION=1.7.0
+# Example: make release-version VERSION=major|minor|patch
+release-version:
+	@BUMP=$(VERSION); \
+	if [ "$$BUMP" = "latest" ]; then \
+		BUMP=patch; \
+	fi; \
+	NEW_VERSION=$$(poetry version $$BUMP | awk '{print $$2}'); \
+		echo "Version bumped to $$NEW_VERSION"; \
+		git tag -a "v$$NEW_VERSION" -m "Release v$$NEW_VERSION"; \
+		echo "Created tag v$$NEW_VERSION"
+
 #* Docker
 # Example: make docker-build VERSION=latest
 # Example: make docker-build IMAGE=some_name VERSION=0.1.0
