@@ -143,7 +143,7 @@ def test_pagination_single_page():
             repo, debug=True, sort_key="stars", max_scraped_pages=1, pagination=True, page_size=100
         )
         gh_deps_info.collect()
-        md = gh_deps_info.build_markdown(file=tmp_md_file)
+        gh_deps_info.build_markdown(file=tmp_md_file)
 
         # Should only have one file since results fit on one page
         assert os.path.isfile(tmp_md_file)
@@ -168,7 +168,7 @@ def test_pagination_multiple_pages():
 
         # Should have results that span multiple pages
         if gh_deps_info.result["public_dependents_number"] > 5:
-            md = gh_deps_info.build_markdown(file=tmp_md_file)
+            gh_deps_info.build_markdown(file=tmp_md_file)
 
             # Check that multiple files were created
             assert os.path.isfile(tmp_md_file)
@@ -198,7 +198,7 @@ def test_pagination_disabled_no_split():
             repo, debug=True, sort_key="stars", max_scraped_pages=2, pagination=False, page_size=5
         )
         gh_deps_info.collect()
-        md = gh_deps_info.build_markdown(file=tmp_md_file)
+        gh_deps_info.build_markdown(file=tmp_md_file)
 
         # Should only have one file even if results exceed page size
         assert os.path.isfile(tmp_md_file)
