@@ -375,7 +375,6 @@ class GithubDependentsInfo:
             md_lines += [f"| {name}    | {badge_1}  | {badge_2} | {badge_3} | {badge_4} |"]
         md_lines += [""]
 
-
     def _build_single_markdown(self, **options) -> str:
         """Build a single markdown file without pagination."""
         md_lines = [f"# Dependents stats for {self.repo}", ""]
