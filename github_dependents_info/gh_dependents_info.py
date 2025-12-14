@@ -319,7 +319,7 @@ class GithubDependentsInfo:
     def build_markdown(self, **options) -> str:
         # Determine if pagination should be applied
         use_pagination = self.pagination
-        
+
         # Calculate total number of repos to potentially paginate
         total_repos = 0
         if self.merge_packages is True:
@@ -328,10 +328,10 @@ class GithubDependentsInfo:
             # For per-package display, count total across all packages
             for package in self.packages:
                 total_repos += len(package.get("public_dependents", []))
-        
+
         # Determine if we need multiple pages
         needs_pagination = use_pagination and total_repos > self.page_size
-        
+
         if needs_pagination:
             # Generate paginated markdown files
             return self._build_paginated_markdown(**options)
@@ -421,23 +421,23 @@ class GithubDependentsInfo:
         if "file" not in options:
             # If no file is specified, just return the first page as a string
             return self._build_markdown_page(1, 1, **options)
-        
+
         base_file = options["file"]
         # Split the file path to add page suffixes
         file_path = Path(base_file)
         base_name = file_path.stem
         extension = file_path.suffix
         parent_dir = file_path.parent
-        
+
         # Calculate number of pages needed
         if self.merge_packages is True:
             total_repos = len(self.all_public_dependent_repos)
         else:
             # For per-package display, we'll paginate the entire content
             total_repos = sum(len(package.get("public_dependents", [])) for package in self.packages)
-        
+
         total_pages = (total_repos + self.page_size - 1) // self.page_size  # Ceiling division
-        
+
         # Generate each page
         os.makedirs(parent_dir, exist_ok=True)
         for page_num in range(1, total_pages + 1):
@@ -445,26 +445,26 @@ class GithubDependentsInfo:
                 page_file = base_file
             else:
                 page_file = str(parent_dir / f"{base_name}-{page_num}{extension}")
-            
+
             md_content = self._build_markdown_page(page_num, total_pages, file_path=file_path)
-            
+
             with open(page_file, "w", encoding="utf-8") as f:
                 f.write(md_content)
                 if self.json_output is False:
                     print(f"Wrote markdown file {page_file}")
-        
+
         # Return the first page content
         return self._build_markdown_page(1, total_pages, file_path=file_path)
 
     def _build_markdown_page(self, page_num: int, total_pages: int, **options) -> str:
         """Build a single page of paginated markdown."""
         md_lines = [f"# Dependents stats for {self.repo}", ""]
-        
+
         # Add page navigation if multiple pages
         if total_pages > 1:
             nav_line = self._build_page_navigation(page_num, total_pages, **options)
             md_lines += [nav_line, ""]
-        
+
         # Summary table (only on first page)
         if page_num == 1 and len(self.packages) > 1 and self.merge_packages is False:
             # Summary badges if there are multiple packages
@@ -488,11 +488,11 @@ class GithubDependentsInfo:
                 badge_4 = package["badges"]["stars"]
                 md_lines += [f"| {name}    | {badge_1}  | {badge_2} | {badge_3} | {badge_4} |"]
             md_lines += [""]
-        
+
         # Calculate start and end indices for this page
         start_idx = (page_num - 1) * self.page_size
         end_idx = start_idx + self.page_size
-        
+
         # Single dependents list (merged packages)
         if self.merge_packages is True:
             if page_num == 1:
@@ -514,9 +514,9 @@ class GithubDependentsInfo:
             for package in self.packages:
                 for repo1 in package.get("public_dependents", []):
                     all_package_items.append((package, repo1))
-            
+
             page_items = all_package_items[start_idx:end_idx]
-            
+
             # Group items by package for display
             current_package_name = None
             for package, repo1 in page_items:
@@ -533,16 +533,16 @@ class GithubDependentsInfo:
                         "",
                     ]
                     md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
-                
+
                 self.build_repo_md_line(md_lines, repo1)
-        
+
         md_lines += [""]
-        
+
         # Add page navigation at bottom if multiple pages
         if total_pages > 1:
             nav_line = self._build_page_navigation(page_num, total_pages, **options)
             md_lines += [nav_line, ""]
-        
+
         # footer
         md_lines += [""]
         md_lines += [
@@ -550,13 +550,13 @@ class GithubDependentsInfo:
             "(https://github.com/nvuillam/github-dependents-info), "
             "by [Nicolas Vuillamy](https://github.com/nvuillam)_"
         ]
-        
+
         return "\n".join(md_lines)
 
     def _build_page_navigation(self, page_num: int, total_pages: int, **options) -> str:
         """Build navigation links for pagination."""
         nav_parts = []
-        
+
         # Get the file path info if provided
         file_path = options.get("file_path")
         if file_path:
@@ -565,7 +565,7 @@ class GithubDependentsInfo:
         else:
             base_name = "page"
             extension = ".md"
-        
+
         # Previous link
         if page_num > 1:
             if page_num == 2:
@@ -575,17 +575,17 @@ class GithubDependentsInfo:
             nav_parts.append(f"[⬅️ Previous]({prev_file})")
         else:
             nav_parts.append("⬅️ Previous")
-        
+
         # Page indicator
         nav_parts.append(f"Page {page_num} of {total_pages}")
-        
+
         # Next link
         if page_num < total_pages:
             next_file = f"{base_name}-{page_num + 1}{extension}"
             nav_parts.append(f"[Next ➡️]({next_file})")
         else:
             nav_parts.append("Next ➡️")
-        
+
         return " | ".join(nav_parts)
 
     def build_repo_md_line(self, md_lines, repo1):

@@ -83,11 +83,9 @@ def main(
         0, "-n", "--max-scraped-pages", help="Maximum number of pages to scrape per package (0 means no limit)"
     ),
     pagination: bool = typer.Option(
-        True, "--pagination", help="Enable pagination to split results into multiple files"
+        True, "--pagination/--no-pagination", help="Enable pagination to split results into multiple files"
     ),
-    page_size: int = typer.Option(
-        500, "--page-size", help="Number of results per page when pagination is enabled"
-    ),
+    page_size: int = typer.Option(500, "--page-size", help="Number of results per page when pagination is enabled"),
 ) -> None:
     # Init logger
     if verbose is True:
