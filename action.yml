@@ -77,25 +77,86 @@ inputs:
 runs:
   using: "docker"
   image: "docker://nvuillam/github-dependents-info:v2.0.0"
+  entrypoint: /bin/sh
   args:
-    - --repo=${{ inputs.repo }}
-    - ${{ inputs.outputrepo != '' && format('--outputrepo={0}', inputs.outputrepo) || null }}
-    - --markdownfile=${{ inputs.markdownfile }}
-    - --badgemarkdownfile=${{ inputs.badgemarkdownfile }}
-    - ${{ inputs.docurl != '' && format('--docurl={0}', inputs.docurl) || null }}
-    - --markdownbadgecolor=${{ inputs.markdownbadgecolor }}
-    - --sort=${{ inputs.sort }}
-    - --minstars=${{ inputs.minstars }}
-    - --timedelay=${{ inputs.timedelay }}
-    - ${{ inputs.csvdirectory != '' && format('--csvdirectory={0}', inputs.csvdirectory) || null }}
-    - ${{ inputs.owner != '' && format('--owner={0}', inputs.owner) || null }}
-    - ${{ inputs.max-scraped-pages != '0' && format('--max-scraped-pages={0}', inputs.max-scraped-pages) || null }}
-    - ${{ inputs.pagination == 'false' && '--no-pagination' || null }}
-    - ${{ inputs.page-size != '500' && format('--page-size={0}', inputs.page-size) || null }}
-    - ${{ inputs.json == 'true' && '--json' || null }}
-    - ${{ inputs.mergepackages == 'true' && '--mergepackages' || null }}
-    - ${{ inputs.verbose == 'true' && '--verbose' || null }}
-    - ${{ inputs.overwrite == 'true' && '--overwrite' || null }}
+    - -c
+    - |
+      set -euo pipefail
+
+      max_scraped_pages=$(printenv 'INPUT_MAX-SCRAPED-PAGES' 2>/dev/null || true)
+      page_size=$(printenv 'INPUT_PAGE-SIZE' 2>/dev/null || true)
+
+      set -- github-dependents-info "--repo=${INPUT_REPO}"
+
+      if [ -n "${INPUT_OUTPUTREPO:-}" ]; then
+        set -- "$@" "--outputrepo=${INPUT_OUTPUTREPO}"
+      fi
+
+      if [ -n "${INPUT_MARKDOWNFILE:-}" ]; then
+        set -- "$@" "--markdownfile=${INPUT_MARKDOWNFILE}"
+      fi
+
+      if [ -n "${INPUT_BADGEMARKDOWNFILE:-}" ]; then
+        set -- "$@" "--badgemarkdownfile=${INPUT_BADGEMARKDOWNFILE}"
+      fi
+
+      if [ -n "${INPUT_DOCURL:-}" ]; then
+        set -- "$@" "--docurl=${INPUT_DOCURL}"
+      fi
+
+      if [ -n "${INPUT_MARKDOWNBADGECOLOR:-}" ]; then
+        set -- "$@" "--markdownbadgecolor=${INPUT_MARKDOWNBADGECOLOR}"
+      fi
+
+      if [ -n "${INPUT_SORT:-}" ]; then
+        set -- "$@" "--sort=${INPUT_SORT}"
+      fi
+
+      if [ -n "${INPUT_MINSTARS:-}" ]; then
+        set -- "$@" "--minstars=${INPUT_MINSTARS}"
+      fi
+
+      if [ -n "${INPUT_TIMEDELAY:-}" ]; then
+        set -- "$@" "--timedelay=${INPUT_TIMEDELAY}"
+      fi
+
+      if [ -n "${INPUT_CSVDIRECTORY:-}" ]; then
+        set -- "$@" "--csvdirectory=${INPUT_CSVDIRECTORY}"
+      fi
+
+      if [ -n "${INPUT_OWNER:-}" ]; then
+        set -- "$@" "--owner=${INPUT_OWNER}"
+      fi
+
+      if [ -n "$max_scraped_pages" ] && [ "$max_scraped_pages" != "0" ]; then
+        set -- "$@" "--max-scraped-pages=${max_scraped_pages}"
+      fi
+
+      if [ "${INPUT_PAGINATION:-true}" = "false" ]; then
+        set -- "$@" "--no-pagination"
+      fi
+
+      if [ -n "$page_size" ] && [ "$page_size" != "" ]; then
+        set -- "$@" "--page-size=${page_size}"
+      fi
+
+      if [ "${INPUT_JSON:-false}" = "true" ]; then
+        set -- "$@" "--json"
+      fi
+
+      if [ "${INPUT_MERGEPACKAGES:-false}" = "true" ]; then
+        set -- "$@" "--mergepackages"
+      fi
+
+      if [ "${INPUT_VERBOSE:-false}" = "true" ]; then
+        set -- "$@" "--verbose"
+      fi
+
+      if [ "${INPUT_OVERWRITE:-false}" = "true" ]; then
+        set -- "$@" "--overwrite"
+      fi
+
+      exec "$@"
 
 branding:
   icon: "users"
