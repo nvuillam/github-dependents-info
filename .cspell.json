@@ -182,6 +182,7 @@
     "parseable",
     "pidb",
     "pipenv",
+    "pipefail",
     "prereleases",
     "psess",
     "publishproj",
