@@ -65,6 +65,14 @@ inputs:
     description: "Maximum number of pages to scrape per package (0 means no limit)"
     required: false
     default: "0"
+  pagination:
+    description: "Enable pagination to split results into multiple files"
+    required: false
+    default: "true"
+  page-size:
+    description: "Number of results per page when pagination is enabled"
+    required: false
+    default: "500"
 
 runs:
   using: "docker"
@@ -82,6 +90,8 @@ runs:
     - ${{ inputs.csvdirectory != '' && format('--csvdirectory={0}', inputs.csvdirectory) || null }}
     - ${{ inputs.owner != '' && format('--owner={0}', inputs.owner) || null }}
     - ${{ inputs.max-scraped-pages != '0' && format('--max-scraped-pages={0}', inputs.max-scraped-pages) || null }}
+    - ${{ inputs.pagination == 'false' && '--no-pagination' || null }}
+    - ${{ inputs.page-size != '500' && format('--page-size={0}', inputs.page-size) || null }}
     - ${{ inputs.json == 'true' && '--json' || null }}
     - ${{ inputs.mergepackages == 'true' && '--mergepackages' || null }}
     - ${{ inputs.verbose == 'true' && '--verbose' || null }}
