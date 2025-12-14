@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import math
 import os
 import re
 from pathlib import Path
@@ -339,6 +340,15 @@ class GithubDependentsInfo:
             # Generate a single markdown file
             return self._build_single_markdown(**options)
 
+    def _build_footer(self) -> list:
+        """Build the standard footer for markdown files."""
+        return [
+            "",
+            "_Generated using [github-dependents-info]"
+            "(https://github.com/nvuillam/github-dependents-info), "
+            "by [Nicolas Vuillamy](https://github.com/nvuillam)_",
+        ]
+
     def _build_single_markdown(self, **options) -> str:
         """Build a single markdown file without pagination."""
         md_lines = [f"# Dependents stats for {self.repo}", ""]
@@ -399,12 +409,7 @@ class GithubDependentsInfo:
                 md_lines += [""]
 
         # footer
-        md_lines += [""]
-        md_lines += [
-            "_Generated using [github-dependents-info]"
-            "(https://github.com/nvuillam/github-dependents-info), "
-            "by [Nicolas Vuillamy](https://github.com/nvuillam)_"
-        ]
+        md_lines += self._build_footer()
         md_lines_str = "\n".join(md_lines)
 
         # Write in file if requested
@@ -425,7 +430,7 @@ class GithubDependentsInfo:
             # For per-package display, we'll paginate the entire content
             total_repos = sum(len(package.get("public_dependents", [])) for package in self.packages)
 
-        total_pages = max(1, (total_repos + self.page_size - 1) // self.page_size)  # Ceiling division
+        total_pages = max(1, math.ceil(total_repos / self.page_size))
 
         if "file" not in options:
             # If no file is specified, just return the first page as a string
@@ -439,7 +444,7 @@ class GithubDependentsInfo:
         parent_dir = file_path.parent
 
         # Generate each page
-        os.makedirs(str(parent_dir), exist_ok=True)
+        os.makedirs(parent_dir, exist_ok=True)
         for page_num in range(1, total_pages + 1):
             if page_num == 1:
                 page_file = base_file
@@ -570,12 +575,7 @@ class GithubDependentsInfo:
             md_lines += [nav_line, ""]
 
         # footer
-        md_lines += [""]
-        md_lines += [
-            "_Generated using [github-dependents-info]"
-            "(https://github.com/nvuillam/github-dependents-info), "
-            "by [Nicolas Vuillamy](https://github.com/nvuillam)_"
-        ]
+        md_lines += self._build_footer()
 
         return "\n".join(md_lines)
 
