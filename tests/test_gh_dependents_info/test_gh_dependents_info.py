@@ -110,3 +110,102 @@ def test_collect_stats_max_scraped_pages():
     # With max_scraped_pages=1, we should get at most 30 dependents (1 page = ~30 items)
     assert repo_stats["public_dependents_number"] > 0
     assert repo_stats["public_dependents_number"] <= 30
+
+
+def test_pagination_enabled_by_default():
+    """Test that pagination is enabled by default."""
+    repo = SINGLE_PACKAGE_REPO
+    gh_deps_info = GithubDependentsInfo(repo, debug=True)
+    assert gh_deps_info.pagination is True
+    assert gh_deps_info.page_size == 500
+
+
+def test_pagination_disabled():
+    """Test that pagination can be disabled."""
+    repo = SINGLE_PACKAGE_REPO
+    gh_deps_info = GithubDependentsInfo(repo, debug=True, pagination=False)
+    assert gh_deps_info.pagination is False
+
+
+def test_custom_page_size():
+    """Test that custom page size can be set."""
+    repo = SINGLE_PACKAGE_REPO
+    gh_deps_info = GithubDependentsInfo(repo, debug=True, page_size=100)
+    assert gh_deps_info.page_size == 100
+
+
+def test_pagination_single_page():
+    """Test that no pagination files are created when results fit on one page."""
+    repo = SINGLE_PACKAGE_REPO
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_md_file = os.path.join(tmp_dir, "test-single-page.md")
+        gh_deps_info = GithubDependentsInfo(
+            repo, debug=True, sort_key="stars", max_scraped_pages=1, pagination=True, page_size=100
+        )
+        gh_deps_info.collect()
+        md = gh_deps_info.build_markdown(file=tmp_md_file)
+        
+        # Should only have one file since results fit on one page
+        assert os.path.isfile(tmp_md_file)
+        assert not os.path.isfile(os.path.join(tmp_dir, "test-single-page-2.md"))
+        
+        # Check that navigation is not in the file
+        with open(tmp_md_file, encoding="utf-8") as file:
+            content = file.read()
+            assert "Page 1 of" not in content
+
+
+def test_pagination_multiple_pages():
+    """Test that multiple pagination files are created when results exceed page size."""
+    repo = SINGLE_PACKAGE_REPO
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_md_file = os.path.join(tmp_dir, "test-multi-page.md")
+        # Use a very small page size to force multiple pages
+        gh_deps_info = GithubDependentsInfo(
+            repo, debug=True, sort_key="stars", max_scraped_pages=2, pagination=True, page_size=5
+        )
+        gh_deps_info.collect()
+        
+        # Should have results that span multiple pages
+        if gh_deps_info.result["public_dependents_number"] > 5:
+            md = gh_deps_info.build_markdown(file=tmp_md_file)
+            
+            # Check that multiple files were created
+            assert os.path.isfile(tmp_md_file)
+            assert os.path.isfile(os.path.join(tmp_dir, "test-multi-page-2.md"))
+            
+            # Check navigation in first page
+            with open(tmp_md_file, encoding="utf-8") as file:
+                content = file.read()
+                assert "Page 1 of" in content
+                assert "Next ➡️" in content
+                assert "test-multi-page-2.md" in content
+            
+            # Check navigation in second page
+            with open(os.path.join(tmp_dir, "test-multi-page-2.md"), encoding="utf-8") as file:
+                content = file.read()
+                assert "Page 2 of" in content
+                assert "Previous" in content
+                assert "test-multi-page.md" in content
+
+
+def test_pagination_disabled_no_split():
+    """Test that when pagination is disabled, all results go into one file."""
+    repo = SINGLE_PACKAGE_REPO
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_md_file = os.path.join(tmp_dir, "test-no-pagination.md")
+        gh_deps_info = GithubDependentsInfo(
+            repo, debug=True, sort_key="stars", max_scraped_pages=2, pagination=False, page_size=5
+        )
+        gh_deps_info.collect()
+        md = gh_deps_info.build_markdown(file=tmp_md_file)
+        
+        # Should only have one file even if results exceed page size
+        assert os.path.isfile(tmp_md_file)
+        assert not os.path.isfile(os.path.join(tmp_dir, "test-no-pagination-2.md"))
+        
+        # Check that navigation is not in the file
+        with open(tmp_md_file, encoding="utf-8") as file:
+            content = file.read()
+            assert "Page 1 of" not in content
+
