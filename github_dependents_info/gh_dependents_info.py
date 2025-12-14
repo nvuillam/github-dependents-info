@@ -517,6 +517,17 @@ class GithubDependentsInfo:
 
             page_items = all_package_items[start_idx:end_idx]
 
+            # Determine which packages are being continued from previous page
+            packages_started_before_page = set()
+            if start_idx > 0:
+                for package, _ in all_package_items[:start_idx]:
+                    packages_started_before_page.add(package["name"])
+                # Remove packages that have finished before this page
+                packages_on_this_page = set()
+                for package, _ in page_items:
+                    packages_on_this_page.add(package["name"])
+                packages_started_before_page = packages_started_before_page.intersection(packages_on_this_page)
+
             # Group items by package for display
             current_package_name = None
             for package, repo1 in page_items:
@@ -524,14 +535,21 @@ class GithubDependentsInfo:
                     if current_package_name is not None:
                         md_lines += [""]  # Add spacing between packages
                     current_package_name = package["name"]
+
+                    # Only add header and badges if this package starts on this page
+                    is_continuation = package["name"] in packages_started_before_page
+
                     md_lines += ["## Package " + package["name"], ""]
-                    md_lines += [
-                        package["badges"]["total"],
-                        package["badges"]["public"],
-                        package["badges"]["private"],
-                        package["badges"]["stars"],
-                        "",
-                    ]
+                    if not is_continuation:
+                        md_lines += [
+                            package["badges"]["total"],
+                            package["badges"]["public"],
+                            package["badges"]["private"],
+                            package["badges"]["stars"],
+                            "",
+                        ]
+                    else:
+                        md_lines += ["_Continued from previous page_", ""]
                     md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
 
                 self.build_repo_md_line(md_lines, repo1)
