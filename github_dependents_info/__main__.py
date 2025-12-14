@@ -82,6 +82,10 @@ def main(
     max_scraped_pages: int = typer.Option(
         0, "-n", "--max-scraped-pages", help="Maximum number of pages to scrape per package (0 means no limit)"
     ),
+    pagination: bool = typer.Option(
+        True, "--pagination/--no-pagination", help="Enable pagination to split results into multiple files"
+    ),
+    page_size: int = typer.Option(500, "--page-size", help="Number of results per page when pagination is enabled"),
 ) -> None:
     # Init logger
     if verbose is True:
@@ -117,6 +121,8 @@ def main(
             owner=owner,
             time_delay=time_delay,
             max_scraped_pages=max_scraped_pages,
+            pagination=pagination,
+            page_size=page_size,
         )
         # Collect data
         gh_deps_info.collect()

@@ -6,16 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
-- Upgrade project
-- Upgrade dependencies
+### Features
+
+- Add capability to filter by owner (`--owner`) and document usage (#744)
+- Add pagination controls for large repositories (`--max-scraped-pages`, `--pagination/--no-pagination`, `--page-size`) plus multi-file markdown exports with tests (#748, #5877b0e)
+- Replace synchronous `requests` calls with async `httpx` and parallel scraping for faster data collection (#750)
+- Update GitHub Action to expose all options (owner, pagination, CSV, verbosity, etc.) and refresh default inputs (#745, #746)
+
+### Fixes
+
 - Fix total dependents count (#607)
-- Add capability to filter by owner
-- Refactor update logic in sources_all_df to ensure proper data type handling
-- Update GitHub Action to expose all options
-- CI
-  - Upgrade MegaLinter
-  - Refactor test classes so they run faster
-  - Test on Python 3.10, 3.11, 3.12, 3.13, 3.14
+- Refactor update logic in `sources_all_df` to ensure proper data type handling and keep resumed crawls consistent (#749)
+
+### Dependencies
+
+- Upgrade project
+- Upgrade dependencies (pandas 2.3, rich 14, httpx 0.28, black 25, pylint 4, pytest 9, etc.) and align packaging with Python 3.10+
+
+### CI
+
+- Upgrade MegaLinter, pytest, and related tooling; refactor CLI tests to share fixtures and run faster (#743)
+- Test on Python 3.10, 3.11, 3.12, 3.13, 3.14 and gate safety scans on secret availability (#747, #742)
+- Refresh workflow actions (setup-python 6.1.0, create-pull-request v8, cache/upload-artifact v6)
+- Update release workflow to reuse pinned Python/Poetry versions and publish with refreshed Docker tags (#746)
+- Add release-version in Makefile
 
 ## [1.6.3] 2023-03-03
 
