@@ -470,11 +470,6 @@ class GithubDependentsInfo:
         """Build a single page of paginated markdown."""
         md_lines = [f"# Dependents stats for {self.repo}", ""]
 
-        # Add page navigation if multiple pages
-        if total_pages > 1:
-            nav_line = self._build_page_navigation(page_num, total_pages, **options)
-            md_lines += [nav_line, ""]
-
         # Summary table (only on first page)
         if page_num == 1:
             self._append_summary_table(md_lines)
@@ -546,8 +541,6 @@ class GithubDependentsInfo:
                             package["badges"]["stars"],
                             "",
                         ]
-                    else:
-                        md_lines += ["_Continued from previous page_", ""]
                     md_lines += ["| Repository | Stars  |", "| :--------  | -----: |"]
 
                 self.build_repo_md_line(md_lines, repo1)
