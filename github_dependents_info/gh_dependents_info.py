@@ -418,9 +418,18 @@ class GithubDependentsInfo:
 
     def _build_paginated_markdown(self, **options) -> str:
         """Build multiple paginated markdown files."""
+        # Calculate number of pages needed
+        if self.merge_packages is True:
+            total_repos = len(self.all_public_dependent_repos)
+        else:
+            # For per-package display, we'll paginate the entire content
+            total_repos = sum(len(package.get("public_dependents", [])) for package in self.packages)
+
+        total_pages = max(1, (total_repos + self.page_size - 1) // self.page_size)  # Ceiling division
+
         if "file" not in options:
             # If no file is specified, just return the first page as a string
-            return self._build_markdown_page(1, 1, **options)
+            return self._build_markdown_page(1, total_pages, **options)
 
         base_file = options["file"]
         # Split the file path to add page suffixes
@@ -429,17 +438,8 @@ class GithubDependentsInfo:
         extension = file_path.suffix
         parent_dir = file_path.parent
 
-        # Calculate number of pages needed
-        if self.merge_packages is True:
-            total_repos = len(self.all_public_dependent_repos)
-        else:
-            # For per-package display, we'll paginate the entire content
-            total_repos = sum(len(package.get("public_dependents", [])) for package in self.packages)
-
-        total_pages = (total_repos + self.page_size - 1) // self.page_size  # Ceiling division
-
         # Generate each page
-        os.makedirs(parent_dir, exist_ok=True)
+        os.makedirs(str(parent_dir), exist_ok=True)
         for page_num in range(1, total_pages + 1):
             if page_num == 1:
                 page_file = base_file
@@ -514,6 +514,14 @@ class GithubDependentsInfo:
             for package in self.packages:
                 for repo1 in package.get("public_dependents", []):
                     all_package_items.append((package, repo1))
+
+            # If this is page 1 and there are empty packages, show them first
+            if page_num == 1:
+                for package in self.packages:
+                    if len(package.get("public_dependents", [])) == 0:
+                        md_lines += ["## Package " + package["name"], ""]
+                        md_lines += ["No dependent repositories"]
+                        md_lines += [""]
 
             page_items = all_package_items[start_idx:end_idx]
 
