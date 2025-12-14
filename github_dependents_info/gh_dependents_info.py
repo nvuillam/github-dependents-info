@@ -349,33 +349,39 @@ class GithubDependentsInfo:
             "by [Nicolas Vuillamy](https://github.com/nvuillam)_",
         ]
 
+    def _append_summary_table(self, md_lines: list) -> None:
+        """Append the multi-package summary table when applicable."""
+        if len(self.packages) <= 1 or self.merge_packages:
+            return
+
+        md_lines += [
+            self.badges["total"],
+            self.badges["public"],
+            self.badges["private"],
+            self.badges["stars"],
+            "",
+        ]
+
+        md_lines += [
+            "| Package    | Total  | Public | Private | Stars |",
+            "| :--------  | -----: | -----: | -----:  | ----: |",
+        ]
+        for package in self.packages:
+            name = "[" + package["name"] + "](#package-" + package["name"].replace("/", "").replace("@", "") + ")"
+            badge_1 = package["badges"]["total"]
+            badge_2 = package["badges"]["public"]
+            badge_3 = package["badges"]["private"]
+            badge_4 = package["badges"]["stars"]
+            md_lines += [f"| {name}    | {badge_1}  | {badge_2} | {badge_3} | {badge_4} |"]
+        md_lines += [""]
+
+
     def _build_single_markdown(self, **options) -> str:
         """Build a single markdown file without pagination."""
         md_lines = [f"# Dependents stats for {self.repo}", ""]
 
         # Summary table
-        if len(self.packages) > 1 and self.merge_packages is False:
-            # Summary badges if there are multiple packages
-            md_lines += [
-                self.badges["total"],
-                self.badges["public"],
-                self.badges["private"],
-                self.badges["stars"],
-                "",
-            ]
-
-            md_lines += [
-                "| Package    | Total  | Public | Private | Stars |",
-                "| :--------  | -----: | -----: | -----:  | ----: |",
-            ]
-            for package in self.packages:
-                name = "[" + package["name"] + "](#package-" + package["name"].replace("/", "").replace("@", "") + ")"
-                badge_1 = package["badges"]["total"]
-                badge_2 = package["badges"]["public"]
-                badge_3 = package["badges"]["private"]
-                badge_4 = package["badges"]["stars"]
-                md_lines += [f"| {name}    | {badge_1}  | {badge_2} | {badge_3} | {badge_4} |"]
-            md_lines += [""]
+        self._append_summary_table(md_lines)
 
         # Single dependents list
         if self.merge_packages is True:
@@ -471,28 +477,8 @@ class GithubDependentsInfo:
             md_lines += [nav_line, ""]
 
         # Summary table (only on first page)
-        if page_num == 1 and len(self.packages) > 1 and self.merge_packages is False:
-            # Summary badges if there are multiple packages
-            md_lines += [
-                self.badges["total"],
-                self.badges["public"],
-                self.badges["private"],
-                self.badges["stars"],
-                "",
-            ]
-
-            md_lines += [
-                "| Package    | Total  | Public | Private | Stars |",
-                "| :--------  | -----: | -----: | -----:  | ----: |",
-            ]
-            for package in self.packages:
-                name = "[" + package["name"] + "](#package-" + package["name"].replace("/", "").replace("@", "") + ")"
-                badge_1 = package["badges"]["total"]
-                badge_2 = package["badges"]["public"]
-                badge_3 = package["badges"]["private"]
-                badge_4 = package["badges"]["stars"]
-                md_lines += [f"| {name}    | {badge_1}  | {badge_2} | {badge_3} | {badge_4} |"]
-            md_lines += [""]
+        if page_num == 1:
+            self._append_summary_table(md_lines)
 
         # Calculate start and end indices for this page
         start_idx = (page_num - 1) * self.page_size
