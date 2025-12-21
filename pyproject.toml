@@ -67,40 +67,36 @@ pytest-html = "^4.1.1"
 pytest-cov = "^7.0.0"
 marshmallow = ">=4.1,<4.2"
 
-[tool.black]
-# https://github.com/psf/black
-target-version = ["py39"]
+
+[tool.ruff]
+target-version = "py39"
 line-length = 120
-color = true
+# Enable Pyflakes `E` and `F` codes by default.
+lint.select = [
+    "E", "W",  # see: https://pypi.org/project/pycodestyle
+    "F",  # see: https://pypi.org/project/pyflakes
+    "I",  # isort
+    "D",  # see: https://pypi.org/project/pydocstyle
+    "UP", # pyupgrade
+    "S",  # bandit
+]
 
-exclude = '''
-/(
-    \.git
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-    | env
-    | venv
-)/
-'''
-
-[tool.isort]
-# https://github.com/timothycrosley/isort/
-py_version = 39
-line_length = 120
-
-known_typing = ["typing", "types", "typing_extensions", "mypy", "mypy_extensions"]
-sections = ["FUTURE", "TYPING", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
-include_trailing_comma = true
-profile = "black"
-multi_line_output = 3
-indent = 4
-color_output = true
+[tool.ruff.lint.per-file-ignores]
+"github_dependents_info/**" = [
+    "D100",  # todo
+    "D101",  # todo
+    "D102",  # todo
+    "D103",  # todo
+    "D107",  # todo
+    "D205",  # todo
+]
+"tests/**" = [
+    "D103",
+    "D104",
+    "D400",
+    "D415",
+    "S101",
+]
 
 [tool.mypy]
 # https://mypy.readthedocs.io/en/latest/config_file.html#using-a-pyproject-toml-file

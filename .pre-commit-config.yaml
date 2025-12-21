@@ -1,36 +1,35 @@
 default_language_version:
   python: python3
 
+ci:
+  autofix_prs: true
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit suggestions"
+  autoupdate_schedule: quarterly
+  # submodules: true
+
 default_stages: [commit, push]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.5.0
+    rev: v4.6.0
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
         exclude: LICENSE
 
-  - repo: local
-    hooks:
-      - id: pyupgrade
-        name: pyupgrade
-        entry: poetry run pyupgrade --py39-plus
-        types: [python]
-        language: system
+  #- repo: https://github.com/executablebooks/mdformat
+  #  rev: 0.7.17
+  #  hooks:
+  #    - id: mdformat
+  #      additional_dependencies:
+  #        - mdformat-gfm
+  #        - mdformat-black
 
-  - repo: local
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.2
     hooks:
-      - id: isort
-        name: isort
-        entry: poetry run isort --settings-path pyproject.toml
-        types: [python]
-        language: system
-
-  - repo: local
-    hooks:
-      - id: black
-        name: black
-        entry: poetry run black --config pyproject.toml
-        types: [python]
-        language: system
+      # try to fix what is possible
+      - id: ruff
+        args: ["--fix"]
+      # perform formatting updates
+      - id: ruff-format
