@@ -71,7 +71,7 @@ marshmallow = ">=4.1,<4.2"
 [tool.ruff]
 target-version = "py39"
 line-length = 120
-# Enable Pyflakes `E` and `F` codes by default.
+# Enable standard linting rule sets by default: E/W (pycodestyle), F (pyflakes), I (isort), D (pydocstyle), UP (pyupgrade), S (bandit).
 lint.select = [
     "E", "W",  # see: https://pypi.org/project/pycodestyle
     "F",  # see: https://pypi.org/project/pyflakes

@@ -30,7 +30,7 @@ pre-commit-install:
 #* Formatters
 .PHONY: codestyle
 codestyle:
-	pre-commit run --all-files
+	poetry run pre-commit run --all-files
 
 .PHONY: formatting
 formatting: codestyle
@@ -42,7 +42,8 @@ test:
 	poetry run coverage-badge -o assets/images/coverage.svg -f
 
 .PHONY: check-codestyle
-check-codestyle: codestyle
+check-codestyle:
+	pre-commit run --all-files --hook-stage manual --show-diff-on-failure
 	poetry run darglint --verbosity 2 github_dependents_info tests
 
 .PHONY: mypy
