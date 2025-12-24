@@ -57,6 +57,7 @@ If an LLM API key is detected in the environment (for example `OPENAI_API_KEY`),
 
 - Disable with `--no-llm-summary` (or env var `GITHUB_DEPENDENTS_INFO_LLM_SUMMARY=false`)
 - Override model with `--llm-model` (or env var `GITHUB_DEPENDENTS_INFO_LLM_MODEL` / `LITELLM_MODEL`)
+- Adjust max summary length with `--llm-max-words` (or env var `GITHUB_DEPENDENTS_INFO_LLM_MAX_WORDS`)
 - The summary is cached in `--csvdirectory` (file `llm_summary_<repo>.json`) and reused on subsequent runs
 
 
@@ -272,8 +273,9 @@ _________________
 | --page-size                         | Integer | _(optional)_ Number of repositories per markdown page when pagination is enabled (default: 500)                                                                                               |
 | --llm-summary<br/> --no-llm-summary | Boolean | _(optional)_ Generate an AI usage summary in markdown output when an LLM API key is present (default: enabled)                                                                                |
 | --llm-model                         | String  | _(optional)_ LiteLLM model to use for the summary. If not set, a lightweight model is selected based on the detected API key provider                                                         |
-| --llm-max-repos                     | Integer | _(optional)_ Max dependent repos included in the summary prompt payload (default: 80)                                                                                                         |
-| --llm-timeout                       | Float   | _(optional)_ Timeout (seconds) for the summary LLM call (default: 60)                                                                                                                         |
+| --llm-max-repos                     | Integer | _(optional)_ Max dependent repos included in the summary prompt payload (default: 500)                                                                                                         |
+| --llm-max-words                     | Integer | _(optional)_ Max words for the generated summary (default: 300)                                                                                                                                |
+| --llm-timeout                       | Float   | _(optional)_ Timeout (seconds) for the summary LLM call (default: 120)                                                                                                                         |
 | -v<br/> --version                   | Boolean | _(optional)_ Displays version of github-dependents-info                                                                                                                                       |
 | --verbose                           | Boolean | _(optional)_ Verbose output                                                                                                                                                                   |
 
@@ -335,7 +337,7 @@ _________________
 
 - Generate markdown with AI summary using `OPENAI_API_KEY`
 
-    OPENAI_API_KEY=YOUR_KEY github-dependents-info --repo nvuillam/npm-groovy-lint --markdownfile ./docs/package-usage.md --llm-model gpt-5-mini
+    GEMINI_API_KEY=YOUR_KEY github-dependents-info --repo nvuillam/npm-groovy-lint --markdownfile ./docs/package-usage.md --llm-model gemini-3-flash-preview
 
 ## Use as GitHub Action
 

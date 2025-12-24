@@ -110,10 +110,15 @@ def main(
         "--llm-max-repos",
         help="Max dependent repos to include in the LLM prompt payload (default: 80).",
     ),
+    llm_max_words: int = typer.Option(
+        None,
+        "--llm-max-words",
+        help="Max words for the generated summary (default: 300).",
+    ),
     llm_timeout: float = typer.Option(
         None,
         "--llm-timeout",
-        help="Timeout (seconds) for the LLM call (default: 60).",
+        help="Timeout (seconds) for the LLM call (default: 120).",
     ),
 ) -> None:
     # Init logger
@@ -159,6 +164,8 @@ def main(
             gh_options["llm_model"] = llm_model
         if llm_max_repos is not None:
             gh_options["llm_max_repos"] = llm_max_repos
+        if llm_max_words is not None:
+            gh_options["llm_max_words"] = llm_max_words
         if llm_timeout is not None:
             gh_options["llm_timeout"] = llm_timeout
 

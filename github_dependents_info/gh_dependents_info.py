@@ -1,4 +1,5 @@
 import asyncio
+import inspect
 import json
 import logging
 import math
@@ -65,8 +66,9 @@ class GithubDependentsInfo:
         self.llm_model = (
             options.get("llm_model") or os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MODEL") or os.getenv("LITELLM_MODEL")
         )
-        self.llm_max_repos = int(options.get("llm_max_repos", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MAX_REPOS", 80)))
-        self.llm_timeout = float(options.get("llm_timeout", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_TIMEOUT", 60)))
+        self.llm_max_repos = int(options.get("llm_max_repos", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MAX_REPOS", 500)))
+        self.llm_max_words = int(options.get("llm_max_words", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MAX_WORDS", 300)))
+        self.llm_timeout = float(options.get("llm_timeout", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_TIMEOUT", 120)))
         self.llm_model_used: str | None = None
         self.llm_summary: str | None = None
         self.llm_summary_error: str | None = None
@@ -189,11 +191,11 @@ class GithubDependentsInfo:
     def _detect_llm_provider(self) -> dict | None:
         """Detect which provider API key is present and propose a lightweight default model."""
         candidates: list[tuple[str, str, str]] = [
-            ("openai", "OPENAI_API_KEY", "gpt-4o-mini"),
-            ("azure_openai", "AZURE_OPENAI_API_KEY", "gpt-4o-mini"),
+            ("openai", "OPENAI_API_KEY", "gpt-5-mini"),
+            ("azure_openai", "AZURE_OPENAI_API_KEY", "gpt-5-mini"),
             ("anthropic", "ANTHROPIC_API_KEY", "claude-3-5-haiku-latest"),
-            ("gemini", "GEMINI_API_KEY", "gemini-1.5-flash"),
-            ("google", "GOOGLE_API_KEY", "gemini-1.5-flash"),
+            ("gemini", "GEMINI_API_KEY", "gemini-3-flash-preview"),
+            ("google", "GOOGLE_API_KEY", "gemini-3-flash-preview"),
             ("mistral", "MISTRAL_API_KEY", "mistral-small-latest"),
             ("cohere", "COHERE_API_KEY", "command-r"),
             ("groq", "GROQ_API_KEY", "groq/llama-3.1-8b-instant"),
@@ -224,8 +226,7 @@ class GithubDependentsInfo:
                 self.llm_summary = summary
                 return True
         except Exception as exc:
-            if self.debug:
-                logging.warning("Failed to load cached LLM summary: %s", exc)
+            logging.warning("Failed to load cached LLM summary: %s", exc)
         return False
 
     def save_llm_summary(self) -> None:
@@ -300,12 +301,17 @@ class GithubDependentsInfo:
         model = self.llm_model or provider_info.get("default_model") or "gpt-4o-mini"
         self.llm_model_used = model
 
+        # Add provider prefix if missing (for LiteLLM compatibility)
+        if "/" not in model:
+            model = f"{provider_info['provider']}/{model}"
+
         payload = self._prepare_llm_summary_payload()
         system_prompt = (
             "You summarize GitHub 'Used by' dependents for a package. "
             "Write concise, factual Markdown. Do not invent data. "
             "Use only the provided JSON data. "
-            "Do not include top-level headings (no H1/H2). "
+            "Do not include headings (no H1/H2/H3/H4). "
+            "Add blank lines before bullet points for readability. "
             "Avoid any mention of pagination/navigation words like 'Page', 'Next', or 'Previous'."
         )
         user_prompt = (
@@ -313,7 +319,10 @@ class GithubDependentsInfo:
             "(1) popular companies/organizations using the package, "
             "(2) popular tools/ecosystems (infer from repo names), "
             "(3) notable high-star dependent repositories. "
-            "Format as Markdown with short subheadings (H3) and bullet points. Keep under 180 words.\n\n"
+            "Do not repeat data between sections (1), (2), and (3). "
+            "Format as Markdown with short sentences and bullet points. "
+            "Write in bold the names of companies/organizations and tools/ecosystems. "
+            f"Add blank lines before bullet points for readability. Keep under {self.llm_max_words} words.\n\n"
             + json.dumps(payload, ensure_ascii=False)
         )
 
@@ -339,8 +348,36 @@ class GithubDependentsInfo:
                 self.save_llm_summary()
         except Exception as exc:
             self.llm_summary_error = str(exc)
+            logging.warning("Failed to generate LLM summary: %s", exc)
+        finally:
+            # LiteLLM can keep async clients around. Ensure they're closed before
+            # asyncio.run() tears down the event loop to avoid:
+            # RuntimeWarning: coroutine 'close_litellm_async_clients' was never awaited
+            await self._maybe_close_litellm_async_clients()
+
+    async def _maybe_close_litellm_async_clients(self) -> None:
+        """Best-effort cleanup for LiteLLM async clients."""
+        try:
+            import litellm  # type: ignore
+
+            close_fn = getattr(litellm, "close_litellm_async_clients", None)
+            if close_fn is None:
+                utils = getattr(litellm, "utils", None)
+                close_fn = getattr(utils, "close_litellm_async_clients", None) if utils else None
+
+            if close_fn is None:
+                return
+
+            if inspect.iscoroutinefunction(close_fn):
+                await close_fn()
+                return
+
+            result = close_fn()
+            if inspect.isawaitable(result):
+                await result
+        except Exception as exc:
             if self.debug:
-                logging.warning("Failed to generate LLM summary: %s", exc)
+                logging.debug("LiteLLM async client cleanup skipped: %s", exc)
 
     def _extract_owner_repo(self, dependent_row):
         repo_anchor = dependent_row.find("a", {"data-hovercard-type": "repository"})
@@ -495,6 +532,10 @@ class GithubDependentsInfo:
         if self.json_output is True:
             print(json.dumps(self.result, indent=4))
         else:
+            if self.llm_summary_enabled and self.llm_summary:
+                print("LLM Summary:\n")
+                print(self.llm_summary)
+                print("\n")
             print("Total: " + str(self.total_sum))
             print("Public: " + str(self.total_public_sum) + " (" + str(self.total_stars_sum) + " stars)")
             print("Private: " + str(self.total_private_sum))
