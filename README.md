@@ -47,13 +47,13 @@ This package uses GitHub HTML to collect dependents information and can:
 If an LLM API key is detected in the environment (for example `OPENAI_API_KEY`), the tool will call a lightweight model (via `litellm`) to generate a short **usage summary** and include it in the generated markdown.
 
 - Supported provider env vars (most common):
-    - OpenAI: `OPENAI_API_KEY`
-    - Azure OpenAI: `AZURE_OPENAI_API_KEY`
-    - Anthropic: `ANTHROPIC_API_KEY`
-    - Google Gemini: `GEMINI_API_KEY` (or `GOOGLE_API_KEY`)
-    - Mistral: `MISTRAL_API_KEY`
-    - Cohere: `COHERE_API_KEY`
-    - Groq: `GROQ_API_KEY`
+  - OpenAI: `OPENAI_API_KEY`
+  - Azure OpenAI: `AZURE_OPENAI_API_KEY`
+  - Anthropic: `ANTHROPIC_API_KEY`
+  - Google Gemini: `GEMINI_API_KEY` (or `GOOGLE_API_KEY`)
+  - Mistral: `MISTRAL_API_KEY`
+  - Cohere: `COHERE_API_KEY`
+  - Groq: `GROQ_API_KEY`
 
 - Disable with `--no-llm-summary` (or env var `GITHUB_DEPENDENTS_INFO_LLM_SUMMARY=false`)
 - Override model with `--llm-model` (or env var `GITHUB_DEPENDENTS_INFO_LLM_MODEL` / `LITELLM_MODEL`)
@@ -256,26 +256,26 @@ _________________
     github-dependents-info [OPTIONS]
 ```
 
-| Parameter                         | Type    | Description                                                                                                                                                                                   |
-|-----------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| --repo                            | String  | Repository. Example: `oxsecurity/megalinter`                                                                                                                                                  |
-| -b<br/> --badgemarkdownfile       | String  | _(optional)_ Path to markdown file where to insert/update **Used by** badge <br/> (must contain tags `<!-- gh-dependents-info-used-by-start -->` … `<!-- gh-dependents-info-used-by-end -->`) |
-| -s<br/> --sort                    | String  | _(optional)_ Sort order: name (default) or stars                                                                                                                                              |
-| -x<br/> --minstars                | String  | _(optional)_ If set, filters repositories to keep only those with more than X stars                                                                                                           |
-| -m<br/> --markdownfile            | String  | _(optional)_ Output markdown file file                                                                                                                                                        |
-| -d<br/> --docurl                  | String  | _(optional)_ Hyperlink to use when clicking on badge markdown file badge. (Default: link to markdown file)                                                                                    |
-| -p<br/> --mergepackages           | String  | _(optional)_ In case of multiple packages, merge their stats in a single one in markdown and json output                                                                                      |
-| -j<br/> --json                    | String  | _(optional)_ Output in json format                                                                                                                                                            |
-| -u<br/> --owner                   | String  | _(optional)_ If set, filters repositories to keep only those owned by the specified user/organization                                                                                         |
-| -n<br/> --max-scraped-pages       | Integer | _(optional)_ Maximum number of GitHub pages to scrape per package (0 uses all available pages)                                                                                                |
-| --pagination<br/> --no-pagination | Boolean | _(optional)_ Enable (default) or disable pagination when writing markdown output                                                                                                              |
-| --page-size                       | Integer | _(optional)_ Number of repositories per markdown page when pagination is enabled (default: 500)                                                                                               |
-| --llm-summary<br/> --no-llm-summary | Boolean | _(optional)_ Generate an AI usage summary in markdown output when an LLM API key is present (default: enabled)                                                                              |
-| --llm-model                        | String  | _(optional)_ LiteLLM model to use for the summary. If not set, a lightweight model is selected based on the detected API key provider                                                        |
-| --llm-max-repos                    | Integer | _(optional)_ Max dependent repos included in the summary prompt payload (default: 80)                                                                                                         |
-| --llm-timeout                      | Float   | _(optional)_ Timeout (seconds) for the summary LLM call (default: 60)                                                                                                                         |
-| -v<br/> --version                 | Boolean | _(optional)_ Displays version of github-dependents-info                                                                                                                                       |
-| --verbose                         | Boolean | _(optional)_ Verbose output                                                                                                                                                                   |
+| Parameter                           | Type    | Description                                                                                                                                                                                   |
+|-------------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --repo                              | String  | Repository. Example: `oxsecurity/megalinter`                                                                                                                                                  |
+| -b<br/> --badgemarkdownfile         | String  | _(optional)_ Path to markdown file where to insert/update **Used by** badge <br/> (must contain tags `<!-- gh-dependents-info-used-by-start -->` … `<!-- gh-dependents-info-used-by-end -->`) |
+| -s<br/> --sort                      | String  | _(optional)_ Sort order: name (default) or stars                                                                                                                                              |
+| -x<br/> --minstars                  | String  | _(optional)_ If set, filters repositories to keep only those with more than X stars                                                                                                           |
+| -m<br/> --markdownfile              | String  | _(optional)_ Output markdown file file                                                                                                                                                        |
+| -d<br/> --docurl                    | String  | _(optional)_ Hyperlink to use when clicking on badge markdown file badge. (Default: link to markdown file)                                                                                    |
+| -p<br/> --mergepackages             | String  | _(optional)_ In case of multiple packages, merge their stats in a single one in markdown and json output                                                                                      |
+| -j<br/> --json                      | String  | _(optional)_ Output in json format                                                                                                                                                            |
+| -u<br/> --owner                     | String  | _(optional)_ If set, filters repositories to keep only those owned by the specified user/organization                                                                                         |
+| -n<br/> --max-scraped-pages         | Integer | _(optional)_ Maximum number of GitHub pages to scrape per package (0 uses all available pages)                                                                                                |
+| --pagination<br/> --no-pagination   | Boolean | _(optional)_ Enable (default) or disable pagination when writing markdown output                                                                                                              |
+| --page-size                         | Integer | _(optional)_ Number of repositories per markdown page when pagination is enabled (default: 500)                                                                                               |
+| --llm-summary<br/> --no-llm-summary | Boolean | _(optional)_ Generate an AI usage summary in markdown output when an LLM API key is present (default: enabled)                                                                                |
+| --llm-model                         | String  | _(optional)_ LiteLLM model to use for the summary. If not set, a lightweight model is selected based on the detected API key provider                                                         |
+| --llm-max-repos                     | Integer | _(optional)_ Max dependent repos included in the summary prompt payload (default: 80)                                                                                                         |
+| --llm-timeout                       | Float   | _(optional)_ Timeout (seconds) for the summary LLM call (default: 60)                                                                                                                         |
+| -v<br/> --version                   | Boolean | _(optional)_ Displays version of github-dependents-info                                                                                                                                       |
+| --verbose                           | Boolean | _(optional)_ Verbose output                                                                                                                                                                   |
 
 Badge tags example (the tool replaces everything between the markers):
 
