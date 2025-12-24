@@ -4,6 +4,7 @@ import logging
 import math
 import os
 import re
+from collections import Counter
 from pathlib import Path
 
 import httpx
@@ -54,6 +55,21 @@ class GithubDependentsInfo:
         self.http_retry_initial_delay = options.get("http_retry_initial_delay", max(self.time_delay, 1.0))
         self.http_retry_backoff = options.get("http_retry_backoff", 2.0)
         self.http_retry_max_delay = options.get("http_retry_max_delay", 60.0)
+
+        # LLM summary options (used only when an API key is present)
+        llm_summary_env = os.getenv("GITHUB_DEPENDENTS_INFO_LLM_SUMMARY")
+        llm_summary_default = True
+        if llm_summary_env is not None:
+            llm_summary_default = llm_summary_env.strip().lower() not in {"0", "false", "no", "off"}
+        self.llm_summary_enabled = options.get("llm_summary", llm_summary_default)
+        self.llm_model = (
+            options.get("llm_model") or os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MODEL") or os.getenv("LITELLM_MODEL")
+        )
+        self.llm_max_repos = int(options.get("llm_max_repos", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MAX_REPOS", 80)))
+        self.llm_timeout = float(options.get("llm_timeout", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_TIMEOUT", 60)))
+        self.llm_model_used: str | None = None
+        self.llm_summary: str | None = None
+        self.llm_summary_error: str | None = None
 
     def collect(self):
         """Main entry point - synchronous wrapper for async collection."""
@@ -164,8 +180,167 @@ class GithubDependentsInfo:
         self.badges["public"] = self.build_badge("Used%20by%20(public)", self.total_public_sum)
         self.badges["private"] = self.build_badge("Used%20by%20(private)", self.total_private_sum)
         self.badges["stars"] = self.build_badge("Used%20by%20(stars)", self.total_stars_sum)
+
+        # Optional: generate an LLM summary if an API key is present (and reuse cached summary when available)
+        await self.maybe_generate_llm_summary()
         # Build final result
         return self.build_result()
+
+    def _detect_llm_provider(self) -> dict | None:
+        """Detect which provider API key is present and propose a lightweight default model."""
+        candidates: list[tuple[str, str, str]] = [
+            ("openai", "OPENAI_API_KEY", "gpt-4o-mini"),
+            ("azure_openai", "AZURE_OPENAI_API_KEY", "gpt-4o-mini"),
+            ("anthropic", "ANTHROPIC_API_KEY", "claude-3-5-haiku-latest"),
+            ("gemini", "GEMINI_API_KEY", "gemini-1.5-flash"),
+            ("google", "GOOGLE_API_KEY", "gemini-1.5-flash"),
+            ("mistral", "MISTRAL_API_KEY", "mistral-small-latest"),
+            ("cohere", "COHERE_API_KEY", "command-r"),
+            ("groq", "GROQ_API_KEY", "groq/llama-3.1-8b-instant"),
+        ]
+        for provider, env_var, default_model in candidates:
+            if os.getenv(env_var):
+                return {"provider": provider, "env_var": env_var, "default_model": default_model}
+        return None
+
+    def _llm_api_key_present(self) -> bool:
+        return self._detect_llm_provider() is not None
+
+    def _llm_summary_cache_path(self) -> Path | None:
+        if self.csv_directory is None:
+            return None
+        return self.csv_directory / f"llm_summary_{self.repo}.json".replace("/", "-")
+
+    def load_llm_summary(self) -> bool:
+        """Load cached LLM summary from progress directory if present."""
+        cache_path = self._llm_summary_cache_path()
+        if cache_path is None or not cache_path.exists():
+            return False
+        try:
+            with open(cache_path, encoding="utf-8") as f:
+                payload = json.load(f)
+            summary = (payload.get("summary") or "").strip()
+            if summary:
+                self.llm_summary = summary
+                return True
+        except Exception as exc:
+            if self.debug:
+                logging.warning("Failed to load cached LLM summary: %s", exc)
+        return False
+
+    def save_llm_summary(self) -> None:
+        """Persist LLM summary into progress directory if enabled."""
+        cache_path = self._llm_summary_cache_path()
+        if cache_path is None:
+            return
+        if not self.llm_summary:
+            return
+        try:
+            self.csv_directory.mkdir(parents=False, exist_ok=True)
+            payload = {
+                "repo": self.repo,
+                "model": self.llm_model_used or self.llm_model,
+                "summary": self.llm_summary,
+            }
+            with open(cache_path, "w", encoding="utf-8") as f:
+                json.dump(payload, f, indent=2)
+        except Exception as exc:
+            if self.debug:
+                logging.warning("Failed to save cached LLM summary: %s", exc)
+
+    def _prepare_llm_summary_payload(self) -> dict:
+        """Prepare a compact data payload for the LLM prompt."""
+        repos_sorted = sorted(self.all_public_dependent_repos, key=lambda r: r.get("stars", 0), reverse=True)
+        repos_top = repos_sorted[: max(0, self.llm_max_repos)]
+
+        owners = [r.get("owner") for r in self.all_public_dependent_repos if r.get("owner")]
+        owners_counter = Counter(owners)
+        owners_top = owners_counter.most_common(25)
+
+        owner_stars: dict[str, int] = {}
+        for r in self.all_public_dependent_repos:
+            owner = r.get("owner")
+            if not owner:
+                continue
+            owner_stars[owner] = owner_stars.get(owner, 0) + int(r.get("stars", 0) or 0)
+        owners_top_by_stars = sorted(owner_stars.items(), key=lambda kv: kv[1], reverse=True)[:25]
+
+        return {
+            "source_repo": self.repo,
+            "packages": [p.get("name") for p in self.packages] if self.packages else [self.repo],
+            "totals": {
+                "dependents_total": self.total_sum,
+                "dependents_public": self.total_public_sum,
+                "dependents_private": self.total_private_sum,
+                "public_dependents_total_stars": self.total_stars_sum,
+            },
+            "top_dependents_by_stars": [
+                {"name": r.get("name"), "stars": int(r.get("stars", 0) or 0)} for r in repos_top
+            ],
+            "top_owners_by_dependent_count": [{"owner": o, "count": c} for (o, c) in owners_top],
+            "top_owners_by_total_stars": [{"owner": o, "stars": s} for (o, s) in owners_top_by_stars],
+        }
+
+    async def maybe_generate_llm_summary(self) -> None:
+        """Generate an LLM-based summary if possible; otherwise do nothing."""
+        if not self.llm_summary_enabled:
+            return
+        if self.llm_summary:
+            return
+
+        # Reuse cached summary when resuming from CSV progress
+        if self.load_llm_summary():
+            return
+
+        provider_info = self._detect_llm_provider()
+        if provider_info is None:
+            return
+
+        # Default model if none was provided
+        model = self.llm_model or provider_info.get("default_model") or "gpt-4o-mini"
+        self.llm_model_used = model
+
+        payload = self._prepare_llm_summary_payload()
+        system_prompt = (
+            "You summarize GitHub 'Used by' dependents for a package. "
+            "Write concise, factual Markdown. Do not invent data. "
+            "Use only the provided JSON data. "
+            "Do not include top-level headings (no H1/H2). "
+            "Avoid any mention of pagination/navigation words like 'Page', 'Next', or 'Previous'."
+        )
+        user_prompt = (
+            "Given this JSON data, write a short summary that highlights: "
+            "(1) popular companies/organizations using the package, "
+            "(2) popular tools/ecosystems (infer from repo names), "
+            "(3) notable high-star dependent repositories. "
+            "Format as Markdown with short subheadings (H3) and bullet points. Keep under 180 words.\n\n"
+            + json.dumps(payload, ensure_ascii=False)
+        )
+
+        try:
+            from litellm import acompletion  # type: ignore
+
+            response = await acompletion(
+                model=model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                temperature=0.2,
+                timeout=self.llm_timeout,
+            )
+
+            content = None
+            if hasattr(response, "choices") and response.choices:
+                message = response.choices[0].message
+                content = getattr(message, "content", None)
+            if content:
+                self.llm_summary = str(content).strip()
+                self.save_llm_summary()
+        except Exception as exc:
+            self.llm_summary_error = str(exc)
+            if self.debug:
+                logging.warning("Failed to generate LLM summary: %s", exc)
 
     def _extract_owner_repo(self, dependent_row):
         repo_anchor = dependent_row.find("a", {"data-hovercard-type": "repository"})
@@ -296,6 +471,8 @@ class GithubDependentsInfo:
                     self.total_stars_sum += (
                         package["public_dependent_stars"] if package["public_dependent_stars"] else 0
                     )
+        # Load cached summary if present
+        self.load_llm_summary()
         return len(self.packages) > 0
 
     # Build result
@@ -307,6 +484,7 @@ class GithubDependentsInfo:
             "private_dependents_number": self.total_private_sum,
             "public_dependents_stars": self.total_stars_sum,
             "badges": self.badges,
+            "llm_summary": self.llm_summary,
         }
         if self.merge_packages is False:
             self.result["packages"] = (self.packages,)
@@ -385,6 +563,10 @@ class GithubDependentsInfo:
 
         # Summary table
         self._append_summary_table(md_lines)
+
+        # Optional LLM summary
+        if self.llm_summary:
+            md_lines += ["## Summary", "", self.llm_summary.strip(), ""]
 
         # Single dependents list
         if self.merge_packages is True:
@@ -477,6 +659,10 @@ class GithubDependentsInfo:
         # Summary table (only on first page)
         if page_num == 1:
             self._append_summary_table(md_lines)
+
+            # Optional LLM summary (only on first page)
+            if self.llm_summary:
+                md_lines += ["## Summary", "", self.llm_summary.strip(), ""]
 
         # Calculate start and end indices for this page
         start_idx = (page_num - 1) * self.page_size

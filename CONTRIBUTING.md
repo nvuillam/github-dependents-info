@@ -14,6 +14,14 @@ make pre-commit-install
 
 To activate your `virtualenv` run `poetry shell`.
 
+## Local install from sources
+
+If you want to install `github-dependents-info` from this repository’s sources into your currently active Python environment (for example a local venv), run:
+
+```bash
+make install-local
+```
+
 ## Codestyle
 
 After installation you may execute code formatting.

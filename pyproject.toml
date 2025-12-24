@@ -46,6 +46,7 @@ beautifulsoup4 = "4.14.3"
 pandas = ">=2.3.3,<3.0"
 httpx = "^0.28.1"
 idna = ">=3.11"
+litellm = ">=1.60.0,<2.0"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.5"
