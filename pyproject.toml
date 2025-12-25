@@ -40,7 +40,8 @@ Repository = "https://github.com/nvuillam/github-dependents-info"
 python = ">=3.10,<4.0"
 
 click = ">=8.3.1,<8.4"
-typer = {extras = ["standard"], version = ">=0.20,<0.21"}
+typer = {extras = ["standard"], version = ">=0.19,<0.20"}
+typer-slim = ">=0.19,<0.20"
 rich = ">=14.2,<14.3"
 beautifulsoup4 = "4.14.3"
 pandas = ">=2.3.3,<3.0"
@@ -60,7 +61,7 @@ pydocstyle = "^6.3.0"
 pylint = "^4.0.0"
 pytest = "^9.0.0"
 pyupgrade = "^3.4.0"
-safety = "^3.0.1"
+safety = "^3.7.0"
 coverage = "^7.3.4"
 coverage-badge = "^1.1.0"
 cryptography = ">=44.0.1"
