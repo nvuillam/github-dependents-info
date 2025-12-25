@@ -42,25 +42,6 @@ This package uses GitHub HTML to collect dependents information and can:
 - Keep huge ecosystems manageable with pagination controls (`--max-scraped-pages`, `--pagination/--no-pagination`, `--page-size`)
 - Fetch dependents faster thanks to asynchronous `httpx` requests and parallelized page scraping
 
-### AI usage summary (optional)
-
-If an LLM API key is detected in the environment (for example `OPENAI_API_KEY`), the tool will call a lightweight model (via `litellm`) to generate a short **usage summary** and include it in the generated markdown.
-
-- Supported provider env vars (most common):
-  - OpenAI: `OPENAI_API_KEY`
-  - Azure OpenAI: `AZURE_OPENAI_API_KEY`
-  - Anthropic: `ANTHROPIC_API_KEY`
-  - Google Gemini: `GEMINI_API_KEY` (or `GOOGLE_API_KEY`)
-  - Mistral: `MISTRAL_API_KEY`
-  - Cohere: `COHERE_API_KEY`
-  - Groq: `GROQ_API_KEY`
-
-- Disable with `--no-llm-summary` (or env var `GITHUB_DEPENDENTS_INFO_LLM_SUMMARY=false`)
-- Override model with `--llm-model` (or env var `GITHUB_DEPENDENTS_INFO_LLM_MODEL` / `LITELLM_MODEL`)
-- Adjust max summary length with `--llm-max-words` (or env var `GITHUB_DEPENDENTS_INFO_LLM_MAX_WORDS`)
-- The summary is cached in `--csvdirectory` (file `llm_summary_<repo>.json`) and reused on subsequent runs
-
-
 Badges example
 
 [![](https://img.shields.io/static/v1?label=Used%20by&message=15&color=informational&logo=slickpic)](https://github.com/nvuillam/npm-groovy-lint/network/dependents)
@@ -338,6 +319,28 @@ _________________
 - Generate markdown with AI summary using `OPENAI_API_KEY`
 
     GEMINI_API_KEY=YOUR_KEY github-dependents-info --repo nvuillam/npm-groovy-lint --markdownfile ./docs/package-usage.md --llm-model gemini-3-flash-preview
+
+
+## AI usage summary (optional)
+
+If an LLM API key is detected in the environment (for example `OPENAI_API_KEY`), the tool will call a lightweight model (via `litellm`) to generate a short **usage summary** and include it in the generated markdown.
+
+![](docs/ai-summary.png)
+
+- Supported provider env vars (most common):
+  - OpenAI: `OPENAI_API_KEY`
+  - Azure OpenAI: `AZURE_OPENAI_API_KEY`
+  - Anthropic: `ANTHROPIC_API_KEY`
+  - Google Gemini: `GEMINI_API_KEY` (or `GOOGLE_API_KEY`)
+  - Mistral: `MISTRAL_API_KEY`
+  - Cohere: `COHERE_API_KEY`
+  - Groq: `GROQ_API_KEY`
+
+- Disable with `--no-llm-summary` (or env var `GITHUB_DEPENDENTS_INFO_LLM_SUMMARY=false`)
+- Override model with `--llm-model` (or env var `GITHUB_DEPENDENTS_INFO_LLM_MODEL` / `LITELLM_MODEL`)
+- Adjust max summary length with `--llm-max-words` (or env var `GITHUB_DEPENDENTS_INFO_LLM_MAX_WORDS`)
+- The summary is cached in `--csvdirectory` (file `llm_summary_<repo>.json`) and reused on subsequent runs
+
 
 ## Use as GitHub Action
 
