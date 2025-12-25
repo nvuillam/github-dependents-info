@@ -73,6 +73,26 @@ inputs:
     description: "Number of results per page when pagination is enabled"
     required: false
     default: "500"
+  llm-summary:
+    description: "Enable or disable AI usage summary generation when an LLM API key is present"
+    required: false
+    default: "true"
+  llm-model:
+    description: "LiteLLM model to use for the AI usage summary (example: gpt-4o-mini, gemini-3-flash-preview)"
+    required: false
+    default: ""
+  llm-max-repos:
+    description: "Max dependent repos included in the summary prompt payload"
+    required: false
+    default: "500"
+  llm-max-words:
+    description: "Max words for the generated summary"
+    required: false
+    default: "250"
+  llm-timeout:
+    description: "Timeout (seconds) for the summary LLM call"
+    required: false
+    default: "120"
 
 runs:
   using: "docker"
@@ -85,6 +105,11 @@ runs:
 
       max_scraped_pages=$(printenv 'INPUT_MAX-SCRAPED-PAGES' 2>/dev/null || true)
       page_size=$(printenv 'INPUT_PAGE-SIZE' 2>/dev/null || true)
+      llm_summary=$(printenv 'INPUT_LLM-SUMMARY' 2>/dev/null || true)
+      llm_model=$(printenv 'INPUT_LLM-MODEL' 2>/dev/null || true)
+      llm_max_repos=$(printenv 'INPUT_LLM-MAX-REPOS' 2>/dev/null || true)
+      llm_max_words=$(printenv 'INPUT_LLM-MAX-WORDS' 2>/dev/null || true)
+      llm_timeout=$(printenv 'INPUT_LLM-TIMEOUT' 2>/dev/null || true)
 
       set -- github-dependents-info "--repo=${INPUT_REPO}"
 
@@ -138,6 +163,28 @@ runs:
 
       if [ -n "$page_size" ] && [ "$page_size" != "" ]; then
         set -- "$@" "--page-size=${page_size}"
+      fi
+
+      if [ "${llm_summary:-true}" = "false" ]; then
+        set -- "$@" "--no-llm-summary"
+      elif [ "${llm_summary:-}" = "true" ]; then
+        set -- "$@" "--llm-summary"
+      fi
+
+      if [ -n "${llm_model:-}" ]; then
+        set -- "$@" "--llm-model=${llm_model}"
+      fi
+
+      if [ -n "${llm_max_repos:-}" ] && [ "${llm_max_repos}" != "" ]; then
+        set -- "$@" "--llm-max-repos=${llm_max_repos}"
+      fi
+
+      if [ -n "${llm_max_words:-}" ] && [ "${llm_max_words}" != "" ]; then
+        set -- "$@" "--llm-max-words=${llm_max_words}"
+      fi
+
+      if [ -n "${llm_timeout:-}" ] && [ "${llm_timeout}" != "" ]; then
+        set -- "$@" "--llm-timeout=${llm_timeout}"
       fi
 
       if [ "${INPUT_JSON:-false}" = "true" ]; then

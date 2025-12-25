@@ -400,8 +400,16 @@ jobs:
           # badgemarkdownfile: README.md
           # sort: stars
           # minstars: "0"
+          # llm-summary: "true" # set to "false" to disable AI usage summary
+          # llm-model: "" # optional: override LiteLLM model (example: gpt-4o-mini, gemini-3-flash-preview)
+          # llm-max-repos: "500" # optional: cap repos sent to the summary prompt
+          # llm-max-words: "250" # optional: cap summary length
+          # llm-timeout: "120" # optional: timeout (seconds) for the LLM call
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # To enable the AI usage summary, provide one of the supported provider API keys, for example:
+          # OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       # Workaround for git issues
       - name: Prepare commit
