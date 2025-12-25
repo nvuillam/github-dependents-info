@@ -96,7 +96,7 @@ inputs:
 
 runs:
   using: "docker"
-  image: "docker://nvuillam/github-dependents-info:v2.0.2"
+  image: "docker://nvuillam/github-dependents-info:v3.0.0"
   entrypoint: /bin/sh
   args:
     - -c
