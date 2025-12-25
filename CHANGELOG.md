@@ -6,7 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
-- Insert your updates here :)
+## [3.0.0] 2025-12-25
+
+- Generate AI-powered summary of dependent repositories using LiteLLM
+  - New options:
+    - `--llm-summary / --no-llm-summary`: Enable or disable the AI-generated summary (default: enabled)
+    - `--llm-model`: Specify the LiteLLM model to use (default: environment variable or default model)
+    - `--llm-max-repos`: Cap the number of repositories sent to the summary prompt (default: 500)
+    - `--llm-max-words`: Cap the length of the generated summary (default: 300)
+    - `--llm-timeout`: Set timeout (in seconds) for the LLM call (default: 120)
 
 ## [2.0.2] 2025-12-14
 

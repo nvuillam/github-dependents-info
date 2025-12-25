@@ -1,4 +1,5 @@
 import logging
+from typing import Annotated
 
 import typer
 from github_dependents_info import version
@@ -86,6 +87,39 @@ def main(
         True, "--pagination/--no-pagination", help="Enable pagination to split results into multiple files"
     ),
     page_size: int = typer.Option(500, "--page-size", help="Number of results per page when pagination is enabled"),
+    llm_summary: Annotated[
+        bool | None,
+        typer.Option(
+            "--llm-summary/--no-llm-summary",
+            help=(
+                "Generate an AI usage summary in the markdown output when an LLM API key is present "
+                "(default: enabled)."
+            ),
+        ),
+    ] = None,
+    llm_model: str = typer.Option(
+        None,
+        "--llm-model",
+        help=(
+            "LiteLLM model to use for summary generation. If not set, a lightweight model is selected "
+            "based on the API key provider."
+        ),
+    ),
+    llm_max_repos: int = typer.Option(
+        None,
+        "--llm-max-repos",
+        help="Max dependent repos to include in the LLM prompt payload (default: 80).",
+    ),
+    llm_max_words: int = typer.Option(
+        None,
+        "--llm-max-words",
+        help="Max words for the generated summary (default: 300).",
+    ),
+    llm_timeout: float = typer.Option(
+        None,
+        "--llm-timeout",
+        help="Timeout (seconds) for the LLM call (default: 120).",
+    ),
 ) -> None:
     # Init logger
     if verbose is True:
@@ -104,26 +138,38 @@ def main(
         if min_stars is None:
             min_stars = 0
         # Create GithubDependentsInfo instance
-        gh_deps_info = GithubDependentsInfo(
-            repo,
-            outputrepo=outputrepo,
-            debug=verbose,
-            overwrite_progress=overwrite,
-            sort_key=sort_key,
-            min_stars=min_stars,
-            json_output=json_output,
-            csv_directory=csv_directory,
-            badge_markdown_file=badge_markdown_file,
-            doc_url=doc_url,
-            markdown_file=markdown_file,
-            badge_color=badge_color,
-            merge_packages=merge_packages,
-            owner=owner,
-            time_delay=time_delay,
-            max_scraped_pages=max_scraped_pages,
-            pagination=pagination,
-            page_size=page_size,
-        )
+        gh_options = {
+            "outputrepo": outputrepo,
+            "debug": verbose,
+            "overwrite_progress": overwrite,
+            "sort_key": sort_key,
+            "min_stars": min_stars,
+            "json_output": json_output,
+            "csv_directory": csv_directory,
+            "badge_markdown_file": badge_markdown_file,
+            "doc_url": doc_url,
+            "markdown_file": markdown_file,
+            "badge_color": badge_color,
+            "merge_packages": merge_packages,
+            "owner": owner,
+            "time_delay": time_delay,
+            "max_scraped_pages": max_scraped_pages,
+            "pagination": pagination,
+            "page_size": page_size,
+        }
+        # Only pass LLM options if explicitly provided, to keep env-based defaults working
+        if llm_summary is not None:
+            gh_options["llm_summary"] = llm_summary
+        if llm_model is not None:
+            gh_options["llm_model"] = llm_model
+        if llm_max_repos is not None:
+            gh_options["llm_max_repos"] = llm_max_repos
+        if llm_max_words is not None:
+            gh_options["llm_max_words"] = llm_max_words
+        if llm_timeout is not None:
+            gh_options["llm_timeout"] = llm_timeout
+
+        gh_deps_info = GithubDependentsInfo(repo, **gh_options)
         # Collect data
         gh_deps_info.collect()
         # Write output markdown

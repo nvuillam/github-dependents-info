@@ -23,6 +23,10 @@ install:
 	poetry install -n --with dev
 	-poetry run mypy --install-types --non-interactive ./
 
+.PHONY: install-local
+install-local:
+	$(PYTHON) -m pip install -e .
+
 .PHONY: pre-commit-install
 pre-commit-install:
 	poetry run pre-commit install
