@@ -67,7 +67,7 @@ coverage-badge = "^1.1.0"
 cryptography = ">=44.0.1"
 pytest-html = "^4.1.1"
 pytest-cov = "^7.0.0"
-marshmallow = ">=4.1,<4.2"
+marshmallow = ">=4.1,<4.3"
 
 [tool.black]
 # https://github.com/psf/black
