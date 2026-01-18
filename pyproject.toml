@@ -40,8 +40,8 @@ Repository = "https://github.com/nvuillam/github-dependents-info"
 python = ">=3.10,<4.0"
 
 click = ">=8.3.1,<8.4"
-typer = {extras = ["standard"], version = ">=0.19,<0.20"}
-typer-slim = ">=0.19,<0.20"
+typer = {extras = ["standard"], version = ">=0.21,<0.22"}
+typer-slim = ">=0.21,<0.22"
 rich = ">=14.2,<14.3"
 beautifulsoup4 = "4.14.3"
 pandas = ">=2.3.3,<3.0"
@@ -67,7 +67,7 @@ coverage-badge = "^1.1.0"
 cryptography = ">=44.0.1"
 pytest-html = "^4.1.1"
 pytest-cov = "^7.0.0"
-marshmallow = ">=4.1,<4.2"
+marshmallow = ">=4.2,<4.3"
 
 [tool.black]
 # https://github.com/psf/black
