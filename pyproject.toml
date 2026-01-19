@@ -50,7 +50,7 @@ idna = ">=3.11"
 litellm = ">=1.60.0,<2.0"
 
 [tool.poetry.group.dev.dependencies]
-bandit = "^1.7.5"
+bandit = "^1.9.3"
 black = "^25.0.0"
 darglint = "^1.8.1"
 isort = {extras = ["colors"], version = "^7.0.0"}
