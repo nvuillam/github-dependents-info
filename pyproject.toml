@@ -53,7 +53,7 @@ litellm = ">=1.60.0,<2.0"
 bandit = "^1.7.5"
 black = "^25.0.0"
 darglint = "^1.8.1"
-isort = {extras = ["colors"], version = "^7.0.0"}
+isort = {extras = ["colors"], version = "^8.0.0"}
 mypy = "^1.8"
 mypy-extensions = "^1.0.0"
 pre-commit = "^4.0.0"
