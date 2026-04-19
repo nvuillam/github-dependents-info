@@ -2,6 +2,11 @@
 SHELL := /usr/bin/env bash
 PYTHON := python
 PYTHONPATH := `pwd`
+PYTEST_ARGS :=
+
+ifdef CI
+PYTEST_ARGS += -vv -rA --durations=0 --durations-min=0
+endif
 
 #* Docker variables
 IMAGE := github_dependents_info
@@ -43,7 +48,7 @@ formatting: codestyle
 #* Linting
 .PHONY: test
 test:
-	PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=github_dependents_info tests/
+	PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml $(PYTEST_ARGS) --cov-report=html --cov=github_dependents_info tests/
 	poetry run coverage-badge -o assets/images/coverage.svg -f
 
 .PHONY: check-codestyle
