@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
+## [3.1.0] 2026-04-20
+
+- Upgrade dependencies
+
 ## [3.0.0] 2025-12-25
 
 - Generate AI-powered summary of dependent repositories using LiteLLM
