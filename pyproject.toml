@@ -40,18 +40,16 @@ Repository = "https://github.com/nvuillam/github-dependents-info"
 python = ">=3.10,<4.0"
 
 click = ">=8.3.1,<8.4"
-typer = {extras = ["standard"], version = ">=0.24,<0.25"}
-typer-slim = ">=0.24,<0.25"
+typer = {extras = ["standard"], version = ">=0.23,<0.24"}
 rich = ">=14.3,<14.4"
 beautifulsoup4 = "4.14.3"
 pandas = ">=2.3.3,<3.0"
 httpx = "^0.28.1"
 idna = ">=3.11"
-litellm = ">=1.60.0,<2.0"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.5"
-black = "^25.0.0"
+black = ">=26.3.1"
 darglint = "^1.8.1"
 isort = {extras = ["colors"], version = "^7.0.0"}
 mypy = "^1.8"
@@ -64,10 +62,22 @@ pyupgrade = "^3.4.0"
 safety = "^3.7.0"
 coverage = "^7.3.4"
 coverage-badge = "^1.1.0"
-cryptography = ">=44.0.1"
+cryptography = ">=46.0.7"
 pytest-html = "^4.1.1"
 pytest-cov = "^7.0.0"
 marshmallow = ">=4.3,<4.4"
+authlib = ">=1.7.0"
+requests = ">=2.33.1"
+urllib3 = ">=2.6.3"
+filelock = ">=3.20.4"
+virtualenv = ">=20.39.1"
+nltk = ">=3.9.4"
+
+
+[[tool.poetry.source]]
+name = "safety"
+url = "https://pkgs.safetycli.com/repository/opensource/project/github-dependents-info/pypi/simple/"
+priority = "primary"
 
 [tool.black]
 # https://github.com/psf/black
