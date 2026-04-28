@@ -70,7 +70,7 @@ authlib = ">=1.7.0"
 requests = ">=2.33.1"
 urllib3 = ">=2.6.3"
 filelock = ">=3.20.4"
-virtualenv = ">=20.39.1"
+virtualenv = ">=21.3.0"
 nltk = ">=3.9.4"
 
 
