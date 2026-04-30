@@ -40,7 +40,7 @@ Repository = "https://github.com/nvuillam/github-dependents-info"
 python = ">=3.10,<4.0"
 
 click = ">=8.3.3,<8.4"
-typer = ">=0.25,<0.26"
+typer = ">=0.25.1,<0.26"
 rich = ">=15,<15.1"
 beautifulsoup4 = "4.14.3"
 pandas = ">=2.3.3,<3.0"
