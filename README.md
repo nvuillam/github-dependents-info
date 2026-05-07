@@ -387,14 +387,15 @@ jobs:
     steps:
       # Git Checkout
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+          persist-credentials: false
 
       # Collect data & generate markdown
       - name: GitHub Dependents Info
-        uses: nvuillam/github-dependents-info@v1.6.3 # If you want to always have the latest version, you can use nvuillam/github-dependents-info@main :)
+        uses: nvuillam/github-dependents-info@fa4a7bc373174a9060ad9935ee32557eef05ea89 # v1.6.3
         # See documentation for variables details: https://github.com/nvuillam/github-dependents-info?tab=readme-ov-file#%EF%B8%8F-usage
         with:
           repo: ${{ github.repository }}
@@ -421,7 +422,7 @@ jobs:
       # Create pull request
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN  }}
           branch: github-dependents-info-auto-update
@@ -432,8 +433,11 @@ jobs:
           labels: documentation
       - name: Create PR output
         run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          echo "Pull Request Number - ${STEPS_CPR_OUTPUTS_PULL_REQUEST_NUMBER}"
+          echo "Pull Request URL - ${STEPS_CPR_OUTPUTS_PULL_REQUEST_URL}"
+        env:
+          STEPS_CPR_OUTPUTS_PULL_REQUEST_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          STEPS_CPR_OUTPUTS_PULL_REQUEST_URL: ${{ steps.cpr.outputs.pull-request-url }}
 ```
 
 _________________
