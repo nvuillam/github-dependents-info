@@ -4,9 +4,13 @@ on:
     types:
       - published
 
+permissions: read-all
+
 jobs:
   publish:
     environment: release
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -28,7 +32,7 @@ jobs:
       - name: Publish
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: |
+        run: | # zizmor: ignore[use-trusted-publishing]
           poetry config pypi-token.pypi "$PYPI_TOKEN"
           poetry publish --build
 
@@ -39,6 +43,7 @@ jobs:
     needs: publish
     environment: release
     permissions:
+      contents: read
       packages: write
     steps:
       - name: Check out the repo

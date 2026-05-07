@@ -37,7 +37,7 @@ jobs:
 
       # Collect data & generate markdown
       - name: GitHub Dependents Info
-        uses: nvuillam/github-dependents-info@main
+        uses: nvuillam/github-dependents-info@1f2ddd1ebc43b70c4ab99b45585153518ce5539c # main
         # See documentation for variables details: https://github.com/nvuillam/github-dependents-info?tab=readme-ov-file#%EF%B8%8F-usage
         with:
           repo: ${{ github.repository }}

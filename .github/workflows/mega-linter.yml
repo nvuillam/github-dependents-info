@@ -25,21 +25,23 @@ jobs:
   build:
     name: MegaLinter
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       # Git Checkout
       - name: Checkout Code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6 # zizmor: ignore[artipacked]
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           fetch-depth: 0 # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to improve performances
-          persist-credentials: false
 
       # MegaLinter
       - name: MegaLinter
         id: ml
         # You can override MegaLinter flavor used to have faster performances
         # More info at https://megalinter.io/latest/flavors/
-        uses: oxsecurity/megalinter/flavors/python@beta
+        uses: oxsecurity/megalinter/flavors/python@331108469f4b174c6ad77f8231249b331bcdb056 # beta
         env:
           # All available variables are described in documentation
           # https://megalinter.io/latest/config-file/

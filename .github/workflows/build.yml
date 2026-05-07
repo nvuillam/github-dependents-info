@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     env:
       SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
     strategy:
