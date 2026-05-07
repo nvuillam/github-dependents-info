@@ -23,4 +23,6 @@ FILEIO_REPORTER: false
 SPELL_FILTER_REGEX_EXCLUDE: (\.bandit\.yml)
 ACTION_ZIZMOR_UNSECURED_ENV_VARIABLES:
   - GITHUB_TOKEN
+  - SAFETY_API_KEY
+  - GEMINI_API_KEY
 # DISABLE_ERRORS: true # Uncomment if you want MegaLinter to detect errors but not block CI to pass
