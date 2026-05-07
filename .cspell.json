@@ -277,6 +277,8 @@
     "wwwroot",
     "xpress",
     "yarl",
-    "zipp"
+    "zipp",
+    "zizmor",
+    "artipacked"
   ]
 }
