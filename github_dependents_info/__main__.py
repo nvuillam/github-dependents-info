@@ -129,7 +129,6 @@ def main(
     # Check minimum arguments
     if repo is None:
         raise ValueError("--repo argument is mandatory")
-    else:
         # Manage default values :)
         if outputrepo is None:
             outputrepo = repo
