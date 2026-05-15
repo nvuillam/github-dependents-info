@@ -11,6 +11,7 @@ jobs:
     environment: release
     permissions:
       contents: read
+      id-token: write # required for PyPI trusted publishing (OIDC)
     strategy:
       fail-fast: false
       matrix:
@@ -29,12 +30,10 @@ jobs:
         uses: abatilo/actions-poetry@3765cf608f2d4a72178a9fc5b918668e542b89b1 # v4.0.0
         with:
           poetry-version: ${{ matrix.poetry-version }}
-      - name: Publish
-        env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: | # zizmor: ignore[use-trusted-publishing]
-          poetry config pypi-token.pypi "$PYPI_TOKEN"
-          poetry publish --build
+      - name: Build distribution
+        run: poetry build
+      - name: Publish to PyPI (Trusted Publishing)
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
 
   # Build & push docker image
   build_push_docker:
