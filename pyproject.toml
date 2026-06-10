@@ -69,7 +69,7 @@ marshmallow = ">=4.3,<4.4"
 authlib = ">=1.7.0"
 requests = ">=2.34.2"
 urllib3 = ">=2.6.3"
-filelock = ">=3.20.4"
+filelock = ">=3.29.3"
 virtualenv = ">=21.3.0"
 nltk = ">=3.9.4"
 
