@@ -29,7 +29,7 @@ jobs:
     steps:
       # Git Checkout
       - name: Checkout Code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6 # zizmor: ignore[ref-version-mismatch]
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
@@ -37,7 +37,7 @@ jobs:
 
       # Collect data & generate markdown
       - name: GitHub Dependents Info
-        uses: nvuillam/github-dependents-info@7be385ca13e1a896ea959d5b4b8bb1ee32a55170 # main
+        uses: nvuillam/github-dependents-info@7be385ca13e1a896ea959d5b4b8bb1ee32a55170 # main # zizmor: ignore[ref-version-mismatch]
         # See documentation for variables details: https://github.com/nvuillam/github-dependents-info?tab=readme-ov-file#%EF%B8%8F-usage
         with:
           repo: ${{ github.repository }}
@@ -56,7 +56,7 @@ jobs:
       # Create pull request
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8 # zizmor: ignore[ref-version-mismatch]
         with:
           token: ${{ secrets.GITHUB_TOKEN  }}
           branch: github-dependents-info-auto-update

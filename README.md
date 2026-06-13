@@ -54,6 +54,7 @@ Badges example
 
 Note: when AI usage summary is enabled and an LLM API key is present, the JSON output also includes `llm_summary`.
 
+<!-- jscpd:ignore-start -->
 ```json
 {
     "all_public_dependent_repos": [
@@ -178,6 +179,7 @@ Note: when AI usage summary is enabled and an LLM API key is present, the JSON o
 }
 
 ```
+<!-- jscpd:ignore-end -->
 </details>
 
 <details>
