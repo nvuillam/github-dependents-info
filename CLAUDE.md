@@ -28,6 +28,10 @@ HTTP retry: `http_retry_attempts` / `http_retry_initial_delay` / `http_retry_bac
 
 Badge insertion into READMEs is done by `write_badge()`, which replaces everything between the literal markers `<!-- gh-dependents-info-used-by-start -->` and `<!-- gh-dependents-info-used-by-end -->`. Don't change these marker strings — they're a public contract used by every downstream README.
 
+## Tooling
+
+- **RTK (Rust Token Killer)** — ALWAYS use `rtk` for Bash commands when it is installed. Verify once per session with `rtk --version`. If present, **every** shell command must be prefixed: `rtk git ...`, `rtk ls`, `rtk grep`, `rtk test <cmd>`, `rtk err <cmd>`. On native Windows (PowerShell/cmd/Git Bash) the auto-rewrite hook does NOT fire — you MUST prefix manually, every command, every session. On macOS/Linux/WSL rewriting is automatic. Only skip the prefix (use `rtk proxy <cmd>` or raw) when exact unfiltered output is required (a diff you will edit from, a full stack trace). Not using `rtk` when it is available wastes tokens and is incorrect behavior.
+
 ## Commands
 
 The project uses Poetry + Make. Makefile is bash-only (`SHELL := /usr/bin/env bash`) — on Windows run targets via WSL/Git Bash or invoke the underlying poetry commands directly.
