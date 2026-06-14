@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
+## [3.2.1] 2026-06-14
+
 - Upgrade dependencies
 
 ## [3.2.0] 2026-05-15
