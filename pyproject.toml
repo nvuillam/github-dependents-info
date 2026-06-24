@@ -39,7 +39,7 @@ Repository = "https://github.com/nvuillam/github-dependents-info"
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 
-click = ">=8.4.1,<8.5"
+click = ">=8.4.2,<8.5"
 typer = ">=0.25.1,<0.26"
 rich = ">=15,<15.1"
 beautifulsoup4 = "4.15.0"
