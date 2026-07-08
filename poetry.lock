@@ -970,14 +970,14 @@ reference = "safety"
 
 [[package]]
 name = "filelock"
-version = "3.29.4"
+version = "3.29.7"
 description = "A platform independent file lock."
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "filelock-3.29.4-py3-none-any.whl", hash = "sha256:dac1648087d5115554850d113e7dd8c83ab2d38e3435dde2d4f163847e57b767"},
-    {file = "filelock-3.29.4.tar.gz", hash = "sha256:10cdb3656fc44541cdf30652a93fb10ec6b05325620eb316bd26893e4201538a"},
+    {file = "filelock-3.29.7-py3-none-any.whl", hash = "sha256:987db6f789a3a2a59f55081801b2b3697cb97e2a736b5f1a9e99b559285fbc51"},
+    {file = "filelock-3.29.7.tar.gz", hash = "sha256:5b481979797ae69e72f0b389d89a80bdd585c260c5b3f1fb9c0a5ba9bb3f195d"},
 ]
 
 [package.source]
@@ -3256,4 +3256,4 @@ reference = "safety"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "fb01ab3da0997143f3110e7bf67b40c041f7115fd25055e55c447d859d439855"
+content-hash = "f77ad47debae12bb89945a56cdea609e836daba21bab21995c4cb64ebc4362df"
