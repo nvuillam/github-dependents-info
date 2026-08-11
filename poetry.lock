@@ -3231,14 +3231,14 @@ reference = "safety"
 
 [[package]]
 name = "virtualenv"
-version = "21.5.0"
+version = "21.7.3"
 description = "Virtual Python Environment builder"
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "virtualenv-21.5.0-py3-none-any.whl", hash = "sha256:8f7c38605023688c89789f566959006af6d61c99eeeb9e58342eb780c5761e5e"},
-    {file = "virtualenv-21.5.0.tar.gz", hash = "sha256:98847aadf5e2037e0e4d2e19528eb3aca6f23906422e59a510bff231a6d32fce"},
+    {file = "virtualenv-21.7.3-py3-none-any.whl", hash = "sha256:26dfda3c34f29bf1a3ca167426a67658d59979b9954e705aef60a5f724ce1773"},
+    {file = "virtualenv-21.7.3.tar.gz", hash = "sha256:5e9e287f5c808070eea3b40403d3368248e64b24f1b60bd9a36e85ac841d2c3e"},
 ]
 
 [package.dependencies]
@@ -3256,4 +3256,4 @@ reference = "safety"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "fb01ab3da0997143f3110e7bf67b40c041f7115fd25055e55c447d859d439855"
+content-hash = "e4b95d7c93ef48ccf99f2579b9f5cfb8628d355b0cfa97317cea39047dfa58e7"
