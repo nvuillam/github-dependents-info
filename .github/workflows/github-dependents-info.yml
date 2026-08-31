@@ -37,7 +37,7 @@ jobs:
 
       # Collect data & generate markdown
       - name: GitHub Dependents Info
-        uses: nvuillam/github-dependents-info@c4d055a68a7956b96288df468b053e4759bbf8ed # main # zizmor: ignore[ref-version-mismatch]
+        uses: nvuillam/github-dependents-info@7d698339ee1647eaa437112ba0661f95490affa6 # main # zizmor: ignore[ref-version-mismatch]
         # See documentation for variables details: https://github.com/nvuillam/github-dependents-info?tab=readme-ov-file#%EF%B8%8F-usage
         with:
           repo: ${{ github.repository }}
