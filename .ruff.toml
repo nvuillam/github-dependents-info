@@ -1,1 +1,11 @@
 line-length = 200
+
+[lint.isort]
+# Mirror the isort layout configured in pyproject.toml (profile = "black" with a
+# custom known_typing section), so ruff's I001 and isort agree instead of
+# reverting each other's import order.
+section-order = ["future", "typing", "standard-library", "third-party", "first-party", "local-folder"]
+known-first-party = ["github_dependents_info"]
+
+[lint.isort.sections]
+typing = ["typing", "types", "typing_extensions"]
