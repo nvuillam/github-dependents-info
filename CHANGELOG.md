@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
+## [4.0.0] 2026-08-31
+
+- **BREAKING CHANGE**: Python `>=3.11` is now required (dropped support for Python 3.10), as `pandas` 3 does not support Python 3.10 anymore
+- Upgrade `pandas` to v3
 - Add MegaLinter skills and sub-agents, pin MegaLinter flavor and version
 - Fix MegaLinter findings: ruff cleanup (module logger, simplified option access, narrowed exception handlers), align ruff isort layout with the isort configuration
 - Replace `coverage-badge` with `anybadge` to generate the coverage badge (`coverage-badge` imports `pkg_resources`, removed in setuptools 82)
