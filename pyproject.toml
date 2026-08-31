@@ -62,7 +62,7 @@ pytest = "^9.0.0"
 pyupgrade = "^3.4.0"
 safety = "^3.8.1"
 coverage = "^7.3.4"
-coverage-badge = "^1.1.0"
+anybadge = "^1.16.0" # replaces coverage-badge, which imports pkg_resources (removed in setuptools 82)
 cryptography = ">=50.0.0"
 pytest-html = "^4.1.1"
 pytest-cov = "^7.0.0"

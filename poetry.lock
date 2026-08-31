@@ -35,6 +35,26 @@ url = "https://pkgs.safetycli.com/repository/opensource/project/github-dependent
 reference = "safety"
 
 [[package]]
+name = "anybadge"
+version = "1.16.0"
+description = "Simple, flexible badge generator for project badges."
+optional = false
+python-versions = ">=3.7"
+groups = ["dev"]
+files = [
+    {file = "anybadge-1.16.0-py3-none-any.whl", hash = "sha256:bc9ef2e20d875ee09237a15250a17b6fd7e67276f083d32a297963cdec179918"},
+    {file = "anybadge-1.16.0.tar.gz", hash = "sha256:f4e95eca834482f9932f9020ac2fe04a5ca863728b446324a8d35b1e67faab71"},
+]
+
+[package.dependencies]
+packaging = "*"
+
+[package.source]
+type = "legacy"
+url = "https://pkgs.safetycli.com/repository/opensource/project/github-dependents-info/pypi/simple"
+reference = "safety"
+
+[[package]]
 name = "anyio"
 version = "4.12.0"
 description = "High-level concurrency and networking framework on top of asyncio or Trio"
@@ -767,27 +787,6 @@ tomli = {version = "*", optional = true, markers = "python_full_version <= \"3.1
 
 [package.extras]
 toml = ["tomli ; python_full_version <= \"3.11.0a6\""]
-
-[package.source]
-type = "legacy"
-url = "https://pkgs.safetycli.com/repository/opensource/project/github-dependents-info/pypi/simple"
-reference = "safety"
-
-[[package]]
-name = "coverage-badge"
-version = "1.1.2"
-description = "Generate coverage badges for Coverage.py."
-optional = false
-python-versions = "*"
-groups = ["dev"]
-files = [
-    {file = "coverage_badge-1.1.2-py2.py3-none-any.whl", hash = "sha256:d8413ce51c91043a1692b943616b450868cbeeb0ea6a0c54a32f8318c9c96ff7"},
-    {file = "coverage_badge-1.1.2.tar.gz", hash = "sha256:fe7ed58a3b72dad85a553b64a99e963dea3847dcd0b8ddd2b38a00333618642c"},
-]
-
-[package.dependencies]
-coverage = "*"
-setuptools = "*"
 
 [package.source]
 type = "legacy"
@@ -3274,4 +3273,4 @@ reference = "safety"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "24aae56ab90bdd6dac76162aac51a9374575a1f169fd8e7a0bfa94b402d30a1c"
+content-hash = "7641078efbdcbda81212cb1e94f78b3c1832b71c736610100711708529c1a990"

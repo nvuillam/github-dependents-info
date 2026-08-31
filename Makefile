@@ -49,7 +49,7 @@ formatting: codestyle
 .PHONY: test
 test:
 	PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml $(PYTEST_ARGS) --cov-report=html --cov=github_dependents_info tests/
-	poetry run coverage-badge -o assets/images/coverage.svg -f
+	poetry run anybadge --overwrite --label=coverage --value=`poetry run coverage report --format=total` --file=assets/images/coverage.svg coverage
 
 .PHONY: check-codestyle
 check-codestyle:
@@ -71,7 +71,7 @@ lint: test check-codestyle mypy check-safety
 
 .PHONY: update-dev-deps
 update-dev-deps:
-	poetry add -D bandit@latest darglint@latest "isort[colors]@latest" mypy@latest pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest coverage-badge@latest pytest-html@latest pytest-cov@latest
+	poetry add -D bandit@latest darglint@latest "isort[colors]@latest" mypy@latest pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest anybadge@latest pytest-html@latest pytest-cov@latest
 	poetry add -D --allow-prereleases black@latest
 
 .PHONY: release-version
