@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "megalinter": {
+      "source": "oxsecurity/megalinter",
+      "sourceType": "github",
+      "skillPath": "skills/megalinter/SKILL.md",
+      "computedHash": "934646fea2e509ad652c69190dadbf99ba8e6b10ce71976d3596dbabcd233d06"
+    },
+    "megalinter-check": {
+      "source": "oxsecurity/megalinter",
+      "sourceType": "github",
+      "skillPath": "skills/megalinter-check/SKILL.md",
+      "computedHash": "64db6d651679c65ea6079e0e7079c0fe2a67f9ccd0ba74c8c993ac2653a6e4c2"
+    },
+    "megalinter-fix": {
+      "source": "oxsecurity/megalinter",
+      "sourceType": "github",
+      "skillPath": "skills/megalinter-fix/SKILL.md",
+      "computedHash": "cc99d5836e1cd092806157b19e5f8325f60564d4fce686e71bea37a11f4adabf"
+    },
+    "megalinter-setup": {
+      "source": "oxsecurity/megalinter",
+      "sourceType": "github",
+      "skillPath": "skills/megalinter-setup/SKILL.md",
+      "computedHash": "b1f0957a191e48faa9ee568bbfae2bb2605afce1f13837e395616f4f9e2ab537"
+    }
+  }
+}
