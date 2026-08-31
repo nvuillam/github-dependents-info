@@ -47,7 +47,9 @@ jobs:
           make check-codestyle
 
       - name: Run safety checks
-        if: ${{ env.SAFETY_API_KEY != '' }}
+        # Safety.io throttles concurrent scans (HTTP 429) when every matrix job
+        # calls it at once, so run the scan on a single Python version.
+        if: ${{ env.SAFETY_API_KEY != '' && matrix.python-version == '3.12' }}
         env:
           SAFETY_API_KEY: ${{ env.SAFETY_API_KEY }}
         run: |
