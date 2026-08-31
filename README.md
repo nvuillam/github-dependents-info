@@ -340,6 +340,7 @@ If an LLM API key is detected in the environment (for example `OPENAI_API_KEY`),
 - Override model with `--llm-model` (or env var `GITHUB_DEPENDENTS_INFO_LLM_MODEL` / `LITELLM_MODEL`)
 - Adjust max summary length with `--llm-max-words` (or env var `GITHUB_DEPENDENTS_INFO_LLM_MAX_WORDS`)
 - The summary is cached in `--csvdirectory` (file `llm_summary_<repo>.json`) and reused on subsequent runs
+- A previously generated summary is never lost: if a new summary can not be generated (no API key anymore, no credit left, rate limit, timeout...), the summary found in the cache or in the existing `--markdownfile` is reused
 
 
 ## Use as GitHub Action

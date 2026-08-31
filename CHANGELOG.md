@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
+- Add MegaLinter skills and sub-agents, pin MegaLinter flavor and version
+- Fix MegaLinter findings: ruff cleanup (module logger, simplified option access, narrowed exception handlers), align ruff isort layout with the isort configuration
+- Replace `coverage-badge` with `anybadge` to generate the coverage badge (`coverage-badge` imports `pkg_resources`, removed in setuptools 82)
+- Upgrade dependencies: `soupsieve`, `cryptography`, `nltk` and `setuptools` security floors
+- Never lose a previously generated AI summary: when a new summary can not be generated (no API key anymore, no credit left, rate limit, timeout...), reuse the summary found in the CSV cache or in the existing markdown file, instead of removing it from the output
+  - The AI summary is now surrounded by `<!-- gh-dependents-info-summary-start -->` and `<!-- gh-dependents-info-summary-end -->` markers so it can be found again by later runs
+
 ## [3.2.1] 2026-06-14
 
 - Upgrade dependencies
