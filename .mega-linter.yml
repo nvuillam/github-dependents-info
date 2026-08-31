@@ -19,7 +19,7 @@ DISABLE_ERRORS_LINTERS:
   - PYTHON_PYRIGHT
   - REPOSITORY_GRYPE
   - SPELL_LYCHEE
-FILTER_REGEX_EXCLUDE: (assets)
+FILTER_REGEX_EXCLUDE: (assets|\.claude/) # .claude holds vendored agent skills, not project sources
 SHOW_ELAPSED_TIME: true
 FILEIO_REPORTER: false
 FLAVOR_SUGGESTIONS: false
