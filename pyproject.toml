@@ -13,7 +13,7 @@ license-files = ["LICENSE"]
 authors = [
   {name = "nvuillam", email = "nicolas.vuillamy@gmail.com"},
 ]
-requires-python = ">=3.10,<4.0"
+requires-python = ">=3.11,<4.0"
 
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
 keywords = ["github", "dependent", "used-by", "repository", "stats", "dependencies", "using"]
@@ -37,7 +37,7 @@ Repository = "https://github.com/nvuillam/github-dependents-info"
 "github-dependents-info" = "github_dependents_info.__main__:app"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<4.0"
+python = ">=3.11,<4.0"
 
 click = ">=8.5,<8.6"
 typer = ">=0.27.1,<0.28"
