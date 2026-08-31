@@ -526,7 +526,10 @@ class GithubDependentsInfo:
                 sources_all_df.set_index("name", inplace=True)
                 source_df = pd.json_normalize(source_info).set_index("name", drop=True)
                 for column in source_df.columns:
-                    if source_df[column].dtype == object and column in sources_all_df.columns:
+                    # pandas >= 3 infers text columns as StringDtype rather than object, so a
+                    # `dtype == object` test misses them and writing text into a numeric column
+                    # raises instead of upcasting. Widen the target column for any non-numeric value.
+                    if column in sources_all_df.columns and not pd.api.types.is_numeric_dtype(source_df[column]):
                         sources_all_df[column] = sources_all_df[column].astype("object")
                     sources_all_df.loc[source_df.index, column] = source_df[column]
                 sources_all_df.reset_index(inplace=True, drop=False)
