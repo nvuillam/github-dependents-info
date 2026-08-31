@@ -45,7 +45,7 @@ rich = ">=15,<15.1"
 beautifulsoup4 = "4.15.0"
 pandas = ">=2.3.3,<3.0"
 httpx = "^0.28.1"
-idna = ">=3.14"
+idna = ">=3.19"
 soupsieve = ">=2.8.4" # security floor (CVE-2026-49476, CVE-2026-49477), pulled by beautifulsoup4
 
 [tool.poetry.group.dev.dependencies]
