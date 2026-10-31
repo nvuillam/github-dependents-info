@@ -3,11 +3,19 @@
 
 version: 2
 
+# Supply-chain hardening: every ecosystem below sets `cooldown.default-days: 7`
+# so a release must be a week old before Dependabot opens a PR for it. A
+# compromised version is usually yanked well within that window.
+# Security updates are NOT delayed: GitHub applies `cooldown` to version
+# updates only, so Dependabot alerts still raise a fix PR immediately.
+
 updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
     allow:
       - dependency-type: "all"
     commit-message:
@@ -18,6 +26,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
     allow:
       - dependency-type: "all"
     commit-message:
@@ -28,6 +38,8 @@ updates:
     directory: "/docker"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
     allow:
       - dependency-type: "all"
     commit-message:

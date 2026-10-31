@@ -29,7 +29,7 @@ jobs:
     steps:
       # Git Checkout
       - name: Checkout Code
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
@@ -37,7 +37,7 @@ jobs:
 
       # Collect data & generate markdown
       - name: GitHub Dependents Info
-        uses: nvuillam/github-dependents-info@e86edaaaba80a085e6f8d31b99a34fc3d7d2599d # main # zizmor: ignore[ref-version-mismatch]
+        uses: nvuillam/github-dependents-info@07e579a84b33f1b4153f5c7f471b2b51e896ce1c # main # zizmor: ignore[ref-version-mismatch]
         # See documentation for variables details: https://github.com/nvuillam/github-dependents-info?tab=readme-ov-file#%EF%B8%8F-usage
         with:
           repo: ${{ github.repository }}

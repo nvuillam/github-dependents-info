@@ -66,9 +66,13 @@ inputs:
     required: false
     default: "0"
   pagination:
-    description: "Enable pagination to split results into multiple files"
+    description: "Enable pagination to split results into multiple files. Set to false to write a single markdown file"
     required: false
     default: "true"
+  no-pagination:
+    description: "Set to true to disable pagination (same as pagination: false)"
+    required: false
+    default: "false"
   page-size:
     description: "Number of results per page when pagination is enabled"
     required: false
@@ -96,7 +100,7 @@ inputs:
 
 runs:
   using: "docker"
-  image: "docker://nvuillam/github-dependents-info:v3.0.0"
+  image: "docker://nvuillam/github-dependents-info:v4.0.0"
   entrypoint: /bin/sh
   args:
     - -c
@@ -104,6 +108,7 @@ runs:
       set -euo pipefail
 
       max_scraped_pages=$(printenv 'INPUT_MAX-SCRAPED-PAGES' 2>/dev/null || true)
+      no_pagination=$(printenv 'INPUT_NO-PAGINATION' 2>/dev/null || true)
       page_size=$(printenv 'INPUT_PAGE-SIZE' 2>/dev/null || true)
       llm_summary=$(printenv 'INPUT_LLM-SUMMARY' 2>/dev/null || true)
       llm_model=$(printenv 'INPUT_LLM-MODEL' 2>/dev/null || true)
@@ -157,7 +162,7 @@ runs:
         set -- "$@" "--max-scraped-pages=${max_scraped_pages}"
       fi
 
-      if [ "${INPUT_PAGINATION:-true}" = "false" ]; then
+      if [ "${INPUT_PAGINATION:-true}" = "false" ] || [ "${no_pagination:-false}" = "true" ]; then
         set -- "$@" "--no-pagination"
       fi
 

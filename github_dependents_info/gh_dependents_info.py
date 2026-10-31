@@ -13,35 +13,40 @@ import numpy as np
 import pandas as pd
 from bs4 import BeautifulSoup
 
+logger = logging.getLogger(__name__)
+
+# Markers surrounding the AI summary in generated markdown, so a previous summary
+# can be found again and reused when a new one can not be generated.
+LLM_SUMMARY_START_MARKER = "<!-- gh-dependents-info-summary-start -->"
+LLM_SUMMARY_END_MARKER = "<!-- gh-dependents-info-summary-end -->"
+
 
 class GithubDependentsInfo:
     def __init__(self, repo, **options) -> None:
         self.repo = repo
-        self.outputrepo = self.repo if "outputrepo" not in options else options["outputrepo"]
+        self.outputrepo = options.get("outputrepo", self.repo)
         if self.outputrepo is None or self.outputrepo == "" or len(self.outputrepo) < 4:
             self.outputrepo = self.repo
         self.url_init = f"https://github.com/{self.repo}/network/dependents"
         self.url_starts_with = f"/{self.repo}/network/dependents" + "?package_id="
-        self.sort_key = "name" if "sort_key" not in options else options["sort_key"]
-        self.min_stars = None if "min_stars" not in options else options["min_stars"]
-        self.json_output = True if "json_output" in options and options["json_output"] is True else False
-        self.merge_packages = True if "merge_packages" in options and options["merge_packages"] is True else False
-        self.doc_url = options["doc_url"] if "doc_url" in options else None
-        self.markdown_file = options["markdown_file"] if "markdown_file" in options else None
-        self.badge_color = options["badge_color"] if "badge_color" in options else "informational"
-        self.debug = True if "debug" in options and options["debug"] is True else False
-        self.overwrite_progress = (
-            True if "overwrite_progress" in options and options["overwrite_progress"] is True else False
-        )
+        self.sort_key = options.get("sort_key", "name")
+        self.min_stars = options.get("min_stars", None)
+        self.json_output = options.get("json_output") is True
+        self.merge_packages = options.get("merge_packages") is True
+        self.doc_url = options.get("doc_url", None)
+        self.markdown_file = options.get("markdown_file", None)
+        self.badge_color = options.get("badge_color", "informational")
+        self.debug = options.get("debug") is True
+        self.overwrite_progress = options.get("overwrite_progress") is True
         self.csv_directory = (
             Path(options["csv_directory"])
             if ("csv_directory" in options and options["csv_directory"] is not None)
             else None
         )
-        self.owner = options["owner"] if "owner" in options else None
-        self.max_scraped_pages = options["max_scraped_pages"] if "max_scraped_pages" in options else 0
+        self.owner = options.get("owner", None)
+        self.max_scraped_pages = options.get("max_scraped_pages", 0)
         self.max_concurrent_requests = options.get("max_concurrent_requests", 10)
-        self.pagination = True if "pagination" not in options else options["pagination"]
+        self.pagination = options.get("pagination", True)
         self.page_size = options.get("page_size", 500)
         self.total_sum = 0
         self.total_public_sum = 0
@@ -51,7 +56,7 @@ class GithubDependentsInfo:
         self.all_public_dependent_repos = []
         self.badges = {}
         self.result = {}
-        self.time_delay = options["time_delay"] if "time_delay" in options else 0.1
+        self.time_delay = options.get("time_delay", 0.1)
         self.http_retry_attempts = options.get("http_retry_attempts", 5)
         self.http_retry_initial_delay = options.get("http_retry_initial_delay", max(self.time_delay, 1.0))
         self.http_retry_backoff = options.get("http_retry_backoff", 2.0)
@@ -66,12 +71,13 @@ class GithubDependentsInfo:
         self.llm_model = (
             options.get("llm_model") or os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MODEL") or os.getenv("LITELLM_MODEL")
         )
-        self.llm_max_repos = int(options.get("llm_max_repos", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MAX_REPOS", 500)))
-        self.llm_max_words = int(options.get("llm_max_words", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MAX_WORDS", 300)))
-        self.llm_timeout = float(options.get("llm_timeout", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_TIMEOUT", 120)))
+        self.llm_max_repos = int(options.get("llm_max_repos", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MAX_REPOS", "500")))
+        self.llm_max_words = int(options.get("llm_max_words", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_MAX_WORDS", "300")))
+        self.llm_timeout = float(options.get("llm_timeout", os.getenv("GITHUB_DEPENDENTS_INFO_LLM_TIMEOUT", "120")))
         self.llm_model_used: str | None = None
         self.llm_summary: str | None = None
         self.llm_summary_error: str | None = None
+        self.llm_summary_reused: bool = False
 
     def collect(self):
         """Main entry point - synchronous wrapper for async collection."""
@@ -95,13 +101,13 @@ class GithubDependentsInfo:
                     if self.owner:
                         url += "&owner=" + self.owner
                     if self.debug is True:
-                        logging.info("Package " + package["name"] + ": browsing " + url + " ...")
+                        logger.info("Package " + package["name"] + ": browsing " + url + " ...")
                 else:
                     url = self.url_init
                     if self.owner:
                         url += "?owner=" + self.owner
                     if self.debug is True:
-                        logging.info("Package " + self.repo + ": browsing " + url + " ...")
+                        logger.info("Package " + self.repo + ": browsing " + url + " ...")
                 package["url"] = url
                 package["public_dependent_stars"] = 0
 
@@ -115,7 +121,7 @@ class GithubDependentsInfo:
                     result = sorted(result, key=lambda d: d[self.sort_key])
                 if self.debug is True:
                     for r in result:
-                        logging.info(r)
+                        logger.info(r)
 
                 # Build package stats
                 total_public_dependents = len(result)
@@ -151,8 +157,8 @@ class GithubDependentsInfo:
 
                 # Output
                 if self.debug is True:
-                    logging.info("Total for package: " + str(total_public_dependents))
-                    logging.info("")
+                    logger.info("Total for package: " + str(total_public_dependents))
+                    logger.info("")
                 # Save crawl progress
                 self.save_progress(package)  # only saves if csv_directory is provided
 
@@ -225,9 +231,72 @@ class GithubDependentsInfo:
             if summary:
                 self.llm_summary = summary
                 return True
-        except Exception as exc:
-            logging.warning("Failed to load cached LLM summary: %s", exc)
+        except Exception as exc:  # noqa: BLE001 - a corrupted cache must never break the run
+            logger.warning("Failed to load cached LLM summary: %s", exc)
         return False
+
+    def _extract_summary_from_markdown_content(self, content: str) -> str | None:
+        """Extract a summary previously written by github-dependents-info in a markdown content."""
+        marked = re.search(
+            re.escape(LLM_SUMMARY_START_MARKER) + "(.*?)" + re.escape(LLM_SUMMARY_END_MARKER),
+            content,
+            re.DOTALL,
+        )
+        if marked is not None:
+            block = marked.group(1)
+        else:
+            # Markdown generated before summary markers existed: fallback on the "## Summary" section
+            heading = re.search(r"^##\s+Summary\s*$", content, re.MULTILINE)
+            if heading is None:
+                return None
+            block = content[heading.end() :]
+        block = re.sub(r"^\s*##\s+Summary\s*$", "", block, count=1, flags=re.MULTILINE)
+        # Keep only the summary text: stop at the next heading, badge, table or footer
+        summary_lines: list[str] = []
+        for line in block.splitlines():
+            stripped = line.strip()
+            if stripped.startswith(("#", "[![", "|", "_Generated using [")):
+                break
+            summary_lines.append(line)
+        return "\n".join(summary_lines).strip() or None
+
+    def _load_previous_markdown_summary(self) -> str | None:
+        """Read the summary generated by a previous run in the output markdown file."""
+        if not self.markdown_file:
+            return None
+        try:
+            if not os.path.isfile(self.markdown_file):
+                return None
+            with open(self.markdown_file, encoding="utf-8") as f:
+                content = f.read()
+        except (OSError, UnicodeDecodeError) as exc:
+            logger.warning("Failed to read previous summary from %s: %s", self.markdown_file, exc)
+            return None
+        return self._extract_summary_from_markdown_content(content)
+
+    def reuse_previous_llm_summary(self, reason: str) -> bool:
+        """Reuse the summary of a previous run when a new one can not be generated.
+
+        This avoids losing an existing summary when the LLM call is impossible
+        (no API key anymore, no credit left, rate limit, timeout...).
+        """
+        if self.llm_summary:
+            return True
+        if self.load_llm_summary():
+            self.llm_summary_reused = True
+        else:
+            previous_summary = self._load_previous_markdown_summary()
+            if not previous_summary:
+                return False
+            self.llm_summary = previous_summary
+            self.llm_summary_reused = True
+            # Keep it in the progress directory so next runs can find it faster
+            self.save_llm_summary()
+        logger.warning(
+            "Unable to generate a new AI summary (%s): reusing the summary generated by a previous run",
+            reason,
+        )
+        return True
 
     def save_llm_summary(self) -> None:
         """Persist LLM summary into progress directory if enabled."""
@@ -245,9 +314,9 @@ class GithubDependentsInfo:
             }
             with open(cache_path, "w", encoding="utf-8") as f:
                 json.dump(payload, f, indent=2)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - caching is best effort
             if self.debug:
-                logging.warning("Failed to save cached LLM summary: %s", exc)
+                logger.warning("Failed to save cached LLM summary: %s", exc)
 
     def _prepare_llm_summary_payload(self) -> dict:
         """Prepare a compact data payload for the LLM prompt."""
@@ -295,6 +364,7 @@ class GithubDependentsInfo:
 
         provider_info = self._detect_llm_provider()
         if provider_info is None:
+            self.reuse_previous_llm_summary("no LLM API key found in environment variables")
             return
 
         # Default model if none was provided
@@ -346,9 +416,13 @@ class GithubDependentsInfo:
             if content:
                 self.llm_summary = str(content).strip()
                 self.save_llm_summary()
-        except Exception as exc:
+            else:
+                self.llm_summary_error = "LLM returned an empty summary"
+                self.reuse_previous_llm_summary(self.llm_summary_error)
+        except Exception as exc:  # noqa: BLE001 - any provider error must not break the run
             self.llm_summary_error = str(exc)
-            logging.warning("Failed to generate LLM summary: %s", exc)
+            logger.warning("Failed to generate LLM summary: %s", exc)
+            self.reuse_previous_llm_summary(str(exc))
         finally:
             # LiteLLM can keep async clients around. Ensure they're closed before
             # asyncio.run() tears down the event loop to avoid:
@@ -375,9 +449,9 @@ class GithubDependentsInfo:
             result = close_fn()
             if inspect.isawaitable(result):
                 await result
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - cleanup is best effort
             if self.debug:
-                logging.debug("LiteLLM async client cleanup skipped: %s", exc)
+                logger.debug("LiteLLM async client cleanup skipped: %s", exc)
 
     def _extract_owner_repo(self, dependent_row):
         repo_anchor = dependent_row.find("a", {"data-hovercard-type": "repository"})
@@ -426,7 +500,7 @@ class GithubDependentsInfo:
                     if "{{" in package_name:
                         continue
                     if self.debug is True:
-                        logging.info(package_name)
+                        logger.info(package_name)
                     self.packages += [{"id": package_id, "name": package_name}]
             if len(self.packages) == 0:
                 self.packages = [{"id": None, "name": self.repo}]
@@ -452,7 +526,10 @@ class GithubDependentsInfo:
                 sources_all_df.set_index("name", inplace=True)
                 source_df = pd.json_normalize(source_info).set_index("name", drop=True)
                 for column in source_df.columns:
-                    if source_df[column].dtype == object and column in sources_all_df.columns:
+                    # pandas >= 3 infers text columns as StringDtype rather than object, so a
+                    # `dtype == object` test misses them and writing text into a numeric column
+                    # raises instead of upcasting. Widen the target column for any non-numeric value.
+                    if column in sources_all_df.columns and not pd.api.types.is_numeric_dtype(source_df[column]):
                         sources_all_df[column] = sources_all_df[column].astype("object")
                     sources_all_df.loc[source_df.index, column] = source_df[column]
                 sources_all_df.reset_index(inplace=True, drop=False)
@@ -567,9 +644,26 @@ class GithubDependentsInfo:
         """Build the standard footer for markdown files."""
         return [
             "",
-            "_Generated using [github-dependents-info]"
-            "(https://github.com/nvuillam/github-dependents-info), "
-            "by [Nicolas Vuillamy](https://github.com/nvuillam)_",
+            (
+                "_Generated using [github-dependents-info]"
+                "(https://github.com/nvuillam/github-dependents-info), "
+                "by [Nicolas Vuillamy](https://github.com/nvuillam)_"
+            ),
+        ]
+
+    def _append_llm_summary(self, md_lines: list) -> None:
+        """Append the AI summary section, surrounded by markers so it can be reused by later runs."""
+        if not self.llm_summary:
+            return
+        md_lines += [
+            LLM_SUMMARY_START_MARKER,
+            "",
+            "## Summary",
+            "",
+            self.llm_summary.strip(),
+            "",
+            LLM_SUMMARY_END_MARKER,
+            "",
         ]
 
     def _append_summary_table(self, md_lines: list) -> None:
@@ -606,8 +700,7 @@ class GithubDependentsInfo:
         self._append_summary_table(md_lines)
 
         # Optional LLM summary
-        if self.llm_summary:
-            md_lines += ["## Summary", "", self.llm_summary.strip(), ""]
+        self._append_llm_summary(md_lines)
 
         # Single dependents list
         if self.merge_packages is True:
@@ -702,8 +795,7 @@ class GithubDependentsInfo:
             self._append_summary_table(md_lines)
 
             # Optional LLM summary (only on first page)
-            if self.llm_summary:
-                md_lines += ["## Summary", "", self.llm_summary.strip(), ""]
+            self._append_llm_summary(md_lines)
 
         # Calculate start and end indices for this page
         start_idx = (page_num - 1) * self.page_size
@@ -840,12 +932,9 @@ class GithubDependentsInfo:
             md_lines += [f"|{image_md} &nbsp; [{repo_label}](https://github.com/{repo_label}) | {repo_stars} |"]
 
     def build_badge(self, label, nb, **options):
-        if "url" in options:
-            url = options["url"]
-        else:
-            url = f"https://github.com/{self.repo}/network/dependents"
+        url = options.get("url", f"https://github.com/{self.repo}/network/dependents")
         return (
-            f"[![Generated by github-dependents-info](https://img.shields.io/static/v1?label={label}&message={str(nb)}"
+            f"[![Generated by github-dependents-info](https://img.shields.io/static/v1?label={label}&message={nb!s}"
             + f"&color={self.badge_color}&logo=slickpic)]({url})"
         )
 
@@ -890,7 +979,7 @@ class GithubDependentsInfo:
                     raise
                 delay = self._compute_retry_delay(attempt, response=exc.response)
                 if self.debug:
-                    logging.warning(
+                    logger.warning(
                         "HTTP %s while fetching %s (attempt %s/%s). Retrying in %.1fs",
                         status_code,
                         url,
@@ -905,7 +994,7 @@ class GithubDependentsInfo:
                     raise
                 delay = self._compute_retry_delay(attempt)
                 if self.debug:
-                    logging.warning(
+                    logger.warning(
                         "Request error while fetching %s (attempt %s/%s): %s. Retrying in %.1fs",
                         url,
                         attempt,
@@ -952,12 +1041,12 @@ class GithubDependentsInfo:
                         # Check if we've reached the max pages limit
                         if self.max_scraped_pages > 0 and page_number >= self.max_scraped_pages:
                             if self.debug is True:
-                                logging.info(f"  - reached max scraped pages limit ({self.max_scraped_pages})")
+                                logger.info(f"  - reached max scraped pages limit ({self.max_scraped_pages})")
                             break
                         next_link = u["href"]
                         page_number += 1
                         if self.debug is True:
-                            logging.info(f"  - discovered page {page_number}")
+                            logger.info(f"  - discovered page {page_number}")
                         break
 
             if next_link is None:
@@ -970,13 +1059,13 @@ class GithubDependentsInfo:
                 current_soup = BeautifulSoup(current_content, "html.parser")
             except (httpx.RequestError, httpx.TimeoutException) as e:
                 if self.debug:
-                    logging.warning(f"Failed to fetch page during discovery: {e}")
+                    logger.warning(f"Failed to fetch page during discovery: {e}")
                 break
 
         # Fetch additional pages in parallel if any
         if urls_to_fetch:
             if self.debug:
-                logging.info(f"  - fetching {len(urls_to_fetch)} additional pages in parallel...")
+                logger.info(f"  - fetching {len(urls_to_fetch)} additional pages in parallel...")
             tasks = [self.fetch_page(client, page_url, semaphore) for page_url in urls_to_fetch]
             additional_pages = await asyncio.gather(*tasks, return_exceptions=True)
             pages_content += additional_pages
@@ -987,7 +1076,7 @@ class GithubDependentsInfo:
         for page_content in pages_content:
             if isinstance(page_content, Exception):
                 if self.debug:
-                    logging.warning(f"Failed to fetch page: {page_content}")
+                    logger.warning(f"Failed to fetch page: {page_content}")
                 continue
 
             soup = BeautifulSoup(page_content, "html.parser")
@@ -997,7 +1086,7 @@ class GithubDependentsInfo:
                 owner_repo = self._extract_owner_repo(t)
                 if owner_repo is None:
                     if self.debug:
-                        logging.warning("Skipping dependent row without repository link")
+                        logger.warning("Skipping dependent row without repository link")
                     continue
                 owner_name, repo_name = owner_repo
                 star_svg = t.find("svg", {"class": "octicon-star"})
@@ -1068,6 +1157,6 @@ class GithubDependentsInfo:
         number_as_string = number_as_string.replace(",", "").replace(" ", "")
         try:
             return int(number_as_string)
-        except Exception:
-            logging.warning(f'WARNING: Unable to get integer from "{number_as_string}"')
+        except (ValueError, TypeError):
+            logger.warning(f'WARNING: Unable to get integer from "{number_as_string}"')
             return 0
