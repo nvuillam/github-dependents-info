@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - GitHub Action: add `no-pagination` input as an alias of `pagination: "false"`, and document all action inputs in README ([#1259](https://github.com/nvuillam/github-dependents-info/issues/1259))
 - Replace local MegaLinter skills and sub-agents with the official MegaLinter Claude Code plugin (`megalinter@megalinter`), declared in `.claude/settings.json`
+- Fix broken README rendering (options table and lists): marker tags mentioned in the documentation are now HTML-escaped so the badge update no longer injects badges inside them
 
 ## [4.0.0] 2026-08-31
 
