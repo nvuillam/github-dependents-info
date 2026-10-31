@@ -2921,4 +2921,4 @@ reference = "safety"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<4.0"
-content-hash = "e82d4ebd49187abb0d1dc84890922b240a86c46e1c84f8c74f64feef0fd5822f"
+content-hash = "9e0c6d562a4f4c3f0833be773c318b6bd7aca453e5848c5235d8c6256e27a181"
