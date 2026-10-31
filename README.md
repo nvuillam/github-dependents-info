@@ -405,6 +405,9 @@ jobs:
           # badgemarkdownfile: README.md
           # sort: stars
           # minstars: "0"
+          # pagination: "true" # set to "false" to write a single markdown file
+          # page-size: "500" # number of repositories per markdown page
+          # max-scraped-pages: "0" # max pages to scrape per package (0 = no limit)
           # llm-summary: "true" # set to "false" to disable AI usage summary
           # llm-model: "" # optional: override LiteLLM model (example: gpt-4o-mini, gemini-3-flash-preview)
           # llm-max-repos: "500" # optional: cap repos sent to the summary prompt
@@ -440,6 +443,37 @@ jobs:
           STEPS_CPR_OUTPUTS_PULL_REQUEST_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
           STEPS_CPR_OUTPUTS_PULL_REQUEST_URL: ${{ steps.cpr.outputs.pull-request-url }}
 ```
+
+### GitHub Action inputs
+
+Action inputs are named after the CLI options, without the leading `--`. Boolean CLI flags such as `--no-pagination` become inputs with a `"true"` / `"false"` value.
+
+| Input                | Description                                                                    | CLI equivalent                       | Default                            |
+|----------------------|--------------------------------------------------------------------------------|--------------------------------------|------------------------------------|
+| `repo`               | Owner and name of the repository (required)                                    | `--repo`                             | _(required)_                       |
+| `outputrepo`         | Owner and name of the output repository, if different from `repo`              | `--outputrepo`                       | `""`                               |
+| `markdownfile`       | Path of the output markdown file                                               | `--markdownfile`                     | `"docs/github-dependents-info.md"` |
+| `badgemarkdownfile`  | File where badges are replaced (between the `gh-dependents-info-used-by` tags) | `--badgemarkdownfile`                | `"README.md"`                      |
+| `docurl`             | Custom URL for the badges hyperlink                                            | `--docurl`                           | `""`                               |
+| `markdownbadgecolor` | Color of the generated badges                                                  | `--markdownbadgecolor`               | `"informational"`                  |
+| `sort`               | Sort criteria: `stars` or `name`                                               | `--sort`                             | `"stars"`                          |
+| `minstars`           | Minimum number of stars to appear in the results                               | `--minstars`                         | `"0"`                              |
+| `timedelay`          | Delay in seconds between GitHub requests                                       | `--timedelay`                        | `"0.1"`                            |
+| `csvdirectory`       | Directory where CSV progress files are written                                 | `--csvdirectory`                     | `""`                               |
+| `mergepackages`      | `true` to merge multiple packages into a single result                         | `--mergepackages`                    | `"false"`                          |
+| `json`               | `true` to emit JSON output                                                     | `--json`                             | `"false"`                          |
+| `verbose`            | `true` to enable verbose logging                                               | `--verbose`                          | `"false"`                          |
+| `overwrite`          | `true` to overwrite existing CSV progress files                                | `--overwrite`                        | `"false"`                          |
+| `owner`              | Filter dependent repositories by owner                                         | `--owner`                            | `""`                               |
+| `max-scraped-pages`  | Max pages to scrape per package (`0` = no limit)                               | `--max-scraped-pages`                | `"0"`                              |
+| `pagination`         | `false` to write a single markdown file instead of multiple pages              | `--pagination` / `--no-pagination`   | `"true"`                           |
+| `no-pagination`      | `true` to disable pagination (same as `pagination: "false"`)                   | `--no-pagination`                    | `"false"`                          |
+| `page-size`          | Number of repositories per markdown page when pagination is enabled            | `--page-size`                        | `"500"`                            |
+| `llm-summary`        | `false` to disable the AI usage summary                                        | `--llm-summary` / `--no-llm-summary` | `"true"`                           |
+| `llm-model`          | LiteLLM model for the AI usage summary                                         | `--llm-model`                        | `""`                               |
+| `llm-max-repos`      | Max dependent repos included in the summary prompt                             | `--llm-max-repos`                    | `"500"`                            |
+| `llm-max-words`      | Max words for the generated summary                                            | `--llm-max-words`                    | `"250"`                            |
+| `llm-timeout`        | Timeout (seconds) for the summary LLM call                                     | `--llm-timeout`                      | `"120"`                            |
 
 _________________
 ## 🛡 License

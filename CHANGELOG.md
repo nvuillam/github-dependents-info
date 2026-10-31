@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Beta
 
+- GitHub Action: add `no-pagination` input as an alias of `pagination: "false"`, and document all action inputs in README ([#1259](https://github.com/nvuillam/github-dependents-info/issues/1259))
+
 ## [4.0.0] 2026-08-31
 
 - **BREAKING CHANGE**: Python `>=3.11` is now required (dropped support for Python 3.10), as `pandas` 3 does not support Python 3.10 anymore
