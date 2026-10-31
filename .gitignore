@@ -619,3 +619,5 @@ MigrationBackup/
 megalinter-reports/
 github_conf/
 .env
+
+.sf/
