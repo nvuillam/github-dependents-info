@@ -3,8 +3,8 @@
 
 version: 2
 
-# Supply-chain hardening: every ecosystem below sets `cooldown.default-days: 7`
-# so a release must be a week old before Dependabot opens a PR for it. A
+# Supply-chain hardening: every ecosystem below sets `cooldown.default-days: 14`
+# so a release must be two weeks old before Dependabot opens a PR for it. A
 # compromised version is usually yanked well within that window.
 # Security updates are NOT delayed: GitHub applies `cooldown` to version
 # updates only, so Dependabot alerts still raise a fix PR immediately.
@@ -15,7 +15,7 @@ updates:
     schedule:
       interval: "daily"
     cooldown:
-      default-days: 7
+      default-days: 14
     allow:
       - dependency-type: "all"
     commit-message:
@@ -27,7 +27,7 @@ updates:
     schedule:
       interval: "daily"
     cooldown:
-      default-days: 7
+      default-days: 14
     allow:
       - dependency-type: "all"
     commit-message:
@@ -39,7 +39,7 @@ updates:
     schedule:
       interval: "weekly"
     cooldown:
-      default-days: 7
+      default-days: 14
     allow:
       - dependency-type: "all"
     commit-message:
